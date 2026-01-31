@@ -11,6 +11,7 @@
   --color-pp-white: #FFFEFB;
   --color-pp-black: #080200;
   --color-pp-green: #8CE395;
+  --color-pp-gray: #817D7B;
 }
 
 @layer base {

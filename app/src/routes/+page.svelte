@@ -1,9 +1,11 @@
 <script>
     import logo from '../lib/icons/logomark.svg';
+    import Signup from '../lib/components/sign-up.svelte';
+    import Login from '../lib/components/log-in.svelte';
 </script>
 
 <div class="h-screen bg-linear-to-t from-pp-pink to-pp-light-pink flex flex-col justify-center items-center">
-    <img src={logo} alt="..." class="max-h-52"> 
+    <img src={logo} alt="Puso't Pinggan Logo" class="max-h-52"> 
 
     <h1 class="text-3xl text-pp-white font-semibold"> 
         Puso't Pinggan 
@@ -18,4 +20,7 @@
             Sign Up
         </a>
     </div>
+
+    <!-- <Signup> </Signup> -->
+    <!-- <Login> </Login> -->
 </div>
