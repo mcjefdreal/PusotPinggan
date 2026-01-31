@@ -1,26 +1,30 @@
 <script>
-    import logo from '../lib/icons/logomark.svg';
-    import Signup from '../lib/components/sign-up.svelte';
-    import Login from '../lib/components/log-in.svelte';
+	import logo from '../lib/icons/logomark.svg';
 </script>
 
-<div class="h-screen bg-linear-to-t from-pp-pink to-pp-light-pink flex flex-col justify-center items-center">
-    <img src={logo} alt="Puso't Pinggan Logo" class="max-h-52"> 
+<div
+	class="from-pp-pink to-pp-light-pink flex h-screen flex-col items-center justify-center bg-linear-to-t"
+>
+	<img src={logo} alt="Puso't Pinggan Logo" class="max-h-52" />
 
-    <h1 class="text-3xl text-pp-white font-semibold"> 
-        Puso't Pinggan 
-    </h1>
+	<h1 class="text-pp-white text-3xl font-semibold">Puso't Pinggan</h1>
 
-    <div class="grid place-items-center py-20 space-y-3">
-        <a class="w-50 h-10 flex justify-center items-center rounded-lg border border-pp-white text-lg font-medium text-pp-white" href="#">
-            Log In
-        </a>
+	<div class="grid place-items-center space-y-3 py-20">
+		<a
+			class="border-pp-white text-pp-white flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
+			href="/login"
+		>
+			Log In
+		</a>
 
-        <a class="w-50 h-10 flex justify-center items-center rounded-lg border border-pp-white bg-pp-white text-lg font-medium text-pp-pink" href="#">
-            Sign Up
-        </a>
-    </div>
+		<a
+			class="border-pp-white bg-pp-white text-pp-pink flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
+			href="/signup"
+		>
+			Sign Up
+		</a>
+	</div>
 
-    <!-- <Signup> </Signup> -->
-    <!-- <Login> </Login> -->
+	<!-- <Signup> </Signup> -->
+	<!-- <Login> </Login> -->
 </div>
