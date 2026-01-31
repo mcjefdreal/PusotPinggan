@@ -1,5 +1,21 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+    import logo from '../lib/icons/logomark.svg';
+</script>
 
-<h1 class="font-display font-bold text-pp-pink text-xl"> hello </h1>
+<div class="h-screen bg-linear-to-t from-pp-pink to-pp-light-pink flex flex-col justify-center items-center">
+    <img src={logo} alt="..." class="max-h-52"> 
+
+    <h1 class="text-3xl text-pp-white font-semibold"> 
+        Puso't Pinggan 
+    </h1>
+
+    <div class="grid place-items-center py-20 space-y-3">
+        <a class="w-50 h-10 flex justify-center items-center rounded-lg border border-pp-white text-lg font-medium text-pp-white" href="#">
+            Log In
+        </a>
+
+        <a class="w-50 h-10 flex justify-center items-center rounded-lg border border-pp-white bg-pp-white text-lg font-medium text-pp-pink" href="#">
+            Sign Up
+        </a>
+    </div>
+</div>
