@@ -1,5 +1,9 @@
 node_modules
 
+# Formatting and Linting
+/.eslintcache
+/.prettiercache
+
 # Output
 .output
 .vercel
