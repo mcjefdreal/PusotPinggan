@@ -2,7 +2,7 @@
 	import logo from '$lib/icons/logomark.svg';
 </script>
 
-<div class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center from-pp-pink to-pp-light-pink h-screen bg-linear-to-t">
 	<img src={logo} alt="Puso't Pinggan Logo" class="max-h-36" />
 
 	<div class="bg-pp-white m-6 w-80 rounded-xl">
@@ -17,7 +17,6 @@
 						id="phone"
 						class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs"
 						placeholder="0912 345 6789"
-						pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
 						required
 					/>
 				</div>

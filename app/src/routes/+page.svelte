@@ -24,7 +24,4 @@
 			Sign Up
 		</a>
 	</div>
-
-	<!-- <Signup> </Signup> -->
-	<!-- <Login> </Login> -->
 </div>
