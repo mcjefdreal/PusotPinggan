@@ -14,14 +14,14 @@
 	<div class="grid place-items-center space-y-3 py-20">
 		<a
 			class="border-pp-white text-pp-white flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
-			href="{resolve('/login/')}"
+			href={resolve('/login/')}
 		>
 			Log In
 		</a>
 
 		<a
 			class="border-pp-white bg-pp-white text-pp-pink flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
-			href="{resolve('/signup/')}"
+			href={resolve('/signup/')}
 		>
 			Sign Up
 		</a>
