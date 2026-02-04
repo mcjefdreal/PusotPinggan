@@ -1,5 +1,7 @@
 <script>
 	import logo from '$lib/icons/logomark.svg';
+
+	import { resolve } from '$app/paths';
 </script>
 
 <div class="flex flex-col items-center justify-center from-pp-pink to-pp-light-pink h-screen bg-linear-to-t">
@@ -76,7 +78,7 @@
 		</div>
 
 		<p class="text-pp-gray px-6 pb-8 text-xs">
-			Already have an account? Log in <a class="text-pp-pink underline" href="/login"> here! </a>
+			Already have an account? Log in <a class="text-pp-pink underline" href="{resolve('/login/')}"> here! </a>
 		</p>
 	</div>
 </div>
