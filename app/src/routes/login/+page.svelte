@@ -2,7 +2,9 @@
 	import logo from '$lib/icons/logomark.svg';
 </script>
 
-<div class="flex flex-col items-center justify-center from-pp-pink to-pp-light-pink h-screen bg-linear-to-t">
+<div
+	class="from-pp-pink to-pp-light-pink flex h-screen flex-col items-center justify-center bg-linear-to-t"
+>
 	<img src={logo} alt="Puso't Pinggan Logo" class="max-h-36" />
 
 	<div class="bg-pp-white m-6 w-80 rounded-xl">
