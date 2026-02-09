@@ -8,12 +8,12 @@
 	import { resolve } from '$app/paths';
 </script>
 
-<nav class="bg-pp-white sticky bottom-0 z-10 w-full">
+<nav class="bg-pp-white sticky bottom-0 z-10 w-full border-t-1 border-pp-gray">
 	<ul class="flex justify-evenly py-5">
 		<li>
 			<a class="flex h-full items-center" href={resolve('/')}>
-				<StoreIcon active={page.url.pathname === '/'} />
-				{#if page.url.pathname === '/'}
+				<StoreIcon active={page.url.pathname === '/store'} />
+				{#if page.url.pathname === '/store'}
 					<div class="bg-pp-pink absolute -bottom-1 h-1 w-1 rounded-full"></div>
 				{/if}
 			</a>
@@ -28,16 +28,16 @@
 		</li>
 		<li>
 			<a class="flex h-full items-center" href={resolve('/')}>
-				<MsgIcon active={page.url.pathname === '/'} />
-				{#if page.url.pathname === '/'}
+				<MsgIcon active={page.url.pathname === '/messages'} />
+				{#if page.url.pathname === '/messages'}
 					<div class="bg-pp-pink absolute -bottom-1 h-1 w-1 rounded-full"></div>
 				{/if}
 			</a>
 		</li>
 		<li>
 			<a class="flex h-full items-center" href={resolve('/')}>
-				<ProfileIcon active={page.url.pathname === '/'} />
-				{#if page.url.pathname === '/'}
+				<ProfileIcon active={page.url.pathname === '/profile'} />
+				{#if page.url.pathname === '/profile'}
 					<div class="bg-pp-pink absolute -bottom-1 h-1 w-1 rounded-full"></div>
 				{/if}
 			</a>
