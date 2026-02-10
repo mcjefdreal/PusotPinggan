@@ -6,3 +6,25 @@ This is a course requirement for CS 191/CS192 Software Engineering Courses of th
 - Mislang, Ethan Renell Sebastian
 - Real, Michael Jeffrey D.
 - Zuñiga, Nathaniel Silas T.
+
+## Development
+### Running the Web Server
+```
+# Install the dependencies
+pnpm install
+
+# Synchronize the auto-generated files from SvelteKit
+pnpm build
+
+# Start development server with hot reloading
+pnpm dev
+```
+
+### Formatting and Linting
+```
+# Check formatting
+pnpm fmt
+
+# Apply formatting auto-fix
+pnpm fmt:fix # prettier --write
+```
