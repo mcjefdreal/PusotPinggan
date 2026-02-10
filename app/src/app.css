@@ -3,7 +3,7 @@
 
 @plugin 'flowbite/plugin';
 @custom-variant dark (&:where(.dark, .dark *));
-@source "../node_modules/flowbite-svelte/dist";
+@source '../node_modules/flowbite-svelte/dist';
 
 @theme {
 	/* set Poppins as default font */
@@ -16,9 +16,9 @@
 	--color-pp-black: #080200;
 	--color-pp-green: #8ce395;
 	--color-pp-gray: #817d7b;
-	--color-pp-dark-pink: #D83A5F;
+	--color-pp-dark-pink: #d83a5f;
 	--color-pp-darker-pink: #b32445;
-	--color-pp-light-gray: #EDE9E7;
+	--color-pp-light-gray: #ede9e7;
 }
 
 @layer base {

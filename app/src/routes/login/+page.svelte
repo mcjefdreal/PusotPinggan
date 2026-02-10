@@ -37,13 +37,20 @@
 		</form>
 
 		<div class="pr-6 pb-12">
-			<button class="bg-pp-pink text-pp-white float-right rounded px-4 py-1 text-xs hover:bg-pp-darker-pink">
+			<button
+				class="bg-pp-pink text-pp-white hover:bg-pp-darker-pink float-right rounded px-4 py-1 text-xs"
+			>
 				Log in
 			</button>
 		</div>
 
 		<p class="text-pp-gray px-6 pb-8 text-xs">
-			Don't have an account? Sign up <a class="text-pp-pink underline hover:text-pp-darker-pink" href="/signup"> here! </a>
+			Don't have an account? Sign up <a
+				class="text-pp-pink hover:text-pp-darker-pink underline"
+				href="/signup"
+			>
+				here!
+			</a>
 		</p>
 	</div>
 </div>

@@ -13,14 +13,14 @@
 
 	<div class="grid place-items-center space-y-3 py-20">
 		<a
-			class="border-pp-white text-pp-white flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium hover:bg-pp-dark-pink"
+			class="border-pp-white text-pp-white hover:bg-pp-dark-pink flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
 			href={resolve('/login/')}
 		>
 			Log In
 		</a>
 
 		<a
-			class="border-pp-white bg-pp-white text-pp-pink flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium hover:bg-pp-light-gray hover:border-pp-light-gray"
+			class="border-pp-white bg-pp-white text-pp-pink hover:bg-pp-light-gray hover:border-pp-light-gray flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
 			href={resolve('/signup/')}
 		>
 			Sign Up
