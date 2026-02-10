@@ -74,13 +74,13 @@
 		</form>
 
 		<div class="pr-6 pb-12">
-			<button class="bg-pp-pink text-pp-white float-right rounded px-4 py-1 text-xs">
+			<button class="bg-pp-pink text-pp-white float-right rounded px-4 py-1 text-xs hover:bg-pp-darker-pink">
 				Sign up
 			</button>
 		</div>
 
 		<p class="text-pp-gray px-6 pb-8 text-xs">
-			Already have an account? Log in <a class="text-pp-pink underline" href={resolve('/login/')}>
+			Already have an account? Log in <a class="text-pp-pink underline hover:text-pp-darker-pink" href={resolve('/login/')}>
 				here!
 			</a>
 		</p>
