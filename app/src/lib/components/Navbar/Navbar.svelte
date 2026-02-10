@@ -8,7 +8,7 @@
 	import { resolve } from '$app/paths';
 </script>
 
-<nav class="bg-pp-white sticky bottom-0 z-10 w-full border-t-1 border-pp-gray">
+<nav class="bg-pp-white border-pp-gray sticky bottom-0 z-10 w-full border-t-1">
 	<ul class="flex justify-evenly py-5">
 		<li>
 			<a class="flex h-full items-center" href={resolve('/')}>
