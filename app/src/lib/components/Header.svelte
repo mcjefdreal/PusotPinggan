@@ -1,5 +1,5 @@
-<script>
-	import logo from '../../icons/logomark.svg';
+<script lang="ts">
+	import logo from '$lib/icons/logomark.svg';
 
 	import { Search, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import {
@@ -30,7 +30,7 @@
 	let selectCategory = $state('Filters');
 </script>
 
-<nav class="from-pp-pink to-pp-light-pink fixed start-0 top-0 z-20 w-full bg-linear-to-t p-2 pb-4">
+<nav class="from-pp-pink to-pp-light-pink sticky start-0 top-0 z-20 w-full bg-linear-to-t p-2 pb-4">
 	<div class="flex max-w-screen-xl items-center p-4">
 		<MapPinAltOutline class="text-pp-white h-8 w-8 shrink-0" />
 		<div class="items-left ml-4 flex flex-col">
