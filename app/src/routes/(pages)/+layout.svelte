@@ -5,6 +5,6 @@
 	const { children } = $props();
 </script>
 
+<Header />
 {@render children()}
 <Navbar />
-<Header />
