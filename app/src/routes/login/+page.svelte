@@ -8,7 +8,7 @@
 	<img src={logo} alt="Puso't Pinggan Logo" class="max-h-36" />
 
 	<div class="bg-pp-white m-6 w-80 rounded-xl">
-		<p class="text-pp-pink pt-5 pb-3 text-center text-3xl font-medium">Welcome back!</p>
+		<h1 class="text-pp-pink pt-5 pb-3 text-center text-3xl font-medium">Welcome back!</h1>
 
 		<form>
 			<div class="mb-6 grid gap-2 px-6">
