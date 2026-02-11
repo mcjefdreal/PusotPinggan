@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import HomeIcon from '$lib/components/Navbar/home.svelte';
 	import MsgIcon from '$lib/components/Navbar/messages.svelte';
 	import StoreIcon from '$lib/components/Navbar/store.svelte';

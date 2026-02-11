@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import logo from '../../icons/logomark.svg';
 
 	import { Search, Button, Dropdown, DropdownItem } from 'flowbite-svelte';

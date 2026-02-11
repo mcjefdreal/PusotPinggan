@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import logo from '$lib/icons/logomark.svg';
 </script>
 
