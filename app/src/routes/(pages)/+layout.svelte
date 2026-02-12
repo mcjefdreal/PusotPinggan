@@ -5,6 +5,8 @@
 	const { children } = $props();
 </script>
 
-<Header />
-{@render children()}
-<Navbar />
+<div class="bg-pp-white w-full min-h-screen">
+	<Header />
+	{@render children()}
+	<Navbar />
+</div>
