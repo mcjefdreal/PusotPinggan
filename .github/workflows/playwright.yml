@@ -8,15 +8,18 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
-    - name: Move working directory
-      run: cd app
+        cache: 'pnpm'
+        cache-dependency-path: './app/pnpm-lock.yaml'
     - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
+      run: pnpm install
     - name: Install Playwright Browsers
       run: pnpm exec playwright install --with-deps
     - name: Run Playwright tests
@@ -25,5 +28,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: playwright-report/
+        path: app/playwright-report/
         retention-days: 30
