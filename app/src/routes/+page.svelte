@@ -2,6 +2,7 @@
 	import logo from '../lib/icons/logomark.svg';
 
 	import { resolve } from '$app/paths';
+	import { redirect } from '@sveltejs/kit';
 </script>
 
 <div
@@ -25,5 +26,15 @@
 		>
 			Sign Up
 		</a>
+	</div>
+	<div class="pr-6 pb-12">
+		<form method="POST" action="?/google">
+			<button
+				class="bg-pp-white text-pp-pink hover:bg-pp-darker-pink float-right rounded px-4 py-1 text-xs"
+				type="submit"
+			>
+				Sign in with Google
+			</button>
+		</form>
 	</div>
 </div>
