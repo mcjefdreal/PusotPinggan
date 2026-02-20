@@ -3,11 +3,8 @@
 
 	let { data } = $props();
 
-	let stores = $state(data.stores);
+	let stores = $derived(data.stores);
 
-	$effect(() => {
-		stores = data.stores;
-	})
 	let storeCount = $derived(stores.length);
 
 </script>
