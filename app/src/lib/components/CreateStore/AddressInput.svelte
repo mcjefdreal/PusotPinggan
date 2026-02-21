@@ -3,7 +3,6 @@
   import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
   import { PUBLIC_GOOGLE_MAPS_API_KEY } from '$env/static/public';
 
-  // Svelte 5 state for the hidden fields
   let selected = $state({ address: '', lat: '', lng: '' });
   let mapElement = $state();
   let inputElement = $state();
@@ -26,28 +25,24 @@
     
     const marker = new AdvancedMarkerElement({ map });
     const autocomplete = new Autocomplete(inputElement, { 
-      fields: ["formatted_address", "geometry"] 
+      fields: ["formatted_address", "geometry"]
     });
     const geocoder = new Geocoder();
 
     map.addListener("click", async (event) => {
       const latLng = event.latLng;
       
-      // 1. Move the marker
       marker.position = latLng;
 
-      // 2. Get the address from the coordinates (Reverse Geocoding)
       const response = await geocoder.geocode({ location: latLng });
       const address = response.results[0]?.formatted_address || "Custom Location";
 
-      // 3. Sync to Svelte 5 State
       selected = {
         address: address,
         lat: latLng.lat().toString(),
         lng: latLng.lng().toString()
       };
       
-      // 4. Update the text input so the user sees the new address
       inputElement.value = address;
     });
 
@@ -55,7 +50,6 @@
       const place = autocomplete.getPlace();
       if (!place.geometry) return;
 
-      // Update the state that the hidden inputs are bound to
       selected = {
         address: place.formatted_address || '',
         lat: place.geometry.location.lat().toString(),
@@ -72,13 +66,9 @@
 <div class="address-picker">
   <input bind:this={inputElement} type="text" placeholder="Search address..." class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs" required />
   
-  <div bind:this={mapElement} class="map-box"></div>
+  <div bind:this={mapElement} class="h-[300px] w-[80%] bg-[#ddd] m-[10px] rounded"></div>
 
   <input type="hidden" name="store_addr" value={selected.address} />
   <input type="hidden" name="store_lat" value={selected.lat} />
   <input type="hidden" name="store_lng" value={selected.lng} />
 </div>
-
-<style>
-  .map-box { height: 300px; width: 100%; background: #ddd; margin: 10px 0; border-radius: 4px; }
-</style>
