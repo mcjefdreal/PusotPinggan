@@ -1,19 +1,8 @@
 <script lang="ts">
     import { resolve } from '$app/paths'
     import { enhance } from '$app/forms'
-
     import { Label, Timepicker } from "flowbite-svelte";
-
-    // let selectedTimeRange = $state({ time: "00:00", endTime: "24:00" });
-
-    // function handleRangeChange(data: { time: string; endTime: string; [key: string]: string }): void {
-    //     if (data) {
-    //         selectedTimeRange = {
-    //             time: data.time,
-    //             endTime: data.endTime
-    //         };
-    //     }
-    // }
+    import AddressInput from '$lib/components/CreateStore/AddressInput.svelte'
 
     let schedule = {
         monday: { open: '00:00', close: '00:00' },
@@ -32,7 +21,7 @@
     let submitting = false;
 </script>
 
-<div class="min-h-screen items-center justify-center">
+<div class="w-full min-h-screen items-center justify-center">
     <div class="m-5">
         <form method="POST" enctype="multipart/form-data" action="?/createStore" 
         use:enhance={() => {
@@ -41,7 +30,7 @@
             await update();
             submitting = false;
         };
-    }} class="max-w-md">
+        }} class="max-w-md">
             <div class="mb-6 grid gap-2 px-6">
                 <div>
                     <label for="store_img" class="text-pp-gray mb-2.5 text-xs font-medium">Store image</label>
@@ -77,63 +66,43 @@
                     
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Monday </Label>
-                        <!-- <input type="hidden" name="mon_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
 
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Tuesday </Label>
-                        <!-- <input type="hidden" name="tue_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
 
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Wednesday </Label>
-                        <!-- <input type="hidden" name="wed_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
 
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Thursday </Label>
-                        <!-- <input type="hidden" name="thu_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
 
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Friday </Label>
-                        <!-- <input type="hidden" name="fri_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
 
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Saturday </Label>
-                        <!-- <input type="hidden" name="sat_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
 
                     <div class="flex flex-row items-center">
                         <Label class="pr-2"> Sunday </Label>
-                        <!-- <input type="hidden" name="sun_hrs" value={`${selectedTimeRange.time}-${selectedTimeRange.endTime}`}/>
-                        <Timepicker type="range" onselect={handleRangeChange} value={selectedTimeRange.time} endValue={selectedTimeRange.endTime} divClass="shadow-none" /> -->
                         <Timepicker type="range" onselect={(e) => handleRangeChange('monday', e.time, e.endTime)} divClass="shadow-none" />
                     </div>
                 </div>
 
                 <div>
-                    <label for="store_loc" class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
-                    <input
-                        type="text"
-                        id="store_loc"
-                        name="store_loc"
-                        class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs"
-                        required
-                    />
+                    <label for="store_addr" class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
+                    <AddressInput />
                 </div>
             </div>
 

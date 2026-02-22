@@ -26,6 +26,7 @@ export const actions: Actions = {
         // You can still use the origin or a hardcoded prod URL
         // Use the current request origin so the redirect matches the running host
         redirectTo: `${url.origin}/auth/callback`,
+        // redirectTo: `https://paulene-pannicular-bula.ngrok-free.dev/auth/callback`,
       }
     });
 

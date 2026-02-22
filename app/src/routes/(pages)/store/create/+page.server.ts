@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
+import { CodeForkSolid } from 'flowbite-svelte-icons';
 
 export const actions: Actions = {
     createStore: async ({ request, locals: { supabase } }) => {
@@ -9,7 +10,9 @@ export const actions: Actions = {
         // get text field data
         const name = formData.get('store_name') as string;
         const desc = formData.get('store_description') as string;
-        const loc = formData.get('store_loc') as string;
+        const addr = formData.get('store_addr') as string;
+        const lat = formData.get('store_lat') as string;
+        const lng = formData.get('store_lng') as string;
 
         // parse schedule JSON
         const schedRaw = formData.get('sched') as string;
@@ -22,7 +25,8 @@ export const actions: Actions = {
             .insert({
                 store_name: name,
                 store_desc: desc,
-                store_loc: loc,
+                store_addr: addr,
+                store_coords: `POINT(${lng} ${lat})`,
                 store_hrs: sched
             })
             .select()

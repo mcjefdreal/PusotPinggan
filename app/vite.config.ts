@@ -5,4 +5,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit(), devtoolsJson()]
+  // server: {
+  //   allowedHosts: ["paulene-pannicular-bula.ngrok-free.dev"]
+  // }
 });
