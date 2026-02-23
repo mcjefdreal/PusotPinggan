@@ -5,7 +5,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase } }) => 
   const { user } = await parent();
 
 
-  console.log(`Fetching stores for user: ${user.id}`);
+  // console.log(`Fetching stores for user: ${user.id}`);
 
   const { data: stores, error: dbError } = await supabase
     .from('store')
