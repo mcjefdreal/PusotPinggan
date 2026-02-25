@@ -1,7 +1,10 @@
 <script>
+	import { resolve } from '$app/paths'
+
     const {
         storePicUrl,
         storeName,
+        storeId
     } = $props();
 
 </script>
@@ -15,7 +18,7 @@
         <div class="flex flex-row"> </div>
         <a
 			class="bg-pp-pink text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-lg font-medium"
-			href='/'
+			href={resolve(`/store/${storeName}/${storeId}`)}
 		>
 			View Store
 		</a>
