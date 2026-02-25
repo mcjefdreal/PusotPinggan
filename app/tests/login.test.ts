@@ -1,13 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { supabase } from './supabase.ts';
 
-test('Should load login page', async({ page }) => {
-    await page.goto('/login');
-    await expect(page.getByRole('heading', { name: 'Welcome back!' })).toBeVisible();
-})
-
-test('Should go to sign up page after clicking the link', async({ page }) => {
-    await page.goto('/login');
-    await page.getByRole('link', { name: 'here!' }).click();
-    await page.waitForURL('**/signup');
-    await expect(page.getByRole('heading', { name: 'Welcome!' })).toBeVisible();
-})
+test('logged in user can access application pages', async ({ page }) => {
+  await page.goto('/home');
+  await expect(page.locator('h1')).toContainText('hello');
+});

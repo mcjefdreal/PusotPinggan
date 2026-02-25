@@ -2,6 +2,7 @@
 	import logo from '../lib/icons/logomark.svg';
 
 	import { resolve } from '$app/paths';
+	import { redirect } from '@sveltejs/kit';
 </script>
 
 <div
@@ -11,19 +12,14 @@
 
 	<h1 class="text-pp-white text-3xl font-semibold">Puso't Pinggan</h1>
 
-	<div class="grid place-items-center space-y-3 py-20">
-		<a
-			class="border-pp-white text-pp-white hover:bg-pp-dark-pink flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
-			href={resolve('/login/')}
-		>
-			Log In
-		</a>
-
-		<a
-			class="border-pp-white bg-pp-white text-pp-pink hover:bg-pp-light-gray hover:border-pp-light-gray flex h-10 w-50 items-center justify-center rounded-lg border text-lg font-medium"
-			href={resolve('/signup/')}
-		>
-			Sign Up
-		</a>
+	<div class="mt-10">
+		<form method="POST" action="?/google">
+			<button
+				class="bg-pp-white text-pp-pink float-right rounded px-4 py-1 h-10 w-50"
+				type="submit"
+			>
+				Sign in with Google
+			</button>
+		</form>
 	</div>
 </div>
