@@ -1,8 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = async ({ locals }) => {
-  const { session } = await locals.safeGetSession();
+export const load: PageServerLoad = async ({ parent, locals: supabase }) => {
+  const { session, user } = await parent() 
 
   // If no session cookie exists, send them back to login
   if (!session) {
@@ -10,6 +10,6 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   return {
-    user: session.user
-  };
+    session, user
+  }
 };
