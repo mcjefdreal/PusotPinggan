@@ -31,8 +31,8 @@
 					<input
 						type="tel"
 						id="firstname"
-						class="border-pp-gray w-full rounded-md border px-2 py-2.5 text-xs"
-						placeholder="Carlyne"
+						class="border-pp-gray w-full rounded-md border px-2 py-2.5 text-xs placeholder-pp-gray"
+						placeholder="First Name"
 						required
 					/>
 				</div>
@@ -42,8 +42,8 @@
 					<input
 						type="tel"
 						id="lastname"
-						class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs"
-						placeholder="Consebido"
+						class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs placeholder-pp-gray"
+						placeholder="Last Name"
 						required
 					/>
 				</div>
@@ -53,7 +53,7 @@
 					<input
 						type="tel"
 						id="phone"
-						class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs"
+						class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs placeholder-pp-gray"
 						placeholder="+63 912 345 6789"
 						required
 					/>
