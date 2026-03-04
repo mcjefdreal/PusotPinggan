@@ -24,10 +24,12 @@
 			return URL.createObjectURL(selectedFile);
 		}
 
-		const timestamp = data.pub_user?.updated_at ? new Date(data.pub_user.updated_at).getTime() : Date.now();
+		const timestamp = data.pub_user?.updated_at
+			? new Date(data.pub_user.updated_at).getTime()
+			: Date.now();
 		return `${baseUrl}?t=${timestamp}`;
-	})
-	
+	});
+
 	let fileInput: HTMLInputElement;
 	let form: HTMLFormElement;
 
@@ -63,11 +65,18 @@
 
 	<div class="text-pp-white text-center text-2xl font-semibold">Edit Profile</div>
 
-	<a href={resolve('/profile')} class="text-pp-white absolute top-6 right-6 flex items-center gap-2">
+	<a
+		href={resolve('/profile')}
+		class="text-pp-white absolute top-6 right-6 flex items-center gap-2"
+	>
 		<CogSolid class="h-8 w-8" />
 	</a>
 
-	<form method="POST" enctype="multipart/form-data" bind:this={form} use:enhance={() => {
+	<form
+		method="POST"
+		enctype="multipart/form-data"
+		bind:this={form}
+		use:enhance={() => {
 			isSaving = true;
 			return async ({ result, update }) => {
 				if (result.type === 'success') {
@@ -90,17 +99,27 @@
 				await update({ reset: false });
 				isSaving = false;
 				showToast = true;
-				setTimeout(() => showToast = false, 2000);
+				setTimeout(() => (showToast = false), 2000);
 				await invalidateAll();
 			};
-		}}>
-		<div class="flex flex-col items-center mt-13">
+		}}
+	>
+		<div class="mt-13 flex flex-col items-center">
 			<button type="button" onclick={handleImageClick} class="focus:outline-none">
-				<div class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white shadow-lg">
+				<div
+					class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white shadow-lg"
+				>
 					<img src={imgUrl} alt="Profile" class="h-full w-full rounded-full object-cover" />
 				</div>
 			</button>
-			<input type="file" accept="image/*" bind:this={fileInput} onchange={handleFileChange} class="hidden" name="profile_image" />
+			<input
+				type="file"
+				accept="image/*"
+				bind:this={fileInput}
+				onchange={handleFileChange}
+				class="hidden"
+				name="profile_image"
+			/>
 		</div>
 
 		<div class="bg-pp-white mx-auto mt-10 w-80 rounded-xl">
@@ -146,7 +165,11 @@
 			</div>
 
 			<div class="pt-4 pr-6 pb-12">
-				<button type="submit" class="bg-pp-pink text-pp-white hover:bg-pp-darker-pink float-right rounded px-4 py-1 text-xs" disabled={isSaving}>
+				<button
+					type="submit"
+					class="bg-pp-pink text-pp-white hover:bg-pp-darker-pink float-right rounded px-4 py-1 text-xs"
+					disabled={isSaving}
+				>
 					{isSaving ? 'Saving...' : 'Save changes'}
 				</button>
 			</div>
