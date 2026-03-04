@@ -7,13 +7,13 @@
 <div class="min-h-screen w-full">
 	<div class="mx-auto max-w-md">
 		<!-- Banner -->
-		<div class="h-44 w-full bg-pp-gray/10"></div>
+		<div class="bg-pp-gray/10 h-44 w-full"></div>
 
 		<!-- Store info -->
 		<div class="px-4 py-3">
-		<div class="text-xl font-semibold text-pp-pink">{data.store.store_name}</div>
-		<div class="text-xs text-pp-gray">⭐ {data.store.rating}</div>
-		<p class="mt-2 text-xs text-pp-gray">{data.store.store_desc}</p>
+			<div class="text-pp-pink text-xl font-semibold">{data.store.store_name}</div>
+			<div class="text-pp-gray text-xs">⭐ {data.store.rating}</div>
+			<p class="text-pp-gray mt-2 text-xs">{data.store.store_desc}</p>
 		</div>
 
 		<!-- Products -->
@@ -32,11 +32,11 @@
 		</div> -->
 	</div>
 
-  <!-- Floating plus -->
-  <button
-    class="fixed bottom-24 right-6 grid h-12 w-12 place-items-center rounded-full bg-pp-pink text-xl text-pp-white shadow-lg"
-    aria-label="Add"
-  >
-    +
-  </button>
+	<!-- Floating plus -->
+	<button
+		class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+		aria-label="Add"
+	>
+		+
+	</button>
 </div>

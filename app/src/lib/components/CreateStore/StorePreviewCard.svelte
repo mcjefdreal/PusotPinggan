@@ -1,32 +1,27 @@
 <script>
-	import { resolve } from '$app/paths'
+	import { resolve } from '$app/paths';
 
-    const {
-        storePicUrl,
-        storeName,
-        storeId
-    } = $props();
-
+	const { storePicUrl, storeName, storeId } = $props();
 </script>
 
 <div class="flex flex-row">
-    <img src={storePicUrl} alt={storeName} class="w-50 h-50 rounded-lg" />
+	<img src={storePicUrl} alt={storeName} class="h-50 w-50 rounded-lg" />
 
-    <div class="flex flex-col">
-        <p> {storeName} </p>
+	<div class="flex flex-col">
+		<p>{storeName}</p>
 
-        <div class="flex flex-row"> </div>
-        <a
+		<div class="flex flex-row"></div>
+		<a
 			class="bg-pp-pink text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-lg font-medium"
 			href={resolve(`/store/${storeName}/${storeId}`)}
 		>
 			View Store
 		</a>
-        <a
+		<a
 			class="bg-pp-pink text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-lg font-medium"
-			href='/'
+			href="/"
 		>
 			View Orders
 		</a>
-    </div>
+	</div>
 </div>
