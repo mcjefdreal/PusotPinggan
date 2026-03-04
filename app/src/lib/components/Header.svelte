@@ -34,76 +34,112 @@
 	let user = $derived(session.user);
 
 	let locationText = $state('Finding location...');
+	let firstHalf = $state('');
+	let secondHalf = $state('');
 	let errorMessage = $state('');
 
 	async function saveLocationToDatabase(latitude: number, longitude: number) {
-    try {
-      if (!user) {
-        errorMessage = 'User not authenticated.';
-        locationText = 'Location unavailable';
-        return;
-      }
+		try {
+			if (!user) {
+				errorMessage = 'User not authenticated.';
+				locationText = 'Location unavailable';
+				return;
+			}
 
-      const { error: dbError } = await supabase
-        .from('user')
-        .update({ user_coords: `POINT(${longitude} ${latitude})` })
-        .eq('user_id', user.id)
-		.select();
+			const { error: dbError } = await supabase
+				.from('user')
+				.update({ user_coords: `POINT(${longitude} ${latitude})` })
+				.eq('user_id', user.id)
+				.select();
 
-      if (dbError) throw dbError;
+			if (dbError) throw dbError;
 
-      locationText = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+			const response = await fetch(`api/geocode?lat=${latitude}&lng=${longitude}`);
+			const data = await response.json();
 
-    } catch (error: any) {
-      console.error('Error saving location:', error.message);
-      errorMessage = 'Failed to save location.';
-      locationText = 'Location unavailable';
-    }
-  }
+			if (data.firstHalf) {
+				firstHalf = data.firstHalf;
+				secondHalf = data.secondHalf || '';
 
-  function requestLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          saveLocationToDatabase(position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.error('Geolocation error:', error.message);
-          errorMessage = 'Location permission denied.';
-          locationText = 'Location unavailable';
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        }
-      );
-    } else {
-      errorMessage = 'Geolocation is not supported.';
-      locationText = 'Location unavailable';
-    }
-  }
+				// Save to localStorage for caching
+				localStorage.setItem(
+					'userLocation',
+					JSON.stringify({
+						firstHalf: data.firstHalf,
+						secondHalf: data.secondHalf || ''
+					})
+				);
+			}
+		} catch (error: any) {
+			console.error('Error saving location:', error.message);
+			errorMessage = 'Failed to save location.';
+			locationText = 'Location unavailable';
+		}
+	}
 
-  $effect(() => {
-    if (supabase && user) {
-      requestLocation();
-    } else if (!user) {
-      locationText = 'Not logged in';
-    }
-  });
+	function requestLocation() {
+		firstHalf = '';
+		secondHalf = '';
+		locationText = 'Finding location...';
+		errorMessage = '';
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					saveLocationToDatabase(position.coords.latitude, position.coords.longitude);
+				},
+				(error) => {
+					console.error('Geolocation error:', error.message);
+					errorMessage = 'Location permission denied.';
+					locationText = 'Location unavailable';
+				},
+				{
+					enableHighAccuracy: true,
+					timeout: 10000,
+					maximumAge: 0
+				}
+			);
+		} else {
+			errorMessage = 'Geolocation is not supported.';
+			locationText = 'Location unavailable';
+		}
+	}
+
+	$effect(() => {
+		if (!user) {
+			locationText = 'Not logged in';
+			return;
+		}
+
+		// Check localStorage first
+		const cached = localStorage.getItem('userLocation');
+		if (cached) {
+			const { firstHalf: cachedFirst, secondHalf: cachedSecond } = JSON.parse(cached);
+			firstHalf = cachedFirst;
+			secondHalf = cachedSecond || '';
+		} else {
+			requestLocation();
+		}
+	});
 </script>
 
 <nav class="from-pp-pink to-pp-light-pink sticky start-0 top-0 z-20 w-full bg-linear-to-t p-2 pb-4">
-	<div class="flex max-w-screen-xl items-center p-4">
+	<div
+		class="flex max-w-screen-xl items-center p-4"
+		onclick={requestLocation}
+		role="button"
+		tabindex="0"
+		onkeydown={(e) => e.key === 'Enter' && requestLocation()}
+	>
 		<MapPinAltOutline class="text-pp-white h-8 w-8 shrink-0" />
 		<div class="items-left ml-4 flex flex-col">
 			{#if errorMessage}
 				<p class="text-pp-white font-bold">{errorMessage}</p>
 			{:else}
-				<p class="text-pp-white font-bold">{locationText}</p>
+				<p class="text-pp-white font-bold">{firstHalf || locationText}</p>
+				{#if secondHalf}
+					<p class="text-pp-white">{secondHalf}</p>
+				{/if}
 			{/if}
-			<!-- <p class="text-pp-white font-bold">Velasquez</p>
-			<p class="text-pp-white">Diliman, Quezon City</p> -->
 		</div>
 		<CogSolid class="text-pp-white ml-auto h-8 w-8 shrink-0" />
 	</div>

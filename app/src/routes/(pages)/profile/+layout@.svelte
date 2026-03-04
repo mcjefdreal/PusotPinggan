@@ -3,7 +3,7 @@
 	const { data, children } = $props();
 </script>
 
-<div class="bg-pp-white w-full min-h-screen">
+<div class="bg-pp-white min-h-screen w-full">
 	{@render children()}
 	<Navbar />
 </div>

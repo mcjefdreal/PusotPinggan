@@ -15,7 +15,7 @@
 	<div class="mt-10">
 		<form method="POST" action="?/google">
 			<button
-				class="bg-pp-white text-pp-pink float-right rounded px-4 py-1 h-10 w-50"
+				class="bg-pp-white text-pp-pink float-right h-10 w-50 rounded px-4 py-1"
 				type="submit"
 			>
 				Sign in with Google
