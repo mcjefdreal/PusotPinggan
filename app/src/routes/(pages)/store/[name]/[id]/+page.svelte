@@ -1,13 +1,54 @@
 <script lang="ts">
+    import AddProductModal from '$lib/components/Store/AddProductModal.svelte'
 	import type { PageProps } from './$types.ts';
+	import { Toast } from 'flowbite-svelte';
 
 	let { data }: PageProps = $props();
+
+	let active = $state(false);
+	let showSuccess = $state(false);
+	let showFail = $state(false);
+	let toastMessage = $state('');
+
+	let products = $derived(data.products);
+
+
+	function handleModal() {
+		active = false;
+	}
+
+	function handleSubmit(result: {success: boolean, message: string}) {
+		active = false;
+		toastMessage = result.message;
+		if (result.success) {
+			showSuccess = true;
+			setTimeout(() => showSuccess = false, 3000);
+		} else {
+			showFail = true;
+			setTimeout(() => showFail = false, 3000);
+		}
+	}
+
 </script>
+
+{#if showSuccess}
+	<Toast color="green" class="fixed top-4 right-4 z-50">
+		{toastMessage}
+	</Toast>
+{/if}
+
+{#if showFail}
+	<Toast color="red" class="fixed top-4 right-4 z-50">
+		{toastMessage}
+	</Toast>
+{/if}
 
 <div class="min-h-screen w-full">
 	<div class="mx-auto max-w-md">
 		<!-- Banner -->
-		<div class="bg-pp-gray/10 h-44 w-full"></div>
+		<div class="bg-pp-gray/10 h-44 w-full">
+			<img class="object-cover w-full h-full" src={data.store.img_url} alt={data.store.store_name}/>
+		</div>
 
 		<!-- Store info -->
 		<div class="px-4 py-3">
@@ -17,26 +58,31 @@
 		</div>
 
 		<!-- Products -->
-		<!-- <div class="px-4 pb-24">
+		<div class="px-4 pb-24">
 		<div class="grid grid-cols-2 gap-3">
-			{#each products as p (p.id)}
-			<div class="overflow-hidden rounded-xl border border-pp-gray/30">
-				<img class="h-28 w-full object-cover" src={p.img_url} alt={p.name} />
-				<div class="p-2">
-				<div class="text-sm font-semibold text-pp-black">{p.name}</div>
-				<div class="text-xs text-pp-gray">₱ {p.price.toFixed(2)}</div>
+			{#each products as p (p.product_id)}
+				<div class="overflow-hidden rounded-xl border border-pp-gray/30">
+					<img class="h-28 w-full object-cover" src={p.img_url} alt={p.name} />
+					<div class="p-2">
+					<div class="text-sm font-semibold text-pp-black">{p.name}</div>
+					<div class="text-xs text-pp-gray">₱ {p.price.toFixed(2)}</div>
+					</div>
 				</div>
-			</div>
 			{/each}
 		</div>
-		</div> -->
+		</div>
 	</div>
 
 	<!-- Floating plus -->
 	<button
 		class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
 		aria-label="Add"
+		onclick={() => active = true}
 	>
 		+
 	</button>
+
+	<AddProductModal active={active} onClose={handleModal} onSubmit={handleSubmit} supabase={data.supabase} storeId={data.storeId}>
+
+	</AddProductModal>
 </div>
