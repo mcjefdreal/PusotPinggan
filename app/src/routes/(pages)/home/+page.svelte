@@ -6,9 +6,10 @@
 	import Banner from '$lib/banner.png';
 	import RecCard from '$lib/components/Homepage/RecCard.svelte';
 
-	import { CartOutline } from 'flowbite-svelte-icons';
 	import { Button } from 'flowbite-svelte';
 	import CategoryCard from '$lib/components/Homepage/CategoryCard.svelte';
+
+	import BasketIcon from '$lib/icons/basket.svg';
 </script>
 
 <div class="min-h-screen w-full p-5">
@@ -30,5 +31,5 @@
 		<CategoryCard> </CategoryCard>
 	</div>
 
-	<Button pill={true} class="p-2! bg-pp-pink fixed right-6 bottom-25 z-50 shadow-lg"><CartOutline class="h-10 w-10" /></Button>
+	<Button pill={true} class="focus:outline-none p-2! bg-pp-pink fixed right-6 bottom-25 z-50 shadow-lg"><img src={BasketIcon} /></Button>
 </div>
