@@ -1,35 +1,14 @@
 <script lang="ts">
 	import logo from '$lib/icons/logomark.svg';
 
-	import { Search, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
+	import { Search, Button } from 'flowbite-svelte';
 	import {
 		SearchOutline,
-		AdjustmentsHorizontalOutline,
 		MapPinAltOutline,
 		CogSolid
 	} from 'flowbite-svelte-icons';
 
 	import { goto } from '$app/navigation';
-
-	const items = [
-		{
-			label: 'Filter 1'
-		},
-		{
-			label: 'Filter 2'
-		},
-		{
-			label: 'Filter 3'
-		},
-		{
-			label: 'Filter 4'
-		},
-		{
-			label: 'Filter 5'
-		}
-	];
-
-	let selectCategory = $state('Filters');
 
 	let { supabase, session } = $props();
 
