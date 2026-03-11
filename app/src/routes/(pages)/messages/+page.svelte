@@ -19,8 +19,12 @@
 		</a>
 	</div>
 
-	<div class="flex flex-col p-6 gap-y-4">
-		<ChatPreview> </ChatPreview>
-		<ChatPreview userName="karin" read={true}> </ChatPreview>
+	<div class="flex flex-col px-0 py-0 gap-y-0">
+		<a href={resolve('/messages/chat')} class="block hover:bg-gray-100 active:bg-gray-300 transition rounded-lg">
+			<ChatPreview> </ChatPreview>		
+		</a>
+		<a href={resolve('/messages/chat')} class="block hover:bg-gray-100 active:bg-gray-300 transition rounded-lg">
+			<ChatPreview userName="karin" read={true}> </ChatPreview>
+		</a>
 	</div>
 </div>
