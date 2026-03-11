@@ -2,6 +2,9 @@
     import AddProductModal from '$lib/components/Store/AddProductModal.svelte'
 	import type { PageProps } from './$types.ts';
 	import { Toast } from 'flowbite-svelte';
+	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
+
+	import { resolve } from '$app/paths';
 
 	let { data }: PageProps = $props();
 
@@ -46,8 +49,16 @@
 <div class="min-h-screen w-full">
 	<div class="mx-auto max-w-md">
 		<!-- Banner -->
-		<div class="bg-pp-gray/10 h-44 w-full">
-			<img class="object-cover w-full h-full" src={data.store.img_url} alt={data.store.store_name}/>
+		<div class="relative">
+			<a
+			class="bg-pp-pink text-pp-white absolute top-2 left-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+			href={resolve('/store/')}
+			>
+				<ArrowLeftOutline />
+			</a>
+			<div class="bg-pp-gray/10 h-44 w-full">
+				<img class="object-cover w-full h-full" src={data.store.img_url} alt={data.store.store_name}/>
+			</div>
 		</div>
 
 		<!-- Store info -->
