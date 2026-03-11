@@ -170,24 +170,5 @@
 				placeholder="Search for food"
 			/>
 		</div>
-
-		<div class="bg-pp-white border-pp-gray relative ml-4 rounded-lg border px-8">
-			<Button class="text-pp-gray flex">
-				{selectCategory}
-				<AdjustmentsHorizontalOutline class="ms-2.5 h-6 w-6" />
-			</Button>
-			<Dropdown simple class="w-40">
-				{#each items as { label } (label)}
-					<DropdownItem
-						onclick={() => {
-							selectCategory = label;
-						}}
-						class={selectCategory === label ? 'underline' : ''}
-					>
-						{label}
-					</DropdownItem>
-				{/each}
-			</Dropdown>
-		</div>
 	</form>
 </nav>
