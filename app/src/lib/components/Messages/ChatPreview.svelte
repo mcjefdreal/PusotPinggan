@@ -8,7 +8,7 @@
 	} = $props();
 </script>
 
-<div class="flex flex-row">
+<div class="flex flex-row py-4 px-4">
     <div class="bg-pp-light-pink h-20 w-20 rounded-full"> </div>
     <div class="flex flex-col justify-center gap-1 pl-4">
         <p class="text-lg font-semibold"> {userName} </p>
