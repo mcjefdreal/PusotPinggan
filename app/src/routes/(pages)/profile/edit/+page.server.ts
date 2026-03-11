@@ -33,7 +33,7 @@ export const actions: Actions = {
 		const imgFile = formData.get('profile_image') as File;
 		if (imgFile && imgFile.size > 0) {
 			const fileExt = imgFile.name.split('.').pop();
-			const filePath = `avatars/${user.id}/profile.${fileExt}`;
+			const filePath = `avatars/${user.id}/profile_${Date.now()}.${fileExt}`;
 			// console.log(filePath);
 
 			// Delete existing image(s) first
@@ -45,8 +45,10 @@ export const actions: Actions = {
 				console.log('Deleting files');
 				const filesToDelete = existingFiles.map((f) => `avatars/${user.id}/${f.name}`);
 				await supabase.storage.from('images').remove(filesToDelete);
+				await new Promise(resolve => setTimeout(resolve, 100));
 			}
 
+			// upload new image
 			const { error: uploadError } = await supabase.storage
 				.from('images')
 				.upload(filePath, imgFile, { upsert: true, contentType: imgFile.type });
