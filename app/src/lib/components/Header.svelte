@@ -9,6 +9,8 @@
 		CogSolid
 	} from 'flowbite-svelte-icons';
 
+	import { goto } from '$app/navigation';
+
 	const items = [
 		{
 			label: 'Filter 1'
@@ -37,6 +39,8 @@
 	let firstHalf = $state('');
 	let secondHalf = $state('');
 	let errorMessage = $state('');
+
+	let searchQuery = $state('');
 
 	async function saveLocationToDatabase(latitude: number, longitude: number) {
 		try {
@@ -120,6 +124,15 @@
 			requestLocation();
 		}
 	});
+
+	function handleSearch(e: Event) {
+		e.preventDefault();
+		if (searchQuery.trim()) {
+			goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+			searchQuery = '';
+		}
+	}
+
 </script>
 
 <nav class="from-pp-pink to-pp-light-pink sticky start-0 top-0 z-20 w-full bg-linear-to-t p-2 pb-4">
@@ -144,7 +157,7 @@
 		<CogSolid class="text-pp-white ml-auto h-8 w-8 shrink-0" />
 	</div>
 
-	<form class="flex max-w-screen-xl px-4">
+	<form class="flex max-w-screen-xl px-4" onsubmit={handleSearch}>
 		<div class="relative w-full">
 			<div class="absolute inset-y-0 start-0 flex items-center ps-3">
 				<SearchOutline class="text-pp-gray ms-0.5 h-6 w-6" />
@@ -152,6 +165,7 @@
 			<input
 				type="search"
 				id="search"
+				bind:value={searchQuery}
 				class="bg-pp-white border-pp-gray placeholder:text-body placeholder:text-pp-gray w-full rounded-lg border p-3 ps-10 text-sm"
 				placeholder="Search for food"
 			/>
