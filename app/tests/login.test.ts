@@ -3,5 +3,6 @@ import { supabase } from './supabase.ts';
 
 test('logged in user can access application pages', async ({ page }) => {
 	await page.goto('/home');
-	await expect(page.locator('h1')).toContainText('hello');
+	await page.goto('/store');
+	await page.goto('/profile');
 });

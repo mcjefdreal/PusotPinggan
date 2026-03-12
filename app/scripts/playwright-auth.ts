@@ -1,7 +1,13 @@
 import { chromium } from '@playwright/test';
 import 'dotenv/config';
 async function saveAuthSession() {
-	const browser = await chromium.launch({ headless: false });
+	const browser = await chromium.launch({ 
+		headless: false,
+		args: [
+			'--disable-blink-features=AutomationControlled',
+			'--disable-dev-shm-usage',
+		]
+	 });
 	const context = await browser.newContext();
 	const page = await context.newPage();
 	// Navigate to app
@@ -10,7 +16,7 @@ async function saveAuthSession() {
 	console.log('Please log in with Google OAuth...');
 	console.log('The session will save automatically after login.');
 
-	await page.waitForSelector('h1:has-text("hello profile")', { timeout: 0 });
+	await page.waitForSelector('h1:has-text("All categories")', { timeout: 0 });
 
 	console.log('Login detected! Saving session...');
 
