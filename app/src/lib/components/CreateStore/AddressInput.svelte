@@ -72,7 +72,7 @@
 		required
 	/>
 
-	<div bind:this={mapElement} class="m-[10px] h-[300px] w-[80%] rounded bg-[#ddd]"></div>
+	<div bind:this={mapElement} class="my-4 h-[300px] w-[100%] rounded bg-[#ddd]"></div>
 
 	<input type="hidden" name="store_addr" value={selected.address} />
 	<input type="hidden" name="store_lat" value={selected.lat} />

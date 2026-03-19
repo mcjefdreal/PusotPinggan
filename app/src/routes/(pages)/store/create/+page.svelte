@@ -34,9 +34,9 @@
 					submitting = false;
 				};
 			}}
-			class="max-w-md"
+			class="max-w-md w-full"
 		>
-			<div class="mb-6 grid gap-2 px-6">
+			<div class="mb-6 grid gap-2 px-3">
 				<div>
 					<label for="store_img" class="text-pp-gray mb-2.5 text-xs font-medium">Store image</label>
 					<input type="file" id="store_img" name="store_img" accept="image/*" required />
@@ -65,73 +65,25 @@
 					></textarea>
 				</div>
 
-				<div>
+				<div class="min-w-0 shrink-0">
 					<Label class="text-pp-gray mb-2.5 text-xs font-medium">Store hours</Label>
 
 					<input type="hidden" name="sched" value={JSON.stringify(schedule)} />
 
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Monday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
-
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Tuesday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
-
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Wednesday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
-
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Thursday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
-
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Friday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
-
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Saturday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
-
-					<div class="flex flex-row items-center">
-						<Label class="pr-2">Sunday</Label>
-						<Timepicker
-							type="range"
-							onselect={(e) => handleRangeChange('monday', e.time, e.endTime)}
-							divClass="shadow-none"
-						/>
-					</div>
+					{#each Object.keys(schedule) as day}
+						<div class="grid grid-cols-[100px_1fr] items-center gap-2 pb-2">
+							<Label class="capitalize">{day}</Label>
+							<br/>
+							<div class="min-w-0">
+								<Timepicker
+									type="range"
+									onselect={(e) => handleRangeChange(day, e.time, e.endTime)}
+									divClass="w-full max-w-full shadow-none max-w-xs"
+									class="w-full min-w-0 max-w-xs"
+								/>
+							</div>
+						</div>
+					{/each}
 				</div>
 
 				<div>
