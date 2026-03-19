@@ -1,6 +1,8 @@
 <script lang="ts">
 	import logo from '../lib/icons/logomark.svg';
 
+	import { GoogleSolid } from 'flowbite-svelte-icons';
+
 	import { resolve } from '$app/paths';
 	import { redirect } from '@sveltejs/kit';
 </script>
@@ -13,9 +15,10 @@
 	<h1 class="text-pp-white text-3xl font-semibold">Puso't Pinggan</h1>
 
 	<div class="mt-10">
-		<form method="POST" action="?/google">
+		<form method="POST" action="?/google" class="bg-pp-white text-pp-pink flex items-center h-10 w-60 rounded px-4 py-1">
+			<GoogleSolid class="shrink-0 h-6 w-6" />
 			<button
-				class="bg-pp-white text-pp-pink float-right h-10 w-50 rounded px-4 py-1"
+				class="pl-4"
 				type="submit"
 			>
 				Sign in with Google
