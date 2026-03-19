@@ -92,7 +92,13 @@
 				</div>
 			</div>
 
-			<div class="pr-2 pb-12">
+			<div class="px-3 pb-12">
+				<a
+					class="bg-pp-white text-pp-black hover:bg-pp-darker-pink float-left rounded px-4 py-1 text-xs"
+					href={resolve(`/store/`)}
+				>
+					Cancel
+				</a>
 				<button
 					type="submit"
 					disabled={submitting}
