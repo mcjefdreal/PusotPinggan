@@ -5,6 +5,7 @@
 	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
 
 	import { resolve } from '$app/paths';
+	import ProductCard from '$lib/components/Store/ProductCard.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -72,13 +73,7 @@
 		<div class="px-4 pb-24">
 		<div class="grid grid-cols-2 gap-3">
 			{#each products as p (p.product_id)}
-				<div class="overflow-hidden rounded-xl border border-pp-gray/30">
-					<img class="h-28 w-full object-cover" src={p.img_url} alt={p.name} />
-					<div class="p-2">
-					<div class="text-sm font-semibold text-pp-black">{p.name}</div>
-					<div class="text-xs text-pp-gray">₱ {p.price.toFixed(2)}</div>
-					</div>
-				</div>
+				<ProductCard productPic={p.img_url} productName={p.name} productPrice={p.price}/>
 			{/each}
 		</div>
 		</div>
