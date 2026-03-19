@@ -7,8 +7,8 @@
 <div class="flex flex-row py-5 items-start">
 	<img src={storePicUrl} alt={storeName} class="h-35 w-35 rounded-lg" />
 
-	<div class="flex flex-col px-5">
-		<p class="text-2xl text-pp-pink font-semibold pb-5">{storeName}</p>
+	<div class="flex flex-col px-5 overflow-hidden">
+		<p class="text-2xl text-pp-pink font-semibold pb-5 truncate">{storeName}</p>
 
 		<div class="flex flex-col"> 
 			<a

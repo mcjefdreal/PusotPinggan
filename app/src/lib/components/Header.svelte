@@ -116,20 +116,20 @@
 
 <nav class="from-pp-pink to-pp-light-pink sticky start-0 top-0 z-20 w-full bg-linear-to-t p-2 pb-4">
 	<div
-		class="flex max-w-screen-xl items-center p-4"
+		class="flex max-w-screen-xl items-center p-4 min-w-0"
 		onclick={requestLocation}
 		role="button"
 		tabindex="0"
 		onkeydown={(e) => e.key === 'Enter' && requestLocation()}
 	>
 		<MapPinAltOutline class="text-pp-white h-8 w-8 shrink-0" />
-		<div class="items-left ml-4 flex flex-col">
+		<div class="items-left ml-4 flex flex-col min-w-0">
 			{#if errorMessage}
 				<p class="text-pp-white font-bold">{errorMessage}</p>
 			{:else}
-				<p class="text-pp-white font-bold">{firstHalf || locationText}</p>
+				<p class="text-pp-white font-bold truncate">{firstHalf || locationText}</p>
 				{#if secondHalf}
-					<p class="text-pp-white">{secondHalf}</p>
+					<p class="text-pp-white truncate">{secondHalf}</p>
 				{/if}
 			{/if}
 		</div>
