@@ -19,6 +19,7 @@
 	} = $props();
 
 	let isSubmitting = $state(false);
+	let isDeleting = $state(false);
 	let selectedFile = $state<File | null>(null);
 	let fileInput: HTMLInputElement;
 
@@ -126,6 +127,30 @@
 				disabled={isSubmitting}
 			>
 				{isSubmitting ? 'Saving...' : 'Save Changes'}
+			</button>
+		</div>
+	</form>
+	<form
+		method="POST"
+		action="?/delete-product"
+		use:enhance={() => {
+			isDeleting = true;
+			return async ({ result }) => {
+				isDeleting = false;
+				if (result.type === 'success') {
+					await invalidateAll();
+				}
+			}
+		}}
+	>
+		<input type="hidden" name="productId" value={productId} />
+		<div class="flex justify-center">
+			<button
+				class="bg-pp-pink text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-lg"
+				type="submit"
+				disabled={isDeleting}
+			>
+				{isDeleting ? 'Removing...' : 'Remove Product'}
 			</button>
 		</div>
 	</form>

@@ -169,7 +169,25 @@ export const actions: Actions = {
 		}
 
 		return { success: true, message: 'Product added successfully' };
-	}
+	},
 
+	"delete-product": async ({ request, locals: { supabase } }) => {
+		const timeout = (ms: number) =>
+			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
+
+		const formData = await request.formData();
+		const productId = formData.get('productId') as string;
+
+		const { error: deleteError } = await supabase
+			.from('product')
+			.delete()
+			.eq('product_id', productId);
+
+		if(deleteError) {
+			return fail(500, { success: false, message: 'Remove product failed' });
+		}
+
+		return { success: true, message: 'Product removed successfully' };
+	},
 };
 
