@@ -168,7 +168,7 @@ export const actions: Actions = {
 			}
 		}
 
-		return { success: true, message: 'Product added successfully' };
+		return { success: true, message: 'Product edited successfully' };
 	},
 
 	"delete-product": async ({ request, locals: { supabase } }) => {

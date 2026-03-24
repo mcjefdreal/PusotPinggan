@@ -8,6 +8,7 @@
 		editModal = false,
 		onClose,
 		onSubmit,
+		showToast,
 		supabase,
 		storeId,
 		productId,
@@ -55,7 +56,8 @@
 				if (result.type === 'success') {
 					await invalidateAll();
 					const data = result.data as { success: boolean; message: string };
-					onSubmit?.(data);
+					onSubmit?.(data)
+					showToast?.(data);
 				}
 			}
 		}}
@@ -92,6 +94,8 @@
 				<label for="product_price" class="text-pp-gray mb-2.5 text-xs font-medium">Price</label>
 				<input
 					type="number"
+					step="any"
+					inputmode="decimal"
 					id="product_price"
 					name="product_price"
 					class="border-pp-gray text-pp-black w-full rounded-md border px-3 py-2.5 text-xs"
@@ -139,6 +143,9 @@
 				isDeleting = false;
 				if (result.type === 'success') {
 					await invalidateAll();
+					const data = result.data as { success: boolean; message: string };
+					showToast?.(data);
+					onSubmit
 				}
 			}
 		}}

@@ -10,6 +10,7 @@
 		productId,
 		storeId,
 		supabase,
+		showToast,
 	} = $props();
 
 	let editModal = $state(false);
@@ -40,6 +41,7 @@
 	{editModal} 
 	onClose={handleClose}
 	onSubmit={handleSubmit}
+	showToast={showToast}
 	{supabase}
 	{storeId}
 	{productId}

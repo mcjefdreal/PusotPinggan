@@ -50,7 +50,6 @@
 			setTimeout(() => showFail = false, 3000);
 		}
 	}
-
 </script>
 
 {#if showSuccess}
@@ -107,6 +106,7 @@
 					productQuantity={p.quantity}
 					supabase={data.supabase}
 					storeId={data.storeId}
+					showToast={handleSubmit}
 				/>
 			{/each}
 		</div>
