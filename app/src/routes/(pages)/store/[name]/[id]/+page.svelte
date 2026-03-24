@@ -136,6 +136,8 @@
 		storeDesc={data.store.store_desc}
 		storePic={data.store.img_url}
 		storeAddr={data.store.store_addr}
+		storeLat={data.storeLat}
+		storeLng={data.storeLng}
 		storeHrs={data.store.store_hrs}
 	/>
 </div>

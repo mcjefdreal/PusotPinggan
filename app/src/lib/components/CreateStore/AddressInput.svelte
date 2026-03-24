@@ -3,7 +3,13 @@
 	import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 	import { PUBLIC_GOOGLE_MAPS_API_KEY } from '$env/static/public';
 
-	let selected = $state({ address: '', lat: '', lng: '' });
+	let {
+		initialAddress = '',
+		initialLat = '14.648937907831831', 
+		initialLng = '121.06869653914266'
+	} = $props();
+
+	let selected = $state({ address: initialAddress, lat: initialLat, lng: initialLng });
 	let mapElement = $state();
 	let inputElement = $state();
 
@@ -17,13 +23,25 @@
 			importLibrary('geocoding')
 		]);
 
+		const initialCenter = initialLat && initialLng 
+			? { lat: parseFloat(initialLat), lng: parseFloat(initialLng) }
+			: { lat: 0, lng: 0 };
+
 		const map = new Map(mapElement, {
-			center: { lat: 0, lng: 0 },
-			zoom: 2,
+			center: initialCenter,
+			zoom: initialLat && initialLng ? 15 : 2,
 			mapId: 'DEMO_MAP_ID'
 		});
 
-		const marker = new AdvancedMarkerElement({ map });
+		const marker = new AdvancedMarkerElement({ 
+			map,
+			position: initialCenter
+		});
+
+		if (initialAddress && inputElement) {
+			inputElement.value = initialAddress;
+		}
+
 		const autocomplete = new Autocomplete(inputElement, {
 			fields: ['formatted_address', 'geometry']
 		});
@@ -48,7 +66,7 @@
 
 		autocomplete.addListener('place_changed', () => {
 			const place = autocomplete.getPlace();
-			if (!place.geometry) return;
+			if (!place || !place.geometry || !place.geometry.location) return;
 
 			selected = {
 				address: place.formatted_address || '',
@@ -72,7 +90,7 @@
 		required
 	/>
 
-	<div bind:this={mapElement} class="my-4 h-[300px] w-[100%] rounded bg-[#ddd]"></div>
+	<div bind:this={mapElement} class="my-4 h-[300px] w-full rounded bg-[#ddd]"></div>
 
 	<input type="hidden" name="store_addr" value={selected.address} />
 	<input type="hidden" name="store_lat" value={selected.lat} />

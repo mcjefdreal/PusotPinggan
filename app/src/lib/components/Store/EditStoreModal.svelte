@@ -3,6 +3,7 @@
 	import { invalidateAll, goto } from '$app/navigation';
 	import { Modal } from 'flowbite-svelte';
 	import { Label, Timepicker } from 'flowbite-svelte';
+	import AddressInput from '$lib/components/CreateStore/AddressInput.svelte';
 
 	let {
 		editModal = false,
@@ -14,6 +15,8 @@
 		storeDesc = '',
 		storePic = '',
 		storeAddr = '',
+		storeLat = '',
+		storeLng = '',
 		storeHrs = {}
 	} = $props();
 
@@ -29,7 +32,7 @@
 		return storePic;
 	});
 
-	let schedule = $state({
+	let schedule = $derived({
 		monday: storeHrs?.monday || { open: '00:00', close: '00:00' },
 		tuesday: storeHrs?.tuesday || { open: '00:00', close: '00:00' },
 		wednesday: storeHrs?.wednesday || { open: '00:00', close: '00:00' },
@@ -127,14 +130,11 @@
 					</div>
 				{/each}
 
-				<label for="store_addr" class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
-				<input
-					type="text"
-					id="store_addr"
-					name="store_addr"
-					class="border-pp-gray text-pp-black w-full rounded-md border px-3 py-2.5 text-xs bg-gray-100"
-					value={storeAddr}
-					readonly
+				<label class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
+				<AddressInput 
+					initialAddress={storeAddr}
+					initialLat={storeLat}
+					initialLng={storeLng}
 				/>
 			</div>
 		</div>

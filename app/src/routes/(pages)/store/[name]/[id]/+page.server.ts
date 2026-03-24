@@ -17,6 +17,19 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		throw error(500, 'Failed to load stores');
 	}
 
+	let storeLat = '';
+	let storeLng = '';
+
+	if (store.store_coords) {
+		const { data: coords, error } = await supabase.rpc('get_geo_coords', {
+			p_store_id: store.store_id
+		});
+		if (coords) {
+			storeLat = coords[0].lat?.toString() || '';
+			storeLng = coords[0].lng?.toString() || '';
+		}
+	}
+
 	const { data: products, error: productError } = await supabase
 		.from('product')
 		.select('*')
@@ -26,6 +39,8 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		store,
 		storeName: params.name,
 		storeId: params.id,
+		storeLat,
+		storeLng,
 		products
 	};
 };
@@ -197,6 +212,8 @@ export const actions: Actions = {
 		const name = formData.get('store_name') as string;
 		const desc = formData.get('store_description') as string;
 		const addr = formData.get('store_addr') as string;
+		const lat = formData.get('store_lat') as string;
+		const lng = formData.get('store_lng') as string;
 
 		const schedRaw = formData.get('sched') as string;
 		let sched = {};
@@ -210,14 +227,25 @@ export const actions: Actions = {
 			return fail(400, { success: false, message: 'Missing required fields' });
 		}
 
+		let storeCoords = undefined;
+		if (lat && lng) {
+			storeCoords = `POINT(${lng} ${lat})`;
+		}
+
+		const updateData: any = {
+			store_name: name,
+			store_desc: desc,
+			store_addr: addr,
+			store_hrs: sched
+		};
+
+		if (storeCoords) {
+			updateData.store_coords = storeCoords;
+		}
+
 		const { error: updateError } = await supabase
 			.from('store')
-			.update({
-				store_name: name,
-				store_desc: desc,
-				store_addr: addr,
-				store_hrs: sched
-			})
+			.update(updateData)
 			.eq('store_id', storeId);
 
 		if (updateError) {
