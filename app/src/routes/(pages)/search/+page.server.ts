@@ -5,7 +5,10 @@ export const load: PageServerLoad = async ({ parent, url, locals: { supabase } }
 	const query = url.searchParams.get('q');
 
 	if (!query) {
-		return { products: [] };
+		return { 
+			products: [],
+			stores: []
+		};
 	}
 
 	const { data: products, error: productError } = await supabase
@@ -14,13 +17,27 @@ export const load: PageServerLoad = async ({ parent, url, locals: { supabase } }
 		.ilike('name', `%${query}%`)
 		.eq('available', true);
 
+	console.log(products)
 	if (productError) {
 		console.error('Search error:', productError.message);
 		throw error(500, 'Failed to search products');
 	}
 
+	const { data: stores, error: storeError } = await supabase
+		.from('store')
+		.select('*')
+		.ilike('store_name', `%${query}%`)
+
+	console.log(stores)
+
+	if (storeError) {
+		console.error('Search error:', storeError.message);
+		throw error(500, 'Failed to search store');
+	}
+
 	return {
 		products: products || [],
+		stores: stores || [],
 		query
 	};
 };

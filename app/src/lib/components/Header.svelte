@@ -146,7 +146,7 @@
 				id="search"
 				bind:value={searchQuery}
 				class="bg-pp-white border-pp-gray placeholder:text-body placeholder:text-pp-gray w-full rounded-lg border p-3 ps-10 text-sm"
-				placeholder="Search for food"
+				placeholder="Search for food or stores"
 			/>
 		</div>
 	</form>
