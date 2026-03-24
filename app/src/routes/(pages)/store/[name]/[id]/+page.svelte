@@ -1,8 +1,9 @@
 <script lang="ts">
     import AddProductModal from '$lib/components/Store/AddProductModal.svelte'
+	import EditStoreModal from '$lib/components/Store/EditStoreModal.svelte'
 	import type { PageProps } from './$types.ts';
 	import { Toast } from 'flowbite-svelte';
-	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
+	import { ArrowLeftOutline, EditOutline } from 'flowbite-svelte-icons';
 
 	import { resolve } from '$app/paths';
 	import ProductCard from '$lib/components/Store/ProductCard.svelte';
@@ -10,11 +11,28 @@
 	let { data }: PageProps = $props();
 
 	let active = $state(false);
+	let editStoreActive = $state(false);
 	let showSuccess = $state(false);
 	let showFail = $state(false);
 	let toastMessage = $state('');
 
 	let products = $derived(data.products);
+
+	function handleEditStoreClose() {
+		editStoreActive = false;
+	}
+
+	function handleEditStoreSubmit(result: { success: boolean; message: string }) {
+		editStoreActive = false;
+		toastMessage = result.message;
+		if (result.success) {
+			showSuccess = true;
+			setTimeout(() => showSuccess = false, 3000);
+		} else {
+			showFail = true;
+			setTimeout(() => showFail = false, 3000);
+		}
+	}
 
 
 	function handleModal() {
@@ -57,6 +75,13 @@
 			>
 				<ArrowLeftOutline />
 			</a>
+			<button
+			class="bg-pp-pink text-pp-white absolute top-2 right-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+			aria-label="Edit Store"
+			onclick={() => editStoreActive = true}
+			>
+				<EditOutline />
+			</button>
 			<div class="bg-pp-gray/10 h-44 w-full">
 				<img class="object-cover w-full h-full" src={data.store.img_url} alt={data.store.store_name}/>
 			</div>
@@ -100,4 +125,17 @@
 	<AddProductModal active={active} onClose={handleModal} onSubmit={handleSubmit} supabase={data.supabase} storeId={data.storeId}>
 
 	</AddProductModal>
+
+	<EditStoreModal 
+		editModal={editStoreActive} 
+		onClose={handleEditStoreClose} 
+		onSubmit={handleEditStoreSubmit}
+		supabase={data.supabase}
+		storeId={data.storeId}
+		storeName={data.store.store_name}
+		storeDesc={data.store.store_desc}
+		storePic={data.store.img_url}
+		storeAddr={data.store.store_addr}
+		storeHrs={data.store.store_hrs}
+	/>
 </div>
