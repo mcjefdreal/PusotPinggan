@@ -190,7 +190,7 @@ export const actions: Actions = {
 		return { success: true, message: 'Product removed successfully' };
 	},
 
-	editStore: async ({ request, locals: { supabase } }) => {
+	"edit-store": async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 
 		const storeId = formData.get('storeId') as string;
@@ -267,7 +267,7 @@ export const actions: Actions = {
 		return { success: true, message: 'Store updated successfully' };
 	},
 
-	deleteStore: async ({ request, locals: { supabase } }) => {
+	"delete-store": async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const storeId = formData.get('storeId') as string;
 
@@ -304,7 +304,7 @@ export const actions: Actions = {
 			return fail(500, { success: false, message: 'Delete store failed' });
 		}
 
-		throw redirect(303, '/store');
+		return { success: true, message: 'Store deleted successfully' }
 	}
 };
 

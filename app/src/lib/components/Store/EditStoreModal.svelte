@@ -60,7 +60,7 @@
 	<form
 		method="POST"
 		enctype="multipart/form-data"
-		action="?/editStore"
+		action="?/edit-store"
 		use:enhance={() => {
 			isSubmitting = true;
 			return async ({ result }) => {
@@ -150,16 +150,14 @@
 	</form>
 	<form
 		method="POST"
-		action="?/deleteStore"
+		action="?/delete-store"
 		use:enhance={() => {
 			isDeleting = true;
 			return async ({ result }) => {
 				isDeleting = false;
-				if (result.type === 'redirect') {
-					await goto('/store');
-				} else if (result.type === 'success') {
-					await invalidateAll();
-					await goto('/store');
+				if (result.type === 'success') {
+					await invalidateAll()
+					goto('/store');
 				}
 			}
 		}}

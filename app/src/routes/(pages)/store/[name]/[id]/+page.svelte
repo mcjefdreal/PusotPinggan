@@ -54,13 +54,13 @@
 </script>
 
 {#if showSuccess}
-	<Toast color="green" class="fixed top-4 right-4 z-50">
+	<Toast color="green" class="fixed top-4 right-4 z-100">
 		{toastMessage}
 	</Toast>
 {/if}
 
 {#if showFail}
-	<Toast color="red" class="fixed top-4 right-4 z-50">
+	<Toast color="red" class="fixed top-4 right-4 z-100">
 		{toastMessage}
 	</Toast>
 {/if}
