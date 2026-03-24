@@ -1,14 +1,26 @@
-<script>
+<script lang="ts">
 	import { EditOutline } from 'flowbite-svelte-icons';
 
 	let {
 		productPic,
 		productName = 'Product',
 		productPrice = 85.0,
-		productDescription = 'Lorem ipsum'
+		productQuantity = 1,
+		productDescription = 'Lorem ipsum',
+		productId,
+		storeId,
+		supabase,
 	} = $props();
 
 	let editModal = $state(false);
+
+	function handleClose() {
+		editModal = false;
+	}
+
+	function handleSubmit(result: { success: boolean; message: string }) {
+		editModal = false;
+	}
 
 	import EditProductModal from './EditProductModal.svelte';
 </script>
@@ -24,4 +36,17 @@
 	</div>
 </div>
 
-<EditProductModal {editModal} {productName} {productPrice} {productDescription}></EditProductModal>
+<EditProductModal 
+	{editModal} 
+	onClose={handleClose}
+	onSubmit={handleSubmit}
+	{supabase}
+	{storeId}
+	{productId}
+	{productName} 
+	{productPrice} 
+	{productDescription} 
+	{productPic}
+	{productQuantity}
+>
+</EditProductModal>

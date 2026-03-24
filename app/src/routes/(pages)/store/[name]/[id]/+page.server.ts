@@ -31,7 +31,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase } }) => {
+	"add-product": async ({ request, locals: { supabase } }) => {
 		const timeout = (ms: number) =>
 			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
 
@@ -102,6 +102,74 @@ export const actions: Actions = {
 		}
 
 		return { success: true, message: 'Product added successfully' };
+	},
+
+	"edit-product": async ({ request, locals: { supabase } }) => {
+		const timeout = (ms: number) =>
+			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
+
+		const formData = await request.formData();
+		
+		const name = formData.get('product_name') as string;
+		const price = parseFloat(formData.get('product_price') as string);
+		const description = formData.get('product_description') as string;
+		const quantity = parseInt(formData.get('product_quantity') as string);
+		const storeId = formData.get('storeId') as string;
+		const productId = formData.get('productId') as string;
+
+		if (!productId || !storeId || !name || !price || !description || isNaN(quantity)) {
+			return fail(400, { success: false, message: 'Missing required fields' });
+		}
+
+		const { error: oroductUpdateError } = await supabase
+			.from('product')
+			.update({ name: name, description: description, price: price, quantity: quantity })
+			.eq('product_id', productId)
+
+		// Handle optional image update
+		const imgFile = formData.get('product_img') as File;
+		if (imgFile && imgFile.size > 0) {
+			const fileExt = imgFile.name.split('.').pop();
+			const filePath = `${storeId}/${productId}_${Date.now()}.${fileExt}`;
+
+			// Delete existing images for this product
+			const { data: existingFiles } = await supabase.storage
+				.from('images')
+				.list(`${storeId}/`);
+
+			if (existingFiles && existingFiles.length > 0) {
+				const filesToDelete = existingFiles
+					.filter((f) => f.name.startsWith(`${productId}_`))
+					.map((f) => `${storeId}/${f.name}`);
+				if (filesToDelete.length > 0) {
+					await supabase.storage.from('images').remove(filesToDelete);
+					await new Promise(resolve => setTimeout(resolve, 100));
+				}
+			}
+
+			// Upload new image
+			const { error: uploadError } = await supabase.storage
+				.from('images')
+				.upload(filePath, imgFile, { upsert: true, contentType: imgFile.type });
+
+			if (uploadError) {
+				return fail(500, { success: false, message: 'Image upload failed' });
+			}
+
+			const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
+
+			const { error: imgUpdateError } = await supabase
+				.from('product')
+				.update({ img_url: urlData.publicUrl })
+				.eq('product_id', productId);
+
+			if (imgUpdateError) {
+				return fail(500, { success: false, message: 'Image URL update failed' });
+			}
+		}
+
+		return { success: true, message: 'Product added successfully' };
 	}
+
 };
 

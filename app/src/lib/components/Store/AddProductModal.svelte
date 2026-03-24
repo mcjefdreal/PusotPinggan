@@ -19,6 +19,7 @@
 	<form
 		method="POST"
 		enctype="multipart/form-data"
+		action="?/add-product"
 		use:enhance={() => {
 			isSubmitting = true;
 			return async ({ result }) => {

@@ -73,7 +73,16 @@
 		<div class="px-4 pb-24">
 		<div class="grid grid-cols-2 gap-3">
 			{#each products as p (p.product_id)}
-				<ProductCard productPic={p.img_url} productName={p.name} productPrice={p.price}/>
+				<ProductCard 
+					productPic={p.img_url} 
+					productName={p.name} 
+					productPrice={p.price}
+					productDescription={p.description}
+					productId={p.product_id}
+					productQuantity={p.quantity}
+					supabase={data.supabase}
+					storeId={data.storeId}
+				/>
 			{/each}
 		</div>
 		</div>
