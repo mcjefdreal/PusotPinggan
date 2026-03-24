@@ -17,7 +17,6 @@ export const load: PageServerLoad = async ({ parent, url, locals: { supabase } }
 		.ilike('name', `%${query}%`)
 		.eq('available', true);
 
-	console.log(products)
 	if (productError) {
 		console.error('Search error:', productError.message);
 		throw error(500, 'Failed to search products');
@@ -27,8 +26,6 @@ export const load: PageServerLoad = async ({ parent, url, locals: { supabase } }
 		.from('store')
 		.select('*')
 		.ilike('store_name', `%${query}%`)
-
-	console.log(stores)
 
 	if (storeError) {
 		console.error('Search error:', storeError.message);
