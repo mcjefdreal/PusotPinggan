@@ -30,6 +30,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: 'app/pnpm-lock.yaml'
+          pnpm-version: 9
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
