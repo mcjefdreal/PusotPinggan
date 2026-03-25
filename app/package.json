@@ -9,7 +9,7 @@
 		"prepack": "svelte-kit sync && svelte-package && publint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "pnpm run --workspace-root --parallel /^lint:/",
+		"lint": "pnpm run lint:eslint && pnpm run lint:svelte",
 		"lint:svelte": "svelte-check",
 		"lint:eslint": "eslint --cache --concurrency auto",
 		"fmt": "prettier . --experimental-cli --check --cache-location .prettiercache",

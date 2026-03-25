@@ -8,7 +8,6 @@
 		onClose,
 		onSubmit,
 		storeId,
-		supabase
 	} = $props();
 
 	let isSubmitting = $state(false);

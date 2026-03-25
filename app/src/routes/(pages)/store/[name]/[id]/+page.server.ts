@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		.select('*')
 		.eq('store_name', params.name)
 		.eq('store_id', params.id)
-		.eq('owner', user.id)
+		.eq('owner', user!.id)
 		.single();
 
 	if (storeError) {

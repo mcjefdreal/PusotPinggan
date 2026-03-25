@@ -9,7 +9,6 @@
 		productDescription = 'Lorem ipsum',
 		productId = '',
 		storeId = '',
-		supabase = null,
 		showToast = () => {},
 	} = $props();
 

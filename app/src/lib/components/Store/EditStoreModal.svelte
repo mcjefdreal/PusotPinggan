@@ -9,7 +9,6 @@
 		editModal = false,
 		onClose,
 		onSubmit,
-		supabase,
 		storeId,
 		storeName = '',
 		storeDesc = '',

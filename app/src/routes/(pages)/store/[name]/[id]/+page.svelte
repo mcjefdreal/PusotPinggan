@@ -105,7 +105,6 @@
 					productDescription={p.description}
 					productId={p.product_id}
 					productQuantity={p.quantity}
-					supabase={data.supabase}
 					storeId={data.storeId}
 					showToast={handleSubmit}
 				/>
@@ -124,7 +123,7 @@
 		+
 	</button>
 
-	<AddProductModal active={active} onClose={handleModal} onSubmit={handleSubmit} supabase={data.supabase} storeId={data.storeId}>
+	<AddProductModal active={active} onClose={handleModal} onSubmit={handleSubmit} storeId={data.storeId}>
 
 	</AddProductModal>
 
@@ -132,7 +131,6 @@
 		editModal={editStoreActive} 
 		onClose={handleEditStoreClose} 
 		onSubmit={handleEditStoreSubmit}
-		supabase={data.supabase}
 		storeId={data.storeId}
 		storeName={data.store.store_name}
 		storeDesc={data.store.store_desc}
