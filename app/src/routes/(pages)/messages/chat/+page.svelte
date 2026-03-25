@@ -52,29 +52,11 @@
 	</div>
 	<div class="flex flex-col py-1">
 		<ChatMessage chatID={1} {MsgShowingTS} {ShowTS} {toggleTS}></ChatMessage>
-		<ChatMessage
-			chatID={2}
-			{MsgShowingTS}
-			{ShowTS}
-			{toggleTS}
-			isUser={false}
-			timestamp="12:01 PM"
+		<ChatMessage chatID={2} {MsgShowingTS} {ShowTS} {toggleTS} isUser={false} timestamp="12:01 PM"
 		></ChatMessage>
-		<ChatMessage
-			chatID={3}
-			{MsgShowingTS}
-			{ShowTS}
-			{toggleTS}
-			isUser={false}
-			timestamp="12:01 PM"
+		<ChatMessage chatID={3} {MsgShowingTS} {ShowTS} {toggleTS} isUser={false} timestamp="12:01 PM"
 		></ChatMessage>
-		<ChatMessage
-			chatID={4}
-			{MsgShowingTS}
-			{ShowTS}
-			{toggleTS}
-			isUser={false}
-			timestamp="12:02 PM"
+		<ChatMessage chatID={4} {MsgShowingTS} {ShowTS} {toggleTS} isUser={false} timestamp="12:02 PM"
 		></ChatMessage>
 		<ChatMessage
 			chatID={5}

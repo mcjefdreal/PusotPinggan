@@ -126,11 +126,7 @@
 		+
 	</button>
 
-	<AddProductModal
-		{active}
-		onClose={handleModal}
-		onSubmit={handleSubmit}
-		storeId={data.storeId}
+	<AddProductModal {active} onClose={handleModal} onSubmit={handleSubmit} storeId={data.storeId}
 	></AddProductModal>
 
 	<EditStoreModal
