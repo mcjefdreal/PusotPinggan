@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = async ({ parent }) => {
+export const load = async ({ parent }: { parent: () => Promise<{ session: import('@supabase/supabase-js').Session | null; user: import('@supabase/supabase-js').User | null }> }) => {
 	const { session, user } = await parent();
 
 	// If no session cookie exists, send them back to login

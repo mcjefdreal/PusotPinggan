@@ -41,6 +41,9 @@ export const actions: Actions = {
 		}
 
 		const store = result.data;
+		if (!store) {
+			return fail(500, { message: 'Failed to create store' });
+		}
 		const storeId = store.store_id;
 		// console.log(`Store created with ID: ${store.store_id}`);
 

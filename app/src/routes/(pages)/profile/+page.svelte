@@ -35,7 +35,7 @@
 			Edit Profile</a
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
-		<a href={resolve('/profile/basket')} class="block hover:bg-gray-100 active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a href="/profile/basket" class="block hover:bg-gray-100 active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
 			<CartOutline class="mr-2 inline-block h-5 w-5" />
 			View Basket</a
 		>

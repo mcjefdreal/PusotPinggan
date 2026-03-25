@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { setOptions, importLibrary } from '@googlemaps/js-api-loader';
 	import { PUBLIC_GOOGLE_MAPS_API_KEY } from '$env/static/public';
@@ -10,8 +10,12 @@
 	} = $props();
 
 	let selected = $state({ address: initialAddress, lat: initialLat, lng: initialLng });
-	let mapElement = $state();
-	let inputElement = $state();
+	let mapElement: HTMLElement | undefined = $state();
+	let inputElement: HTMLInputElement | undefined = $state();
+
+	const initialCenter = $derived(initialLat && initialLng 
+		? { lat: parseFloat(initialLat), lng: parseFloat(initialLng) }
+		: { lat: 0, lng: 0 });
 
 	onMount(async () => {
 		setOptions({ key: PUBLIC_GOOGLE_MAPS_API_KEY });
@@ -22,10 +26,6 @@
 			importLibrary('marker'),
 			importLibrary('geocoding')
 		]);
-
-		const initialCenter = initialLat && initialLng 
-			? { lat: parseFloat(initialLat), lng: parseFloat(initialLng) }
-			: { lat: 0, lng: 0 };
 
 		const map = new Map(mapElement, {
 			center: initialCenter,
@@ -47,7 +47,7 @@
 		});
 		const geocoder = new Geocoder();
 
-		map.addListener('click', async (event) => {
+		map.addListener('click', async (event: { latLng: { lat: () => number; lng: () => number } }) => {
 			const latLng = event.latLng;
 
 			marker.position = latLng;
@@ -61,7 +61,9 @@
 				lng: latLng.lng().toString()
 			};
 
-			inputElement.value = address;
+			if (inputElement) {
+				inputElement.value = address;
+			}
 		});
 
 		autocomplete.addListener('place_changed', () => {

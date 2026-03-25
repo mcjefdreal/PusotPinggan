@@ -4,7 +4,10 @@
 	import { Label, Timepicker } from 'flowbite-svelte';
 	import AddressInput from '$lib/components/CreateStore/AddressInput.svelte';
 
-	let schedule = {
+	type DaySchedule = { open: string; close: string };
+	type WeekSchedule = Record<string, DaySchedule>;
+
+	let schedule: WeekSchedule = {
 		monday: { open: '00:00', close: '00:00' },
 		tuesday: { open: '00:00', close: '00:00' },
 		wednesday: { open: '00:00', close: '00:00' },
@@ -14,7 +17,7 @@
 		sunday: { open: '00:00', close: '00:00' }
 	};
 
-	function handleRangeChange(day, start, end) {
+	function handleRangeChange(day: string, start: string, end: string) {
 		schedule[day] = { open: start, close: end };
 	}
 
@@ -77,9 +80,8 @@
 							<div class="min-w-0">
 								<Timepicker
 									type="range"
-									onselect={(e) => handleRangeChange(day, e.time, e.endTime)}
+									onselect={(e: { time: string; endTime: string }) => handleRangeChange(day, e.time, e.endTime)}
 									divClass="w-full max-w-full shadow-none max-w-xs"
-									class="w-full min-w-0 max-w-xs"
 								/>
 							</div>
 						</div>

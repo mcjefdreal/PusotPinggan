@@ -2,14 +2,15 @@
 	import { EditOutline } from 'flowbite-svelte-icons';
 
 	let {
-		productPic,
+		productPic = '',
 		productName = 'Product',
 		productPrice = 85.0,
 		productQuantity = 1,
 		productDescription = 'Lorem ipsum',
-		productId,
-		storeId,
-		showToast,
+		productId = '',
+		storeId = '',
+		supabase = null,
+		showToast = () => {},
 	} = $props();
 
 	let editModal = $state(false);

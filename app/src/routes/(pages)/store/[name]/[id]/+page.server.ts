@@ -84,6 +84,9 @@ export const actions: Actions = {
 		}
 
 		const product = result.data
+		if (!product) {
+			return fail(500, { success: false, message: 'Failed to create product' });
+		}
 		const productId = product.product_id
 
 		// get image file

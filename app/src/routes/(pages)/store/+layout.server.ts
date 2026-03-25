@@ -1,8 +1,11 @@
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent, locals: { supabase } }) => {
+export const load = async ({ parent, locals: { supabase } }: { parent: () => Promise<{ user: import('@supabase/supabase-js').User | null }>; locals: App.Locals }) => {
 	const { user } = await parent();
+
+	if (!user) {
+		return { stores: [], pub_user: null };
+	}
 
 	const { data: stores, error: storeError } = await supabase
 		.from('store')

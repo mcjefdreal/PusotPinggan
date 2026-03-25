@@ -9,6 +9,7 @@
 		editModal = false,
 		onClose,
 		onSubmit,
+		supabase,
 		storeId,
 		storeName = '',
 		storeDesc = '',
@@ -31,7 +32,10 @@
 		return storePic;
 	});
 
-	let schedule = $derived({
+	type DaySchedule = { open: string; close: string };
+	type WeekSchedule = Record<string, DaySchedule>;
+
+	let schedule: WeekSchedule = $derived({
 		monday: storeHrs?.monday || { open: '00:00', close: '00:00' },
 		tuesday: storeHrs?.tuesday || { open: '00:00', close: '00:00' },
 		wednesday: storeHrs?.wednesday || { open: '00:00', close: '00:00' },
@@ -117,23 +121,22 @@
 					required
 				></textarea>
 
-				<label class="text-pp-gray mb-2.5 text-xs font-medium">Store hours</label>
+				<span class="text-pp-gray mb-2.5 text-xs font-medium">Store hours</span>
 				<input type="hidden" name="sched" value={JSON.stringify(schedule)} />
 				{#each Object.keys(schedule) as day (day)}
 					<div class="grid grid-cols-[80px_1fr] items-center gap-2 pb-2">
 						<Label class="capitalize text-xs">{day}</Label>
 						<Timepicker
 							type="range"
-							onselect={(e) => handleRangeChange(day, e.time, e.endTime)}
+							onselect={(e: { time: string; endTime: string }) => handleRangeChange(day, e.time, e.endTime)}
 							divClass="w-full max-w-full shadow-none"
-							class="w-full"
 							value={schedule[day].open}
 							endValue={schedule[day].close}
 						/>
 					</div>
 				{/each}
 
-				<label class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
+				<label for="store_addr" class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
 				<AddressInput 
 					initialAddress={storeAddr}
 					initialLat={storeLat}
