@@ -1,0 +1,66 @@
+<script>
+	import { resolve } from '$app/paths';
+
+	import { ArrowLeftOutline, CogSolid } from 'flowbite-svelte-icons';
+
+	import Order from '$lib/components/BasketOrders/Order.svelte';
+</script>
+
+<div class="min-h-screen w-full bg-rose-50">
+	<div class="sticky start-0 top-0 z-20">
+		<div
+			class="from-pp-pink to-pp-light-pink grid w-full grid-cols-3 justify-center bg-linear-to-t p-4 py-8"
+		>
+			<a href={resolve('/profile')}>
+				<button
+					class="text-pp-white flex items-center gap-2 rounded-full transition active:bg-gray-300"
+				>
+					<ArrowLeftOutline class="h-8 w-8" />
+				</button>
+			</a>
+
+			<div class="text-pp-white text-center text-2xl font-semibold">My Basket</div>
+
+			<a
+				href={resolve('/profile')}
+				class="text-pp-white top-6 right-6 ml-auto flex items-center gap-2"
+			>
+				<CogSolid class="h-8 w-8" />
+			</a>
+		</div>
+
+		<div class="bg-pp-white sticky top-24 z-20 mb-1 flex h-14 w-full">
+			<a
+				href={resolve('/profile/basket/ordered')}
+				class="border-pp-pink flex flex-1 items-center justify-center border-b-2 transition active:bg-gray-300"
+			>
+				<div class="text-pp-pink">Ordered</div>
+			</a>
+			<a
+				href={resolve('/profile/basket/completed')}
+				class="flex flex-1 items-center justify-center transition active:bg-gray-300">Completed</a
+			>
+			<a
+				href={resolve('/profile/basket/cancelled')}
+				class="flex flex-1 items-center justify-center transition active:bg-gray-300">Cancelled</a
+			>
+		</div>
+	</div>
+
+	<div class="flex flex-col items-center justify-center gap-y-2 py-1">
+		<Order
+			sellerName="Sundays Cafe"
+			productName="Four Cheese Ensaymada"
+			quantity={3}
+			status="To Receive"
+			unitPrice={100}
+		></Order>
+		<Order
+			sellerName="McDonalds UP Town Center"
+			productName="2pc Chicken Mcdo"
+			quantity={1}
+			status="To Receive"
+			unitPrice={229}
+		></Order>
+	</div>
+</div>

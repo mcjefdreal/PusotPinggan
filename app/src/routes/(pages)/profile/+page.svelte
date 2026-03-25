@@ -39,7 +39,7 @@
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
 		<a
-			href="/profile/basket"
+			href="/profile/basket/ordered"
 			class="block px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
 		>
 			<CartOutline class="mr-2 inline-block h-5 w-5" />

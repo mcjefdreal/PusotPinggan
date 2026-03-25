@@ -20,8 +20,10 @@
 		</li>
 		<li>
 			<a class="relative flex h-full flex-col items-center" href={resolve('/home/')}>
-				<HomeIcon active={page.url.pathname.includes('/home')} />
-				{#if page.url.pathname.includes('/home')}
+				<HomeIcon
+					active={page.url.pathname.includes('/home') || page.url.pathname.includes('/search')}
+				/>
+				{#if page.url.pathname.includes('/home') || page.url.pathname.includes('/search')}
 					<div class="bg-pp-pink absolute -bottom-1 h-1 w-1 rounded-full"></div>
 				{/if}
 			</a>
