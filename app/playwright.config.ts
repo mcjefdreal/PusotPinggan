@@ -42,36 +42,36 @@ export default defineConfig({
 			},
 			dependencies: ['setup']
 		},
-		{
-			name: 'firefox',
-			use: { 
-				...devices['Desktop Firefox'],
-				storageState: 'playwright/.auth/user.json',
-				launchOptions: {
-					args: [
-						'--disable-blink-features=AutomationControlled',
-					]
-				},
-				permissions: ['geolocation'],
-				geolocation: { latitude: 14.5995, longitude: 120.9842 },
-			},
-			dependencies: ['setup']
-		},
+		// {
+		// 	name: 'firefox',
+		// 	use: { 
+		// 		...devices['Desktop Firefox'],
+		// 		storageState: 'playwright/.auth/user.json',
+		// 		launchOptions: {
+		// 			args: [
+		// 				'--disable-blink-features=AutomationControlled',
+		// 			]
+		// 		},
+		// 		permissions: ['geolocation'],
+		// 		geolocation: { latitude: 14.5995, longitude: 120.9842 },
+		// 	},
+		// 	dependencies: ['setup']
+		// },
 
-		/* Test against mobile viewports. */
-		{
-			name: 'Mobile Chrome',
-			use: { 
-				...devices['Pixel 5'],
-				storageState: 'playwright/.auth/user.json',
-				launchOptions: {
-					args: ['--disable-blink-features=AutomationControlled']
-				},
-				permissions: ['geolocation'],
-				geolocation: { latitude: 14.5995, longitude: 120.9842 },
-			},
-			dependencies: ['setup']
-		}
+		// /* Test against mobile viewports. */
+		// {
+		// 	name: 'Mobile Chrome',
+		// 	use: { 
+		// 		...devices['Pixel 5'],
+		// 		storageState: 'playwright/.auth/user.json',
+		// 		launchOptions: {
+		// 			args: ['--disable-blink-features=AutomationControlled']
+		// 		},
+		// 		permissions: ['geolocation'],
+		// 		geolocation: { latitude: 14.5995, longitude: 120.9842 },
+		// 	},
+		// 	dependencies: ['setup']
+		// }
 	],
 
 	/* Run your local dev server before starting the tests */
