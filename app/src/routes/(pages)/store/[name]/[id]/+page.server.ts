@@ -205,7 +205,7 @@ export const actions: Actions = {
 		return { success: true, message: 'Product removed successfully' };
 	},
 
-	"edit-store": async ({ request, locals: { supabase } }) => {
+	"edit-store": async ({ request, locals: { supabase }, params }) => {
 		const formData = await request.formData();
 
 		const storeId = formData.get('storeId') as string;
@@ -214,6 +214,8 @@ export const actions: Actions = {
 		const addr = formData.get('store_addr') as string;
 		const lat = formData.get('store_lat') as string;
 		const lng = formData.get('store_lng') as string;
+
+		const oldName = params.name;
 
 		const schedRaw = formData.get('sched') as string;
 		let sched = {};
@@ -292,6 +294,11 @@ export const actions: Actions = {
 			}
 		}
 
+		const nameChanged = oldName !== name;
+		if (nameChanged) {
+			throw redirect(303, `/store/${name}/${storeId}`);
+		}
+
 		return { success: true, message: 'Store updated successfully' };
 	},
 
@@ -332,7 +339,7 @@ export const actions: Actions = {
 			return fail(500, { success: false, message: 'Delete store failed' });
 		}
 
-		return { success: true, message: 'Store deleted successfully' }
+		throw redirect(303, '/store');
 	}
 };
 

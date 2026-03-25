@@ -68,7 +68,11 @@
 			isSubmitting = true;
 			return async ({ result }) => {
 				isSubmitting = false;
-				if (result.type === 'success') {
+				if (result.type === 'redirect') {
+					onClose?.();
+					await invalidateAll();
+					await goto(result.location);
+				} else if (result.type === 'success') {
 					await invalidateAll();
 					const data = result.data as { success: boolean; message: string };
 					onSubmit?.(data);
@@ -155,9 +159,9 @@
 			isDeleting = true;
 			return async ({ result }) => {
 				isDeleting = false;
-				if (result.type === 'success') {
-					await invalidateAll()
-					goto('/store');
+				if (result.type === 'redirect') {
+					await goto(result.location);
+					await invalidateAll();
 				}
 			}
 		}}
