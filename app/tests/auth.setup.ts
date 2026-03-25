@@ -26,40 +26,46 @@ setup('authenticate', async ({ page }) => {
 		// Try to parse token - support multiple formats
 		try {
 			const parsed = JSON.parse(accessToken);
-			
+
 			// Format 1: Full storageState (has cookies array) - from GitHub secret
 			if (parsed.cookies && Array.isArray(parsed.cookies)) {
 				await page.context().addCookies(parsed.cookies);
 			}
 			// Format 2: Supabase response { "access_token": "..." }
 			else if (parsed.access_token) {
-				await page.context().addCookies([{
-					name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
-					value: parsed.access_token,
-					domain: 'localhost',
-					path: '/'
-				}]);
+				await page.context().addCookies([
+					{
+						name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
+						value: parsed.access_token,
+						domain: 'localhost',
+						path: '/'
+					}
+				]);
 			}
 			// Format 3: { "token": "...", "cookieName": "..." }
 			else if (parsed.token) {
-				await page.context().addCookies([{
-					name: parsed.cookieName || 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
-					value: parsed.token,
-					domain: 'localhost',
-					path: '/'
-				}]);
-			}
-			else {
+				await page.context().addCookies([
+					{
+						name: parsed.cookieName || 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
+						value: parsed.token,
+						domain: 'localhost',
+						path: '/'
+					}
+				]);
+			} else {
 				throw new Error('Unknown token format');
 			}
 		} catch (e) {
 			// Format 4: Raw token string - use as-is
-			await page.context().addCookies([{
-				name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
-				value: accessToken,
-				domain: 'localhost',
-				path: '/'
-			}]);
+			console.log(e);
+			await page.context().addCookies([
+				{
+					name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
+					value: accessToken,
+					domain: 'localhost',
+					path: '/'
+				}
+			]);
 		}
 		// Navigate to trigger auth state
 		await page.goto('http://localhost:5173/home');
@@ -102,10 +108,10 @@ setup('authenticate', async ({ page }) => {
 
 		// Extract and save token from cookies
 		const cookies = await loginPage.context().cookies();
-		const tokenCookie = cookies.find(c => 
-			c.name.startsWith('sb-') && c.name.endsWith('-auth-token.0')
+		const tokenCookie = cookies.find(
+			(c) => c.name.startsWith('sb-') && c.name.endsWith('-auth-token.0')
 		);
-		
+
 		if (tokenCookie) {
 			// Save token and cookie name as JSON
 			const tokenData = JSON.stringify({ token: tokenCookie.value, cookieName: tokenCookie.name });
@@ -116,7 +122,7 @@ setup('authenticate', async ({ page }) => {
 				'Copy the contents of .auth-token.txt to your GitHub secrets as: TEST_ACCESS_TOKEN\n'
 			);
 		} else {
-			console.log("No token found in cookies");
+			console.log('No token found in cookies');
 		}
 
 		await loginPage.context().storageState({ path: authFile });
