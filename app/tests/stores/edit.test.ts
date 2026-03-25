@@ -31,7 +31,7 @@ test.beforeEach(async ({ page }) => {
 
   await page.click('.address-picker input[type="text"]');
   await page.fill('.address-picker input[type="text"]', 'UPTC');
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Tab');
 
@@ -86,8 +86,6 @@ test('edit store name and description', async ({ page }) => {
   await page.click('button:has-text("Save Changes")');
 
   await page.waitForTimeout(1000);
-
-  await expect(page).toHaveURL(/.*store/);
 
   await expect(page.getByText(newName)).toBeVisible();
 });

@@ -57,8 +57,6 @@ export default defineConfig({
 		// 	},
 		// 	dependencies: ['setup']
 		// },
-
-		// /* Test against mobile viewports. */
 		// {
 		// 	name: 'Mobile Chrome',
 		// 	use: { 

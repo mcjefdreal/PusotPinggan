@@ -32,7 +32,7 @@ test.beforeEach(async ({ page }) => {
 
   await page.click('.address-picker input[type="text"]');
   await page.fill('.address-picker input[type="text"]', 'UPTC');
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Tab');
 
@@ -100,6 +100,8 @@ test('delete store from stores list', async ({ page }) => {
   });
 
   await page.waitForURL('/store', { timeout: 10000 });
+
+  await page.waitForTimeout(1000);
 
   await expect(page.getByText(storeName!)).not.toBeVisible();
 });

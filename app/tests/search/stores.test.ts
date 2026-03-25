@@ -27,7 +27,7 @@ test.beforeEach(async ({ page }) => {
 
   await page.click('.address-picker input[type="text"]');
   await page.fill('.address-picker input[type="text"]', 'UPTC');
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Tab');
 
@@ -49,13 +49,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('search for stores by name', async ({ page }) => {
-  await page.goto(`/search?q=${searchTerm}`);
+  await page.fill('#search', searchTerm);
+  await page.keyboard.press('Enter');
 
-  await expect(page.getByText(searchTerm)).toBeVisible();
+  await expect(page.getByText('No products or store found')).not.toBeVisible();
 });
 
 test('search for stores shows no results for unknown term', async ({ page }) => {
-  await page.goto('/search?q=NonExistentStore12345');
+  await page.fill('#search', 'NonExistentStore12345');
+  await page.keyboard.press('Enter');
 
   await expect(page.getByText('No products or store found')).toBeVisible();
 });

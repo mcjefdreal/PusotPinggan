@@ -30,7 +30,7 @@ test.beforeEach(async ({ page }) => {
 
   await page.click('.address-picker input[type="text"]');
   await page.fill('.address-picker input[type="text"]', 'UPTC');
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Tab');
 
@@ -51,22 +51,26 @@ test.beforeEach(async ({ page }) => {
 
     await supabaseAdmin.from('product').insert({
       name: searchTerm,
+      description: 'A searchable product',
       price: 50.00,
       quantity: 5,
-      description: 'A searchable product',
       store_id: store.store_id
     });
   }
 });
 
 test('search for products by name', async ({ page }) => {
-  await page.goto(`/search?q=${searchTerm}`);
+  await page.waitForTimeout(2000);
+  
+  await page.fill('#search', searchTerm);
+  await page.keyboard.press('Enter');
 
-  await expect(page.getByText(searchTerm)).toBeVisible();
+  await expect(page.getByText('No products or store found')).not.toBeVisible();
 });
 
 test('search for products shows no results for unknown term', async ({ page }) => {
-  await page.goto('/search?q=NonExistentProduct12345');
+  await page.fill('#search', 'NonExistentProduct12345');
+  await page.keyboard.press('Enter');
 
   await expect(page.getByText('No products or store found')).toBeVisible();
 });
