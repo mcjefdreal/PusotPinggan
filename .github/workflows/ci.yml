@@ -6,6 +6,7 @@ on:
   push:
     branches: main
 
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -29,16 +30,21 @@ jobs:
           version: 9
 
       - name: Install dependencies
+        working-directory: app
         run: pnpm install
 
       - name: Setup Playwright browsers
+        working-directory: app
         run: pnpm exec playwright install --with-deps
 
       - name: Check formatting
+        working-directory: app
         run: pnpm run fmt
 
       - name: Run linters
+        working-directory: app
         run: pnpm run lint
 
       - name: Run tests
+        working-directory: app
         run: pnpm run test:playwright
