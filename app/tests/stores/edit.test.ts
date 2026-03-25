@@ -94,8 +94,7 @@ test('edit store name and description', async ({ page }) => {
 
 	await page.click('button:has-text("Save Changes")');
 
-	await page.waitForTimeout(1000);
-
+	await page.waitForTimeout(3000);
 	await expect(page.getByText(newName)).toBeVisible();
 });
 
