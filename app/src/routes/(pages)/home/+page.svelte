@@ -27,9 +27,11 @@
 		<CategoryCard></CategoryCard>
 	</div>
 
-	<Button
-		pill={true}
-		class="bg-pp-pink fixed right-6 bottom-25 z-50 p-2! shadow-lg focus:outline-none"
-		><img src={BasketIcon} alt="Basket" /></Button
-	>
+	<a href="/profile/basket/ordered">
+		<Button
+			pill={true}
+			class="bg-pp-pink fixed right-6 bottom-25 z-50 p-2! shadow-lg focus:outline-none"
+			><img src={BasketIcon} alt="Basket" /></Button
+		>
+	</a>
 </div>
