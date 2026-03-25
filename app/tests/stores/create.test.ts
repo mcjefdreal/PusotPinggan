@@ -2,14 +2,12 @@ import { test, expect } from '@playwright/test';
 import { supabaseAdmin } from '../supabase';
 
 let createdStoreId: string | null = null;
-let createdStoreName: string | null = null;
 
 test.afterEach(async () => {
   if (createdStoreId) {
     await supabaseAdmin.from('product').delete().eq('store_id', createdStoreId);
     await supabaseAdmin.from('store').delete().eq('store_id', createdStoreId);
     createdStoreId = null;
-    createdStoreName = null;
   }
 });
 
@@ -49,7 +47,6 @@ test('create store with valid data', async ({ page }) => {
   
   if (store) {
     createdStoreId = store.store_id;
-    createdStoreName = storeName;
   }
 });
 

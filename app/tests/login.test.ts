@@ -1,5 +1,4 @@
-import { test, expect } from '@playwright/test';
-import { supabase } from './supabase.ts';
+import { test } from '@playwright/test';
 
 test('logged in user can access application pages', async ({ page }) => {
 	await page.goto('/home');

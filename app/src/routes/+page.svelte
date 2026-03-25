@@ -2,9 +2,6 @@
 	import logo from '../lib/icons/logomark.svg';
 
 	import { GoogleSolid } from 'flowbite-svelte-icons';
-
-	import { resolve } from '$app/paths';
-	import { redirect } from '@sveltejs/kit';
 </script>
 
 <div

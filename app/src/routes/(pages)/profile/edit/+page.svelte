@@ -5,7 +5,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Toast } from 'flowbite-svelte';
 
-	const { data, form: formResult } = $props();
+	const { data } = $props();
 
 	let showToast = $state(false);
 	let toastMessage = $state('');
@@ -47,9 +47,6 @@
 		}
 	}
 
-	function handleSubmit() {
-		form?.requestSubmit();
-	}
 </script>
 
 <div class="bg-linear-to-t from-pp-pink to-pp-light-pink relative min-h-screen w-full p-6">

@@ -1,7 +1,4 @@
 <script lang="ts">
-	import logo from '$lib/icons/logomark.svg';
-
-	import { Search, Button } from 'flowbite-svelte';
 	import {
 		SearchOutline,
 		MapPinAltOutline,
@@ -44,7 +41,6 @@
 				firstHalf = data.firstHalf;
 				secondHalf = data.secondHalf || '';
 
-				// Save to localStorage for caching
 				localStorage.setItem(
 					'userLocation',
 					JSON.stringify({
@@ -53,8 +49,8 @@
 					})
 				);
 			}
-		} catch (error: any) {
-			console.error('Error saving location:', error.message);
+		} catch (error) {
+			console.error('Error saving location:', error);
 			errorMessage = 'Failed to save location.';
 			locationText = 'Location unavailable';
 		}

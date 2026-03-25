@@ -4,7 +4,6 @@
 	import { Button } from 'flowbite-svelte';
 
 	import ProductCard from './ProductCard.svelte';
-	import EditProductModal from './EditProductModal.svelte';
 
 	let {
 		storeName = 'Store Name',
@@ -46,7 +45,7 @@
 
 	<div class="flex items-center justify-center p-4">
 		<div class="flex flex-wrap items-center space-y-4 space-x-4">
-			<ProductCard productName={'Sisig'}></ProductCard>
+			<ProductCard productName="Sisig"></ProductCard>
 			<ProductCard></ProductCard>
 			<ProductCard></ProductCard>
 			<ProductCard></ProductCard>

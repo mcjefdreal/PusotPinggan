@@ -1,8 +1,4 @@
 <script lang="ts">
-	let { data } = $props();
-
-	let email = $derived(data.user?.email);
-
 	import Banner from '$lib/banner.png';
 	import RecCard from '$lib/components/Homepage/RecCard.svelte';
 
@@ -31,5 +27,5 @@
 		<CategoryCard> </CategoryCard>
 	</div>
 
-	<Button pill={true} class="focus:outline-none p-2! bg-pp-pink fixed right-6 bottom-25 z-50 shadow-lg"><img src={BasketIcon} /></Button>
+	<Button pill={true} class="focus:outline-none p-2! bg-pp-pink fixed right-6 bottom-25 z-50 shadow-lg"><img src={BasketIcon} alt="Basket" /></Button>
 </div>

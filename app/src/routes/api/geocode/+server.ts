@@ -23,12 +23,12 @@ export const GET: RequestHandler = async ({ url }) => {
 			const components = data.results[1].address_components;
 
 			const getComponent = (types: string[]) => {
-				const found = components.find((c: any) => types.some((t) => c.types.includes(t)));
+				const found = components.find((c: { types: string[] }) => types.some((t) => c.types.includes(t)));
 				return found?.long_name || '';
 			};
 
 			const getComponentShort = (types: string[]) => {
-				const found = components.find((c: any) => types.some((t) => c.types.includes(t)));
+				const found = components.find((c: { types: string[] }) => types.some((t) => c.types.includes(t)));
 				return found?.short_name || '';
 			};
 

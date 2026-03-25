@@ -65,18 +65,6 @@ export const actions: Actions = {
 			img_url = urlData.publicUrl;
 		}
 
-		// Fetch updated user data from database
-		const { data: updatedUser, error: fetchError } = await supabase
-			.from('user')
-			.select('*')
-			.eq('user_id', user.id)
-			.single();
-
-		if (fetchError) {
-			console.error('Failed to fetch updated user:', fetchError);
-			return fail(500, { message: 'Failed to fetch updated user data' });
-		}
-
 		return {
 			success: true,
 			updatedUser: {

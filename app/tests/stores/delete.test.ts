@@ -53,7 +53,7 @@ test.beforeEach(async ({ page }) => {
   }
 });
 
-async function waitForModalWithRetry(page: any, editButton: any, maxRetries = 3) {
+async function waitForModalWithRetry(page: import('@playwright/test').Page, editButton: import('@playwright/test').Locator, maxRetries = 3) {
   for (let i = 0; i < maxRetries; i++) {
     await editButton.click({ force: true });
     

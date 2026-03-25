@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 	let storeLng = '';
 
 	if (store.store_coords) {
-		const { data: coords, error } = await supabase.rpc('get_geo_coords', {
+		const { data: coords } = await supabase.rpc('get_geo_coords', {
 			p_store_id: store.store_id
 		});
 		if (coords) {
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		}
 	}
 
-	const { data: products, error: productError } = await supabase
+	const { data: products } = await supabase
 		.from('product')
 		.select('*')
 		.eq('store_id', params.id)
@@ -75,7 +75,7 @@ export const actions: Actions = {
 			.select()
 			.single();
 
-		const result = (await Promise.race([dbPromise, timeout(5000)])) as any;
+		const result = await Promise.race([dbPromise, timeout(5000)]) as { data?: { product_id: string }; error?: { message: string } };
 
 		if (result.error) {
 			console.error('Database responded with error: ', result.error.message);
@@ -102,9 +102,7 @@ export const actions: Actions = {
 		} = supabase.storage.from('images').getPublicUrl(filePath);
 
 		const {
-			data,
-			error: updateError,
-			count
+			error: updateError
 		} = await supabase
 			.from('product')
 			.update({ img_url: publicUrl })
@@ -120,9 +118,6 @@ export const actions: Actions = {
 	},
 
 	"edit-product": async ({ request, locals: { supabase } }) => {
-		const timeout = (ms: number) =>
-			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
-
 		const formData = await request.formData();
 		
 		const name = formData.get('product_name') as string;
@@ -136,7 +131,7 @@ export const actions: Actions = {
 			return fail(400, { success: false, message: 'Missing required fields' });
 		}
 
-		const { error: oroductUpdateError } = await supabase
+		await supabase
 			.from('product')
 			.update({ name: name, description: description, price: price, quantity: quantity })
 			.eq('product_id', productId)
@@ -187,9 +182,6 @@ export const actions: Actions = {
 	},
 
 	"delete-product": async ({ request, locals: { supabase } }) => {
-		const timeout = (ms: number) =>
-			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
-
 		const formData = await request.formData();
 		const productId = formData.get('productId') as string;
 
@@ -234,7 +226,7 @@ export const actions: Actions = {
 			storeCoords = `POINT(${lng} ${lat})`;
 		}
 
-		const updateData: any = {
+		const updateData: Record<string, unknown> = {
 			store_name: name,
 			store_desc: desc,
 			store_addr: addr,

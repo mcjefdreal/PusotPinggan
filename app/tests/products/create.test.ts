@@ -50,7 +50,7 @@ test.beforeEach(async ({ page }) => {
   }
 });
 
-async function waitForModalWithRetry(page: any, button: any, modalSelector: string, maxRetries = 5) {
+async function waitForModalWithRetry(page: import('@playwright/test').Page, button: import('@playwright/test').Locator, modalSelector: string, maxRetries = 5) {
   for (let i = 0; i < maxRetries; i++) {
     await button.click({ force: true });
     

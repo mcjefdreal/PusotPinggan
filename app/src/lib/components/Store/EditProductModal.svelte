@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { invalidateAll } from '$app/navigation';
-	import { EditOutline } from 'flowbite-svelte-icons';
 	import { Modal } from 'flowbite-svelte';
 
 	let {
@@ -9,7 +8,6 @@
 		onClose,
 		onSubmit,
 		showToast,
-		supabase,
 		storeId,
 		productId,
 		productName = 'Name',
@@ -56,7 +54,7 @@
 				if (result.type === 'success') {
 					await invalidateAll();
 					const data = result.data as { success: boolean; message: string };
-					onSubmit?.(data)
+					onSubmit?.()
 					showToast?.(data);
 				}
 			}
@@ -145,7 +143,7 @@
 					await invalidateAll();
 					const data = result.data as { success: boolean; message: string };
 					showToast?.(data);
-					onSubmit
+					onSubmit?.();
 				}
 			}
 		}}

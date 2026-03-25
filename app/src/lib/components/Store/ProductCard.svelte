@@ -9,7 +9,6 @@
 		productDescription = 'Lorem ipsum',
 		productId,
 		storeId,
-		supabase,
 		showToast,
 	} = $props();
 
@@ -19,7 +18,7 @@
 		editModal = false;
 	}
 
-	function handleSubmit(result: { success: boolean; message: string }) {
+	function handleSubmit() {
 		editModal = false;
 	}
 
@@ -42,7 +41,6 @@
 	onClose={handleClose}
 	onSubmit={handleSubmit}
 	showToast={showToast}
-	{supabase}
 	{storeId}
 	{productId}
 	{productName} 

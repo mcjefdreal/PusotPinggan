@@ -1,7 +1,7 @@
 <script lang=ts>
 	import { resolve } from '$app/paths';
 
-	import { PlusOutline, ArrowLeftOutline, FaceGrinOutline, PaperPlaneSolid, DotsVerticalOutline } from 'flowbite-svelte-icons';
+	import { PlusOutline, ArrowLeftOutline, FaceGrinOutline, DotsVerticalOutline } from 'flowbite-svelte-icons';
 
 	import ChatHead from '$lib/components/Messages/ChatHead.svelte';
 

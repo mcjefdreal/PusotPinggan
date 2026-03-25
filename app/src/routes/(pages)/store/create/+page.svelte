@@ -70,7 +70,7 @@
 
 					<input type="hidden" name="sched" value={JSON.stringify(schedule)} />
 
-					{#each Object.keys(schedule) as day}
+					{#each Object.keys(schedule) as day (day)}
 						<div class="grid grid-cols-[100px_1fr] items-center gap-2 pb-2">
 							<Label class="capitalize">{day}</Label>
 							<br/>

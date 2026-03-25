@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { CodeForkSolid } from 'flowbite-svelte-icons';
 
 export const actions: Actions = {
 	createStore: async ({ request, locals: { supabase } }) => {
@@ -33,7 +32,7 @@ export const actions: Actions = {
 			.select()
 			.single();
 
-		const result = (await Promise.race([dbPromise, timeout(5000)])) as any;
+		const result = await Promise.race([dbPromise, timeout(5000)]) as { data?: { store_id: string }; error?: { message: string } };
 
 		if (result.error) {
 			console.error('Database responded with error: ', result.error.message);
@@ -61,9 +60,7 @@ export const actions: Actions = {
 		} = supabase.storage.from('images').getPublicUrl(filePath);
 
 		const {
-			data,
-			error: updateError,
-			count
+			error: updateError
 		} = await supabase
 			.from('store')
 			.update({ img_url: publicUrl })

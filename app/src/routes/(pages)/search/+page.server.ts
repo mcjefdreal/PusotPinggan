@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ parent, url, locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 	const query = url.searchParams.get('q');
 
 	if (!query) {

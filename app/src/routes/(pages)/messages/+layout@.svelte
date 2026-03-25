@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar/Navbar.svelte';
-	const { data, children } = $props();
+	const { children } = $props();
 </script>
 
 <div class="bg-pp-white min-h-screen w-full">

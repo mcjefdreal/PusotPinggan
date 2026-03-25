@@ -1,8 +1,6 @@
 <script>
 	import { Card } from 'flowbite-svelte';
 
-	import { EditOutline } from 'flowbite-svelte-icons';
-
 	let {
 		// categPic,
 		categName = 'Category',
