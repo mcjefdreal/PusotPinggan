@@ -10,18 +10,64 @@ const tokenFile = '.auth-token.txt';
 setup('authenticate', async ({ page }) => {
 	const accessToken = process.env.TEST_ACCESS_TOKEN;
 
-	if (accessToken) {
-		// CI/Local with env var - set cookie directly
-		await page.goto('http://localhost:5173');
-
-		await page.addInitScript((token) => {
-			localStorage.setItem('sb-access-token', token);
-		}, accessToken);
-
+	// OPTION A: Check auth file FIRST - use it if it exists
+	if (fs.existsSync(authFile)) {
+		const storageState = JSON.parse(fs.readFileSync(authFile, 'utf-8'));
+		if (storageState.cookies) {
+			await page.context().addCookies(storageState.cookies);
+		}
 		// Navigate to trigger auth state
 		await page.goto('http://localhost:5173/home');
+		await expect(page.getByText('All categories')).toBeVisible({ timeout: 10000 });
 		await page.waitForTimeout(1000);
-	} else {
+	}
+	// OPTION B: Try TEST_ACCESS_TOKEN if auth file doesn't exist
+	else if (accessToken) {
+		// Try to parse token - support multiple formats
+		try {
+			const parsed = JSON.parse(accessToken);
+			
+			// Format 1: Full storageState (has cookies array) - from GitHub secret
+			if (parsed.cookies && Array.isArray(parsed.cookies)) {
+				await page.context().addCookies(parsed.cookies);
+			}
+			// Format 2: Supabase response { "access_token": "..." }
+			else if (parsed.access_token) {
+				await page.context().addCookies([{
+					name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
+					value: parsed.access_token,
+					domain: 'localhost',
+					path: '/'
+				}]);
+			}
+			// Format 3: { "token": "...", "cookieName": "..." }
+			else if (parsed.token) {
+				await page.context().addCookies([{
+					name: parsed.cookieName || 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
+					value: parsed.token,
+					domain: 'localhost',
+					path: '/'
+				}]);
+			}
+			else {
+				throw new Error('Unknown token format');
+			}
+		} catch (e) {
+			// Format 4: Raw token string - use as-is
+			await page.context().addCookies([{
+				name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
+				value: accessToken,
+				domain: 'localhost',
+				path: '/'
+			}]);
+		}
+		// Navigate to trigger auth state
+		await page.goto('http://localhost:5173/home');
+		await expect(page.getByText('All categories')).toBeVisible({ timeout: 10000 });
+		await page.waitForTimeout(1000);
+	}
+	// OPTION C: Run headed browser login
+	else {
 		// Fallback: stealth login (headed only)
 		const stealthPlugin = stealth();
 		stealthPlugin.enabledEvasions.delete('iframe.contentWindow');
@@ -51,14 +97,26 @@ setup('authenticate', async ({ page }) => {
 
 		await expect(loginPage.getByText('All categories')).toBeVisible({ timeout: 10000 });
 
-		// Extract and save token
-		const token = await loginPage.evaluate(() => localStorage.getItem('sb-access-token'));
-		if (token) {
-			fs.writeFileSync(tokenFile, token);
+		// Wait for cookies to be set
+		await loginPage.waitForTimeout(5000);
+
+		// Extract and save token from cookies
+		const cookies = await loginPage.context().cookies();
+		const tokenCookie = cookies.find(c => 
+			c.name.startsWith('sb-') && c.name.endsWith('-auth-token.0')
+		);
+		
+		if (tokenCookie) {
+			// Save token and cookie name as JSON
+			const tokenData = JSON.stringify({ token: tokenCookie.value, cookieName: tokenCookie.name });
+			fs.writeFileSync(tokenFile, tokenData);
 			console.log(`\n✅ Auth token saved to ${tokenFile}`);
+			console.log(`Cookie name: ${tokenCookie.name}`);
 			console.log(
-				'Copy this to your .env file as: TEST_ACCESS_TOKEN=' + token.substring(0, 50) + '...\n'
+				'Copy the contents of .auth-token.txt to your GitHub secrets as: TEST_ACCESS_TOKEN\n'
 			);
+		} else {
+			console.log("No token found in cookies");
 		}
 
 		await loginPage.context().storageState({ path: authFile });

@@ -11,8 +11,8 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'setup',
-			testMatch: /.*\.setup\.ts/,
-			use: { browserName: 'firefox' }
+			testMatch: 'auth.setup.ts',
+			use: { browserName: 'chromium', headless: true }
 		},
 		{
 			name: 'Mobile Chrome',
