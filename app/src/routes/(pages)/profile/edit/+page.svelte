@@ -46,10 +46,9 @@
 			selectedFile = file;
 		}
 	}
-
 </script>
 
-<div class="bg-linear-to-t from-pp-pink to-pp-light-pink relative min-h-screen w-full p-6">
+<div class="from-pp-pink to-pp-light-pink relative min-h-screen w-full bg-linear-to-t p-6">
 	{#if showToast}
 		<Toast color={isSuccess ? 'green' : 'red'} class="fixed top-4 right-4 z-50">
 			{toastMessage}

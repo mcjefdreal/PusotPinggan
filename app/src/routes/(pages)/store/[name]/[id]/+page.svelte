@@ -1,6 +1,6 @@
 <script lang="ts">
-    import AddProductModal from '$lib/components/Store/AddProductModal.svelte'
-	import EditStoreModal from '$lib/components/Store/EditStoreModal.svelte'
+	import AddProductModal from '$lib/components/Store/AddProductModal.svelte';
+	import EditStoreModal from '$lib/components/Store/EditStoreModal.svelte';
 	import type { PageProps } from './$types.ts';
 	import { Toast } from 'flowbite-svelte';
 	import { ArrowLeftOutline, EditOutline } from 'flowbite-svelte-icons';
@@ -27,27 +27,26 @@
 		toastMessage = result.message;
 		if (result.success) {
 			showSuccess = true;
-			setTimeout(() => showSuccess = false, 3000);
+			setTimeout(() => (showSuccess = false), 3000);
 		} else {
 			showFail = true;
-			setTimeout(() => showFail = false, 3000);
+			setTimeout(() => (showFail = false), 3000);
 		}
 	}
-
 
 	function handleModal() {
 		active = false;
 	}
 
-	function handleSubmit(result: {success: boolean, message: string}) {
+	function handleSubmit(result: { success: boolean; message: string }) {
 		active = false;
 		toastMessage = result.message;
 		if (result.success) {
 			showSuccess = true;
-			setTimeout(() => showSuccess = false, 3000);
+			setTimeout(() => (showSuccess = false), 3000);
 		} else {
 			showFail = true;
-			setTimeout(() => showFail = false, 3000);
+			setTimeout(() => (showFail = false), 3000);
 		}
 	}
 </script>
@@ -69,21 +68,25 @@
 		<!-- Banner -->
 		<div class="relative">
 			<a
-			class="bg-pp-pink text-pp-white absolute top-2 left-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
-			href={resolve('/store/')}
+				class="bg-pp-pink text-pp-white absolute top-2 left-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+				href={resolve('/store/')}
 			>
 				<ArrowLeftOutline />
 			</a>
 			<button
-			class="bg-pp-pink text-pp-white absolute top-2 right-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
-			data-testid="edit-store"
-			aria-label="Edit Store"
-			onclick={() => editStoreActive = true}
+				class="bg-pp-pink text-pp-white absolute top-2 right-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+				data-testid="edit-store"
+				aria-label="Edit Store"
+				onclick={() => (editStoreActive = true)}
 			>
 				<EditOutline />
 			</button>
 			<div class="bg-pp-gray/10 h-44 w-full">
-				<img class="object-cover w-full h-full" src={data.store.img_url} alt={data.store.store_name}/>
+				<img
+					class="h-full w-full object-cover"
+					src={data.store.img_url}
+					alt={data.store.store_name}
+				/>
 			</div>
 		</div>
 
@@ -96,20 +99,20 @@
 
 		<!-- Products -->
 		<div class="px-4 pb-24">
-		<div class="grid grid-cols-2 gap-3">
-			{#each products as p (p.product_id)}
-				<ProductCard 
-					productPic={p.img_url} 
-					productName={p.name} 
-					productPrice={p.price}
-					productDescription={p.description}
-					productId={p.product_id}
-					productQuantity={p.quantity}
-					storeId={data.storeId}
-					showToast={handleSubmit}
-				/>
-			{/each}
-		</div>
+			<div class="grid grid-cols-2 gap-3">
+				{#each products as p (p.product_id)}
+					<ProductCard
+						productPic={p.img_url}
+						productName={p.name}
+						productPrice={p.price}
+						productDescription={p.description}
+						productId={p.product_id}
+						productQuantity={p.quantity}
+						storeId={data.storeId}
+						showToast={handleSubmit}
+					/>
+				{/each}
+			</div>
 		</div>
 	</div>
 
@@ -118,18 +121,21 @@
 		class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
 		aria-label="Add"
 		data-testid="add-product"
-		onclick={() => active = true}
+		onclick={() => (active = true)}
 	>
 		+
 	</button>
 
-	<AddProductModal active={active} onClose={handleModal} onSubmit={handleSubmit} storeId={data.storeId}>
+	<AddProductModal
+		{active}
+		onClose={handleModal}
+		onSubmit={handleSubmit}
+		storeId={data.storeId}
+	></AddProductModal>
 
-	</AddProductModal>
-
-	<EditStoreModal 
-		editModal={editStoreActive} 
-		onClose={handleEditStoreClose} 
+	<EditStoreModal
+		editModal={editStoreActive}
+		onClose={handleEditStoreClose}
 		onSubmit={handleEditStoreSubmit}
 		storeId={data.storeId}
 		storeName={data.store.store_name}

@@ -79,14 +79,14 @@
 					const data = result.data as { success: boolean; message: string };
 					onSubmit?.(data);
 				}
-			}
+			};
 		}}
 	>
 		<input type="hidden" name="storeId" value={storeId} />
 
 		<div class="flex flex-col items-center space-y-6">
 			<button type="button" onclick={handleImageClick} class="focus:outline-none">
-				<div class="h-30 w-30 aspect-square rounded-lg overflow-hidden">
+				<div class="aspect-square h-30 w-30 overflow-hidden rounded-lg">
 					<img class="h-full w-full rounded-lg object-cover" src={displayImage} alt={storeName} />
 				</div>
 			</button>
@@ -110,7 +110,9 @@
 					required
 				/>
 
-				<label for="store_description" class="text-pp-gray mb-2.5 text-xs font-medium">Store description</label>
+				<label for="store_description" class="text-pp-gray mb-2.5 text-xs font-medium"
+					>Store description</label
+				>
 				<textarea
 					id="store_description"
 					name="store_description"
@@ -124,10 +126,11 @@
 				<input type="hidden" name="sched" value={JSON.stringify(schedule)} />
 				{#each Object.keys(schedule) as day (day)}
 					<div class="grid grid-cols-[80px_1fr] items-center gap-2 pb-2">
-						<Label class="capitalize text-xs">{day}</Label>
+						<Label class="text-xs capitalize">{day}</Label>
 						<Timepicker
 							type="range"
-							onselect={(e: { time: string; endTime: string }) => handleRangeChange(day, e.time, e.endTime)}
+							onselect={(e: { time: string; endTime: string }) =>
+								handleRangeChange(day, e.time, e.endTime)}
 							divClass="w-full max-w-full shadow-none"
 							value={schedule[day].open}
 							endValue={schedule[day].close}
@@ -136,16 +139,12 @@
 				{/each}
 
 				<label for="store_addr" class="text-pp-gray mb-2.5 text-xs font-medium">Location</label>
-				<AddressInput 
-					initialAddress={storeAddr}
-					initialLat={storeLat}
-					initialLng={storeLng}
-				/>
+				<AddressInput initialAddress={storeAddr} initialLat={storeLat} initialLng={storeLng} />
 			</div>
 		</div>
-		<div class="flex flex-row mt-4">
+		<div class="mt-4 flex flex-row">
 			<button
-				class="bg-pp-pink text-pp-white ml-auto flex h-10 w-40 items-center justify-center rounded-lg text-auto"
+				class="bg-pp-pink text-pp-white text-auto ml-auto flex h-10 w-40 items-center justify-center rounded-lg"
 				type="submit"
 				disabled={isSubmitting}
 			>
@@ -164,13 +163,13 @@
 					await goto(result.location);
 					await invalidateAll();
 				}
-			}
+			};
 		}}
 	>
 		<input type="hidden" name="storeId" value={storeId} />
-		<div class="flex justify-center mt-4">
+		<div class="mt-4 flex justify-center">
 			<button
-				class="bg-red-600 text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-auto"
+				class="text-pp-white text-auto flex h-10 w-40 items-center justify-center rounded-lg bg-red-600"
 				type="submit"
 				disabled={isDeleting}
 				data-testid="delete-store"

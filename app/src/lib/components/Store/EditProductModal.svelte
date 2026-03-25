@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
+	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { Modal } from 'flowbite-svelte';
 
@@ -54,10 +54,10 @@
 				if (result.type === 'success') {
 					await invalidateAll();
 					const data = result.data as { success: boolean; message: string };
-					onSubmit?.()
+					onSubmit?.();
 					showToast?.(data);
 				}
-			}
+			};
 		}}
 	>
 		<input type="hidden" name="productId" value={productId} />
@@ -67,7 +67,7 @@
 			<!-- <div class="bg-pp-pink aspect-square h-30 w-30 rounded-lg">
 			</div> -->
 			<button type="button" onclick={handleImageClick} class="focus:outline-none">
-				<div class="h-30 w-30 aspect-square rounded-lg overflow-hidden">
+				<div class="aspect-square h-30 w-30 overflow-hidden rounded-lg">
 					<img class="h-full w-full rounded-lg object-cover" src={displayImage} alt={productName} />
 				</div>
 			</button>
@@ -80,7 +80,9 @@
 				class="hidden"
 			/>
 			<div>
-		<label for="product_name" class="text-pp-gray mb-2.5 text-xs font-medium">Product name</label>
+				<label for="product_name" class="text-pp-gray mb-2.5 text-xs font-medium"
+					>Product name</label
+				>
 				<input
 					type="text"
 					id="product_name"
@@ -100,7 +102,9 @@
 					value={productPrice}
 					required
 				/>
-				<label for="product_quantity" class="text-pp-gray mb-2.5 text-xs font-medium">Quantity</label>
+				<label for="product_quantity" class="text-pp-gray mb-2.5 text-xs font-medium"
+					>Quantity</label
+				>
 				<input
 					type="number"
 					id="product_quantity"
@@ -145,7 +149,7 @@
 					showToast?.(data);
 					onSubmit?.();
 				}
-			}
+			};
 		}}
 	>
 		<input type="hidden" name="productId" value={productId} />

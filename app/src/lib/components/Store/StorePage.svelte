@@ -53,5 +53,7 @@
 		</div>
 	</div>
 
-	<Button pill={true} class="p-2! bg-pp-pink fixed right-6 bottom-25 z-50 shadow-lg"><CirclePlusSolid class="h-10 w-10" /></Button>
+	<Button pill={true} class="bg-pp-pink fixed right-6 bottom-25 z-50 p-2! shadow-lg"
+		><CirclePlusSolid class="h-10 w-10" /></Button
+	>
 </div>

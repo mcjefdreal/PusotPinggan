@@ -5,7 +5,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 	const query = url.searchParams.get('q');
 
 	if (!query) {
-		return { 
+		return {
 			products: [],
 			stores: []
 		};
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 	const { data: stores, error: storeError } = await supabase
 		.from('store')
 		.select('*')
-		.ilike('store_name', `%${query}%`)
+		.ilike('store_name', `%${query}%`);
 
 	if (storeError) {
 		console.error('Search error:', storeError.message);

@@ -32,7 +32,10 @@ export const actions: Actions = {
 			.select()
 			.single();
 
-		const result = await Promise.race([dbPromise, timeout(5000)]) as { data?: { store_id: string }; error?: { message: string } };
+		const result = (await Promise.race([dbPromise, timeout(5000)])) as {
+			data?: { store_id: string };
+			error?: { message: string };
+		};
 
 		if (result.error) {
 			console.error('Database responded with error: ', result.error.message);
@@ -62,9 +65,7 @@ export const actions: Actions = {
 			data: { publicUrl }
 		} = supabase.storage.from('images').getPublicUrl(filePath);
 
-		const {
-			error: updateError
-		} = await supabase
+		const { error: updateError } = await supabase
 			.from('store')
 			.update({ img_url: publicUrl })
 			.eq('store_id', storeId)

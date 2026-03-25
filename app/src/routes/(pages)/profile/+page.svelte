@@ -11,7 +11,7 @@
 	import { resolve } from '$app/paths';
 </script>
 
-<div class="bg-linear-to-t from-pp-pink to-pp-light-pink relative min-h-screen w-full p-6">
+<div class="from-pp-pink to-pp-light-pink relative min-h-screen w-full bg-linear-to-t p-6">
 	<a
 		href={resolve('/profile')}
 		class="text-pp-white absolute top-6 right-6 flex items-center gap-2"
@@ -30,32 +30,50 @@
 	</div>
 
 	<div class="bg-pp-white mx-auto mt-44 w-80 rounded-xl">
-		<a href={resolve('/profile/edit')} class="block hover:bg-gray-100 rounded-t-xl active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a
+			href={resolve('/profile/edit')}
+			class="block rounded-t-xl px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
+		>
 			<FilePenOutline class="mr-2 inline-block h-5 w-5" />
 			Edit Profile</a
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
-		<a href="/profile/basket" class="block hover:bg-gray-100 active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a
+			href="/profile/basket"
+			class="block px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
+		>
 			<CartOutline class="mr-2 inline-block h-5 w-5" />
 			View Basket</a
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
-		<a href={resolve('/profile/edit')} class="block hover:bg-gray-100 active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a
+			href={resolve('/profile/edit')}
+			class="block px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
+		>
 			<HeartOutline class="mr-2 inline-block h-5 w-5" />
 			Favorites</a
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
-		<a href={resolve('/profile/edit')} class="block hover:bg-gray-100 active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a
+			href={resolve('/profile/edit')}
+			class="block px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
+		>
 			<QuestionCircleOutline class="mr-2 inline-block h-5 w-5" />
 			Help Center</a
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
-		<a href={resolve('/profile/edit')} class="block hover:bg-gray-100 active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a
+			href={resolve('/profile/edit')}
+			class="block px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
+		>
 			<BuildingOutline class="mr-2 inline-block h-5 w-5" />
 			For Business</a
 		>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
-		<a href={resolve('/profile/edit')} class="block hover:bg-gray-100 rounded-b-xl active:bg-gray-300 transition px-3 py-4 text-left text-sm font-normal">
+		<a
+			href={resolve('/profile/edit')}
+			class="block rounded-b-xl px-3 py-4 text-left text-sm font-normal transition hover:bg-gray-100 active:bg-gray-300"
+		>
 			<BookOpenOutline class="mr-2 inline-block h-5 w-5" />
 			Terms and Policies</a
 		>

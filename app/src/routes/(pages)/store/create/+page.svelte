@@ -37,7 +37,7 @@
 					submitting = false;
 				};
 			}}
-			class="max-w-md w-full"
+			class="w-full max-w-md"
 		>
 			<div class="mb-6 grid gap-2 px-3">
 				<div>
@@ -76,11 +76,12 @@
 					{#each Object.keys(schedule) as day (day)}
 						<div class="grid grid-cols-[100px_1fr] items-center gap-2 pb-2">
 							<Label class="capitalize">{day}</Label>
-							<br/>
+							<br />
 							<div class="min-w-0">
 								<Timepicker
 									type="range"
-									onselect={(e: { time: string; endTime: string }) => handleRangeChange(day, e.time, e.endTime)}
+									onselect={(e: { time: string; endTime: string }) =>
+										handleRangeChange(day, e.time, e.endTime)}
 									divClass="w-full max-w-full shadow-none max-w-xs"
 								/>
 							</div>

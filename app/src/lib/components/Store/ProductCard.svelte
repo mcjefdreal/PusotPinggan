@@ -9,7 +9,7 @@
 		productDescription = 'Lorem ipsum',
 		productId = '',
 		storeId = '',
-		showToast = () => {},
+		showToast = () => {}
 	} = $props();
 
 	let editModal = $state(false);
@@ -25,28 +25,31 @@
 	import EditProductModal from './EditProductModal.svelte';
 </script>
 
-<div class="overflow-hidden rounded-xl border border-pp-gray/30">
+<div class="border-pp-gray/30 overflow-hidden rounded-xl border">
 	<img class="h-28 w-full object-cover" src={productPic} alt={productName} />
 	<div class="flex">
 		<div class="p-2">
-			<div class="text-sm font-semibold text-pp-black">{productName}</div>
-			<div class="text-xs text-pp-gray">₱ {productPrice.toFixed(2)}</div>
+			<div class="text-pp-black text-sm font-semibold">{productName}</div>
+			<div class="text-pp-gray text-xs">₱ {productPrice.toFixed(2)}</div>
 		</div>
-		<EditOutline class="text-pp-pink mt-1 ml-auto h-6 w-6" onclick={() => (editModal = true)} data-testid="edit-product" />
+		<EditOutline
+			class="text-pp-pink mt-1 ml-auto h-6 w-6"
+			onclick={() => (editModal = true)}
+			data-testid="edit-product"
+		/>
 	</div>
 </div>
 
-<EditProductModal 
-	{editModal} 
+<EditProductModal
+	{editModal}
 	onClose={handleClose}
 	onSubmit={handleSubmit}
-	showToast={showToast}
+	{showToast}
 	{storeId}
 	{productId}
-	{productName} 
-	{productPrice} 
-	{productDescription} 
+	{productName}
+	{productPrice}
+	{productDescription}
 	{productPic}
 	{productQuantity}
->
-</EditProductModal>
+></EditProductModal>

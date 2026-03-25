@@ -6,6 +6,6 @@ export const supabase = createClient(
 );
 
 export const supabaseAdmin = createClient(
-  process.env.PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+	process.env.PUBLIC_SUPABASE_URL!,
+	process.env.SUPABASE_SERVICE_ROLE_KEY!
 );

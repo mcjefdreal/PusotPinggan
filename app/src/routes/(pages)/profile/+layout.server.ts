@@ -1,6 +1,12 @@
 import { redirect } from '@sveltejs/kit';
 
-export const load = async ({ parent, locals: { supabase } }: { parent: () => Promise<{ user: import('@supabase/supabase-js').User | null }>; locals: App.Locals }) => {
+export const load = async ({
+	parent,
+	locals: { supabase }
+}: {
+	parent: () => Promise<{ user: import('@supabase/supabase-js').User | null }>;
+	locals: App.Locals;
+}) => {
 	const { user } = await parent();
 
 	if (!user) {

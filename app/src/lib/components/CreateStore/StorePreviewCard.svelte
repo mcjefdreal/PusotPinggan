@@ -4,22 +4,22 @@
 	const { storePicUrl, storeName, storeId } = $props();
 </script>
 
-<div class="flex flex-row py-5 items-start">
+<div class="flex flex-row items-start py-5">
 	<img src={storePicUrl} alt={storeName} class="h-35 w-35 rounded-lg" />
 
-	<div class="flex flex-col px-5 overflow-hidden">
-		<p class="text-2xl text-pp-pink font-semibold pb-5 truncate">{storeName}</p>
+	<div class="flex flex-col overflow-hidden px-5">
+		<p class="text-pp-pink truncate pb-5 text-2xl font-semibold">{storeName}</p>
 
-		<div class="flex flex-col"> 
+		<div class="flex flex-col">
 			<a
-				class="bg-pp-pink text-pp-white flex h-8 w-25 items-center justify-center rounded-lg text-sm my-1"
+				class="bg-pp-pink text-pp-white my-1 flex h-8 w-25 items-center justify-center rounded-lg text-sm"
 				href={resolve(`/store/${storeName}/${storeId}`)}
 				data-testid="view-store"
 			>
 				View Store
 			</a>
 			<a
-				class="bg-pp-pink text-pp-white flex h-8 w-25 items-center justify-center rounded-lg text-sm my-1"
+				class="bg-pp-pink text-pp-white my-1 flex h-8 w-25 items-center justify-center rounded-lg text-sm"
 				href="/"
 			>
 				View Orders

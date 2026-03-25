@@ -30,10 +30,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		}
 	}
 
-	const { data: products } = await supabase
-		.from('product')
-		.select('*')
-		.eq('store_id', params.id)
+	const { data: products } = await supabase.from('product').select('*').eq('store_id', params.id);
 
 	return {
 		store,
@@ -46,12 +43,12 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 };
 
 export const actions: Actions = {
-	"add-product": async ({ request, locals: { supabase } }) => {
+	'add-product': async ({ request, locals: { supabase } }) => {
 		const timeout = (ms: number) =>
 			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
 
 		const formData = await request.formData();
-		
+
 		const name = formData.get('product_name') as string;
 		const price = parseFloat(formData.get('product_price') as string);
 		const description = formData.get('product_description') as string;
@@ -70,12 +67,15 @@ export const actions: Actions = {
 				description: description,
 				price: price,
 				quantity: quantity,
-				available: true,
+				available: true
 			})
 			.select()
 			.single();
 
-		const result = await Promise.race([dbPromise, timeout(5000)]) as { data?: { product_id: string }; error?: { message: string } };
+		const result = (await Promise.race([dbPromise, timeout(5000)])) as {
+			data?: { product_id: string };
+			error?: { message: string };
+		};
 
 		if (result.error) {
 			console.error('Database responded with error: ', result.error.message);
@@ -83,11 +83,11 @@ export const actions: Actions = {
 			return fail(500, { success: false, message: result.error.message });
 		}
 
-		const product = result.data
+		const product = result.data;
 		if (!product) {
 			return fail(500, { success: false, message: 'Failed to create product' });
 		}
-		const productId = product.product_id
+		const productId = product.product_id;
 
 		// get image file
 		const imgFile = formData.get('product_img') as File;
@@ -104,9 +104,7 @@ export const actions: Actions = {
 			data: { publicUrl }
 		} = supabase.storage.from('images').getPublicUrl(filePath);
 
-		const {
-			error: updateError
-		} = await supabase
+		const { error: updateError } = await supabase
 			.from('product')
 			.update({ img_url: publicUrl })
 			.eq('product_id', productId)
@@ -114,15 +112,15 @@ export const actions: Actions = {
 
 		if (updateError) {
 			console.error('Update error:', updateError.message);
-			return fail(500, {success: false, message: updateError.message})
+			return fail(500, { success: false, message: updateError.message });
 		}
 
 		return { success: true, message: 'Product added successfully' };
 	},
 
-	"edit-product": async ({ request, locals: { supabase } }) => {
+	'edit-product': async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		
+
 		const name = formData.get('product_name') as string;
 		const price = parseFloat(formData.get('product_price') as string);
 		const description = formData.get('product_description') as string;
@@ -137,7 +135,7 @@ export const actions: Actions = {
 		await supabase
 			.from('product')
 			.update({ name: name, description: description, price: price, quantity: quantity })
-			.eq('product_id', productId)
+			.eq('product_id', productId);
 
 		// Handle optional image update
 		const imgFile = formData.get('product_img') as File;
@@ -146,9 +144,7 @@ export const actions: Actions = {
 			const filePath = `${storeId}/${productId}_${Date.now()}.${fileExt}`;
 
 			// Delete existing images for this product
-			const { data: existingFiles } = await supabase.storage
-				.from('images')
-				.list(`${storeId}/`);
+			const { data: existingFiles } = await supabase.storage.from('images').list(`${storeId}/`);
 
 			if (existingFiles && existingFiles.length > 0) {
 				const filesToDelete = existingFiles
@@ -156,7 +152,7 @@ export const actions: Actions = {
 					.map((f) => `${storeId}/${f.name}`);
 				if (filesToDelete.length > 0) {
 					await supabase.storage.from('images').remove(filesToDelete);
-					await new Promise(resolve => setTimeout(resolve, 100));
+					await new Promise((resolve) => setTimeout(resolve, 100));
 				}
 			}
 
@@ -184,7 +180,7 @@ export const actions: Actions = {
 		return { success: true, message: 'Product edited successfully' };
 	},
 
-	"delete-product": async ({ request, locals: { supabase } }) => {
+	'delete-product': async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const productId = formData.get('productId') as string;
 
@@ -193,14 +189,14 @@ export const actions: Actions = {
 			.delete()
 			.eq('product_id', productId);
 
-		if(deleteError) {
+		if (deleteError) {
 			return fail(500, { success: false, message: 'Remove product failed' });
 		}
 
 		return { success: true, message: 'Product removed successfully' };
 	},
 
-	"edit-store": async ({ request, locals: { supabase }, params }) => {
+	'edit-store': async ({ request, locals: { supabase }, params }) => {
 		const formData = await request.formData();
 
 		const storeId = formData.get('storeId') as string;
@@ -255,9 +251,7 @@ export const actions: Actions = {
 			const fileExt = imgFile.name.split('.').pop();
 			const filePath = `${storeId}/store_thumbnail_${Date.now()}.${fileExt}`;
 
-			const { data: existingFiles } = await supabase.storage
-				.from('images')
-				.list(`${storeId}/`);
+			const { data: existingFiles } = await supabase.storage.from('images').list(`${storeId}/`);
 
 			if (existingFiles && existingFiles.length > 0) {
 				const filesToDelete = existingFiles
@@ -265,7 +259,7 @@ export const actions: Actions = {
 					.map((f) => `${storeId}/${f.name}`);
 				if (filesToDelete.length > 0) {
 					await supabase.storage.from('images').remove(filesToDelete);
-					await new Promise(resolve => setTimeout(resolve, 100));
+					await new Promise((resolve) => setTimeout(resolve, 100));
 				}
 			}
 
@@ -297,7 +291,7 @@ export const actions: Actions = {
 		return { success: true, message: 'Store updated successfully' };
 	},
 
-	"delete-store": async ({ request, locals: { supabase } }) => {
+	'delete-store': async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const storeId = formData.get('storeId') as string;
 
@@ -337,4 +331,3 @@ export const actions: Actions = {
 		throw redirect(303, '/store');
 	}
 };
-

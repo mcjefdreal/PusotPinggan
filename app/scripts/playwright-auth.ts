@@ -1,13 +1,10 @@
 import { chromium } from '@playwright/test';
 import 'dotenv/config';
 async function saveAuthSession() {
-	const browser = await chromium.launch({ 
+	const browser = await chromium.launch({
 		headless: false,
-		args: [
-			'--disable-blink-features=AutomationControlled',
-			'--disable-dev-shm-usage',
-		]
-	 });
+		args: ['--disable-blink-features=AutomationControlled', '--disable-dev-shm-usage']
+	});
 	const context = await browser.newContext();
 	const page = await context.newPage();
 	// Navigate to app

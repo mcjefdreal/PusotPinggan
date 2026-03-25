@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		SearchOutline,
-		MapPinAltOutline,
-		CogSolid
-	} from 'flowbite-svelte-icons';
+	import { SearchOutline, MapPinAltOutline, CogSolid } from 'flowbite-svelte-icons';
 
 	import { goto } from '$app/navigation';
 
@@ -107,23 +103,22 @@
 			searchQuery = '';
 		}
 	}
-
 </script>
 
 <nav class="from-pp-pink to-pp-light-pink sticky start-0 top-0 z-20 w-full bg-linear-to-t p-2 pb-4">
 	<div
-		class="flex max-w-screen-xl items-center p-4 min-w-0"
+		class="flex max-w-screen-xl min-w-0 items-center p-4"
 		onclick={requestLocation}
 		role="button"
 		tabindex="0"
 		onkeydown={(e) => e.key === 'Enter' && requestLocation()}
 	>
 		<MapPinAltOutline class="text-pp-white h-8 w-8 shrink-0" />
-		<div class="items-left ml-4 flex flex-col min-w-0">
+		<div class="items-left ml-4 flex min-w-0 flex-col">
 			{#if errorMessage}
 				<p class="text-pp-white font-bold">{errorMessage}</p>
 			{:else}
-				<p class="text-pp-white font-bold truncate">{firstHalf || locationText}</p>
+				<p class="text-pp-white truncate font-bold">{firstHalf || locationText}</p>
 				{#if secondHalf}
 					<p class="text-pp-white truncate">{secondHalf}</p>
 				{/if}

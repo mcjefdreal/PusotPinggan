@@ -5,7 +5,7 @@
 
 	let {
 		initialAddress = '',
-		initialLat = '14.648937907831831', 
+		initialLat = '14.648937907831831',
 		initialLng = '121.06869653914266'
 	} = $props();
 
@@ -13,9 +13,11 @@
 	let mapElement: HTMLElement | undefined = $state();
 	let inputElement: HTMLInputElement | undefined = $state();
 
-	const initialCenter = $derived(initialLat && initialLng 
-		? { lat: parseFloat(initialLat), lng: parseFloat(initialLng) }
-		: { lat: 0, lng: 0 });
+	const initialCenter = $derived(
+		initialLat && initialLng
+			? { lat: parseFloat(initialLat), lng: parseFloat(initialLng) }
+			: { lat: 0, lng: 0 }
+	);
 
 	onMount(async () => {
 		setOptions({ key: PUBLIC_GOOGLE_MAPS_API_KEY });
@@ -33,7 +35,7 @@
 			mapId: 'DEMO_MAP_ID'
 		});
 
-		const marker = new AdvancedMarkerElement({ 
+		const marker = new AdvancedMarkerElement({
 			map,
 			position: initialCenter
 		});
@@ -47,24 +49,27 @@
 		});
 		const geocoder = new Geocoder();
 
-		map.addListener('click', async (event: { latLng: { lat: () => number; lng: () => number } }) => {
-			const latLng = event.latLng;
+		map.addListener(
+			'click',
+			async (event: { latLng: { lat: () => number; lng: () => number } }) => {
+				const latLng = event.latLng;
 
-			marker.position = latLng;
+				marker.position = latLng;
 
-			const response = await geocoder.geocode({ location: latLng });
-			const address = response.results[0]?.formatted_address || 'Custom Location';
+				const response = await geocoder.geocode({ location: latLng });
+				const address = response.results[0]?.formatted_address || 'Custom Location';
 
-			selected = {
-				address: address,
-				lat: latLng.lat().toString(),
-				lng: latLng.lng().toString()
-			};
+				selected = {
+					address: address,
+					lat: latLng.lat().toString(),
+					lng: latLng.lng().toString()
+				};
 
-			if (inputElement) {
-				inputElement.value = address;
+				if (inputElement) {
+					inputElement.value = address;
+				}
 			}
-		});
+		);
 
 		autocomplete.addListener('place_changed', () => {
 			const place = autocomplete.getPlace();

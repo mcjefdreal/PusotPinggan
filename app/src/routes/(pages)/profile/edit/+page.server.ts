@@ -45,7 +45,7 @@ export const actions: Actions = {
 				console.log('Deleting files');
 				const filesToDelete = existingFiles.map((f) => `avatars/${user.id}/${f.name}`);
 				await supabase.storage.from('images').remove(filesToDelete);
-				await new Promise(resolve => setTimeout(resolve, 100));
+				await new Promise((resolve) => setTimeout(resolve, 100));
 			}
 
 			// upload new image
