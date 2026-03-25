@@ -76,6 +76,7 @@
 			</a>
 			<button
 			class="bg-pp-pink text-pp-white absolute top-2 right-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+			data-testid="edit-store"
 			aria-label="Edit Store"
 			onclick={() => editStoreActive = true}
 			>
@@ -117,6 +118,7 @@
 	<button
 		class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
 		aria-label="Add"
+		data-testid="add-product"
 		onclick={() => active = true}
 	>
 		+

@@ -26,6 +26,7 @@
 		{/if}
 		<a
 			class="bg-pp-pink text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-lg font-medium"
+			data-testid="add-store"
 			href={resolve('/store/create')}
 		>
 			Add Store

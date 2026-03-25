@@ -172,6 +172,7 @@
 				class="bg-red-600 text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-auto"
 				type="submit"
 				disabled={isDeleting}
+				data-testid="delete-store"
 			>
 				{isDeleting ? 'Deleting...' : 'Delete Store'}
 			</button>

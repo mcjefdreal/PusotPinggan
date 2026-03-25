@@ -14,6 +14,7 @@
 			<a
 				class="bg-pp-pink text-pp-white flex h-8 w-25 items-center justify-center rounded-lg text-sm my-1"
 				href={resolve(`/store/${storeName}/${storeId}`)}
+				data-testid="view-store"
 			>
 				View Store
 			</a>

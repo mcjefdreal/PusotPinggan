@@ -156,6 +156,7 @@
 				class="bg-pp-pink text-pp-white flex h-10 w-40 items-center justify-center rounded-lg text-lg"
 				type="submit"
 				disabled={isDeleting}
+				data-testid="delete-product"
 			>
 				{isDeleting ? 'Removing...' : 'Remove Product'}
 			</button>

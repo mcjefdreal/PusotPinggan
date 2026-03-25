@@ -33,6 +33,7 @@ vite.config.ts.timestamp-*
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+/.auth-token.txt
 
 # VScode
 .vscode/

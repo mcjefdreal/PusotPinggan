@@ -33,7 +33,7 @@
 			<div class="text-sm font-semibold text-pp-black">{productName}</div>
 			<div class="text-xs text-pp-gray">₱ {productPrice.toFixed(2)}</div>
 		</div>
-		<EditOutline class="text-pp-pink mt-1 ml-auto h-6 w-6" onclick={() => (editModal = true)} />
+		<EditOutline class="text-pp-pink mt-1 ml-auto h-6 w-6" onclick={() => (editModal = true)} data-testid="edit-product" />
 	</div>
 </div>
 
