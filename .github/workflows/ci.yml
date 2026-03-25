@@ -16,6 +16,7 @@ jobs:
       PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.PUBLIC_GOOGLE_MAPS_API_KEY }}$
+      TEST_ACCESS_TOKEN: ${{ secrets.TEST_ACCESS_TOKEN }}$
 
     defaults:
       run:
@@ -42,7 +43,7 @@ jobs:
         run: pnpm install
 
       - name: Setup Playwright browsers
-        run: pnpm exec playwright install chromium firefox --with-deps
+        run: pnpm exec playwright install chromium --with-deps
 
       - name: Check formatting
         run: pnpm fmt
