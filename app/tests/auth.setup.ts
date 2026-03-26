@@ -19,15 +19,13 @@ setup('authenticate', async ({ page }) => {
 		await page.goto('http://localhost:5173/home');
 		await expect(page.getByText('All categories')).toBeVisible({ timeout: 10000 });
 		await page.waitForTimeout(1000);
-	}
-	else if (accessToken) {
+	} else if (accessToken) {
 		try {
 			const parsed = JSON.parse(accessToken);
 
 			if (parsed.cookies && Array.isArray(parsed.cookies)) {
 				await page.context().addCookies(parsed.cookies);
-			}
-			else if (parsed.access_token) {
+			} else if (parsed.access_token) {
 				await page.context().addCookies([
 					{
 						name: 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
@@ -36,8 +34,7 @@ setup('authenticate', async ({ page }) => {
 						path: '/'
 					}
 				]);
-			}
-			else if (parsed.token) {
+			} else if (parsed.token) {
 				await page.context().addCookies([
 					{
 						name: parsed.cookieName || 'sb-tyyeqrrpaezkfusujglm-auth-token.0',
@@ -63,8 +60,7 @@ setup('authenticate', async ({ page }) => {
 		await page.goto('http://localhost:5173/home');
 		await expect(page.getByText('All categories')).toBeVisible({ timeout: 10000 });
 		await page.waitForTimeout(1000);
-	}
-	else {
+	} else {
 		const stealthPlugin = stealth();
 		stealthPlugin.enabledEvasions.delete('iframe.contentWindow');
 		stealthPlugin.enabledEvasions.delete('media.codecs');

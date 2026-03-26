@@ -32,6 +32,6 @@ export default defineConfig({
 		command: 'pnpm dev',
 		url: 'http://localhost:5173',
 		reuseExistingServer: !process.env.CI,
-		stderr: 'ignore', // Suppress errors
+		stderr: 'ignore' // Suppress errors
 	}
 });
