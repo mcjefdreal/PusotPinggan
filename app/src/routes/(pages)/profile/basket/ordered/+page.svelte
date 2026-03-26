@@ -21,12 +21,7 @@
 
 			<div class="text-pp-white text-center text-2xl font-semibold">My Basket</div>
 
-			<a
-				href={resolve('/profile')}
-				class="text-pp-white top-6 right-6 ml-auto flex items-center gap-2"
-			>
-				<CogSolid class="h-8 w-8" />
-			</a>
+			<div></div>
 		</div>
 
 		<div class="bg-pp-white sticky top-24 z-20 mb-1 flex h-14 w-full">
