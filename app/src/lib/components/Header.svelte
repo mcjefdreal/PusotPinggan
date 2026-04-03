@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SearchOutline, MapPinAltOutline, CogSolid } from 'flowbite-svelte-icons';
+	import { SearchOutline, MapPinAltOutline } from 'flowbite-svelte-icons';
 
 	import { goto } from '$app/navigation';
 
@@ -124,7 +124,6 @@
 				{/if}
 			{/if}
 		</div>
-		<CogSolid class="text-pp-white ml-auto h-8 w-8 shrink-0" />
 	</div>
 
 	<form class="flex max-w-screen-xl px-4" onsubmit={handleSearch}>
