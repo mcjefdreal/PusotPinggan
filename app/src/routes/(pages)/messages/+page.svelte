@@ -1,8 +1,6 @@
 <script>
 	import { resolve } from '$app/paths';
 
-	import { CogSolid } from 'flowbite-svelte-icons';
-
 	import ChatPreview from '$lib/components/Messages/ChatPreview.svelte';
 </script>
 

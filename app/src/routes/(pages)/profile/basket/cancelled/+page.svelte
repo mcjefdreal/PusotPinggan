@@ -1,7 +1,7 @@
 <script>
 	import { resolve } from '$app/paths';
 
-	import { ArrowLeftOutline, CogSolid } from 'flowbite-svelte-icons';
+	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
 
 	import Order from '$lib/components/BasketOrders/Order.svelte';
 </script>
@@ -35,7 +35,7 @@
 			>
 			<a
 				href={resolve('/profile/basket/cancelled')}
-				class="border-pp-pink flex flex-1 items-center justify-center border-b-2 transition active:bg-gray-300"
+				class="border-pp-pink flex flex-1 items-center justify-center border-b-2 transition active:text-pp-darker-pink"
 			>
 				<div class="text-pp-pink">Cancelled</div>
 			</a>

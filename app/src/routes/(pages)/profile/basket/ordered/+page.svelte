@@ -1,7 +1,7 @@
 <script>
 	import { resolve } from '$app/paths';
 
-	import { ArrowLeftOutline, CogSolid } from 'flowbite-svelte-icons';
+	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
 
 	import Order from '$lib/components/BasketOrders/Order.svelte';
 </script>
@@ -13,7 +13,7 @@
 		>
 			<a href={resolve('/profile')}>
 				<button
-					class="text-pp-white flex items-center gap-2 rounded-full transition active:bg-gray-300"
+					class="text-pp-white flex items-center gap-2 rounded-full transition active:text-pp-darker-pink"
 				>
 					<ArrowLeftOutline class="h-8 w-8" />
 				</button>

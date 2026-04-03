@@ -15,19 +15,19 @@
 
 <div class="relative h-screen overflow-hidden">
 	<div class="from-pp-pink to-pp-light-pink relative h-[36%] bg-gradient-to-t p-6">
-		<div class="text-pp-white text-center text-2xl font-semibold">Profile</div>
-	</div>
-
-	<div class="absolute left-1/2 top-[8%] mt-22 -translate-x-1/2 -translate-y-1/2">
+		<div class="mt-0 text-pp-white text-center text-2xl font-semibold">Profile</div>
+		<div class="flex flex-col mt-6 items-center justify-center">
 		<div
-			class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white shadow-lg"
+			class="flex h-35 w-35 items-center justify-center rounded-full border-4 border-white bg-white shadow-lg"
 		>
 			Karin
 		</div>
 		<div class="text-pp-white mt-2 text-center text-lg font-medium">Karin Consebido</div>
 	</div>	
+	</div>
+
 	<div class="bg-rose-50 h-[64%]"></div>
-	<div class="absolute left-1/2 top-[30%] -translate-x-1/2 bg-pp-white w-80 rounded-xl">
+	<div class="absolute left-1/2 top-[31%] -translate-x-1/2 bg-pp-white w-80 rounded-xl">
 			<a
 				href={resolve('/profile/edit')}
 				class="block rounded-t-xl px-3 py-4 flex items-center w-full text-base font-normal transition hover:bg-gray-100 active:bg-gray-300"
