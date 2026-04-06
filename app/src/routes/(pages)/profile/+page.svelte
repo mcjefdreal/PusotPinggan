@@ -3,13 +3,17 @@
 		AngleRightOutline,
 		FilePenOutline,
 		CartOutline,
-		HeartOutline,
-		QuestionCircleOutline,
-		BuildingOutline,
-		BookOpenOutline,
 		ArrowRightToBracketOutline
 	} from 'flowbite-svelte-icons';
 	import { resolve } from '$app/paths';
+	import { invalidateAll } from '$app/navigation';
+
+	const { data } = $props();
+
+	export async function signOut() {
+		await data.supabase.auth.signOut()
+		await invalidateAll()
+	}
 </script>
 
 
@@ -46,13 +50,13 @@
 				<AngleRightOutline class="ml-auto mr-1 h-5 w-5" />
 			</a>
 			<div class="border-t-1 border-dotted border-gray-300"></div>
-			<a
-				href={resolve('/profile/edit')}
-				class="block rounded-b-xl px-3 py-4 text-left text-base font-normal transition hover:bg-gray-100 active:bg-gray-300"
+			<button
+				class="block rounded-b-xl px-3 py-4 text-left text-base font-normal transition hover:bg-gray-100 active:bg-gray-300 w-full"
+				onclick={signOut}
 			>
 				<ArrowRightToBracketOutline class="text-red-800 ml-2 mr-3 inline-block h-5 w-5" />
-				Log Out</a
-			>
+				Log Out
+			</button >
 		</div>
 </div>
 
