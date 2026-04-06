@@ -81,7 +81,9 @@
 	<div
 		class="bg-pp-white sticky bottom-0 z-20 grid w-full grid-cols-[auto_1fr_auto] items-center justify-center gap-x-5 p-4 px-6"
 	>
-		<button class="text-pp-gray flex items-center gap-2 rounded-full transition active:text-gray-700">
+		<button
+			class="text-pp-gray flex items-center gap-2 rounded-full transition active:text-gray-700"
+		>
 			<PlusOutline class="h-8 w-8" />
 		</button>
 
@@ -92,7 +94,9 @@
 			class="border-pp-white placeholder-pp-gray focus:border-pp-pink focus:ring-pp-pink w-full rounded-md border px-2 py-2.5"
 			placeholder="Type a message..."
 		/>
-		<button class="text-pp-gray flex items-center gap-2 rounded-full transition active:text-gray-700">
+		<button
+			class="text-pp-gray flex items-center gap-2 rounded-full transition active:text-gray-700"
+		>
 			<FaceGrinOutline class="h-8 w-8" />
 		</button>
 	</div>

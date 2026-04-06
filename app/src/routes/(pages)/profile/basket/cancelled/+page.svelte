@@ -13,7 +13,7 @@
 		>
 			<a href={resolve('/profile')}>
 				<button
-					class="text-pp-white flex items-center gap-2 rounded-full transition active:text-pp-darker-pink"
+					class="text-pp-white active:text-pp-darker-pink flex items-center gap-2 rounded-full transition"
 				>
 					<ArrowLeftOutline class="h-8 w-8" />
 				</button>
@@ -35,7 +35,7 @@
 			>
 			<a
 				href={resolve('/profile/basket/cancelled')}
-				class="border-pp-pink flex flex-1 items-center justify-center border-b-2 transition active:text-pp-darker-pink"
+				class="border-pp-pink active:text-pp-darker-pink flex flex-1 items-center justify-center border-b-2 transition"
 			>
 				<div class="text-pp-pink">Cancelled</div>
 			</a>

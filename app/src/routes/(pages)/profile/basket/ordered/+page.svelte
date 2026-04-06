@@ -13,7 +13,7 @@
 		>
 			<a href={resolve('/profile')}>
 				<button
-					class="text-pp-white flex items-center gap-2 rounded-full transition active:text-pp-darker-pink"
+					class="text-pp-white active:text-pp-darker-pink flex items-center gap-2 rounded-full transition"
 				>
 					<ArrowLeftOutline class="h-8 w-8" />
 				</button>

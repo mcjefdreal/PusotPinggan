@@ -56,7 +56,10 @@
 			</Toast>
 		{/if}
 
-		<a href={resolve('/profile')} class="text-pp-white absolute top-6 left-6 flex items-center gap-1 transition active:text-pp-darker-pink">
+		<a
+			href={resolve('/profile')}
+			class="text-pp-white active:text-pp-darker-pink absolute top-6 left-6 flex items-center gap-1 transition"
+		>
 			<ArrowLeftOutline class="h-8 w-8" />
 		</a>
 
@@ -108,10 +111,10 @@
 					class="hidden"
 					name="profile_image"
 				/>
-				<button type="button" onclick={handleImageClick} class="focus:outline-none">				
-					<div 
-						class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-400
-								-translate-y-9 translate-x-12 active:bg-emerald-500"
+				<button type="button" onclick={handleImageClick} class="focus:outline-none">
+					<div
+						class="flex h-10 w-10 translate-x-12 -translate-y-9 items-center justify-center
+								rounded-full bg-emerald-400 active:bg-emerald-500"
 					>
 						<EditOutline class="absolute left-2.5 h-6 w-6 text-white" />
 					</div>
@@ -119,8 +122,8 @@
 			</div>
 		</form>
 	</div>
-	
-	<div class="absolute left-1/2 top-[23%] -translate-x-1/2 mx-auto mt-10 w-84">
+
+	<div class="absolute top-[23%] left-1/2 mx-auto mt-10 w-84 -translate-x-1/2">
 		<div class="mb-1 grid gap-2.5 px-3 pt-2">
 			<div>
 				<label for="firstname" class="text-pp-gray mb-2.5 text-sm font-medium">First Name</label>
@@ -172,5 +175,4 @@
 			</button>
 		</div>
 	</div>
-	
 </div>
