@@ -129,7 +129,7 @@
 					id="firstname"
 					name="firstname"
 					bind:value={firstname}
-					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2 py-2.5 text-xs"
+					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
 					placeholder="First Name"
 					required
 				/>
@@ -142,7 +142,7 @@
 					id="lastname"
 					name="lastname"
 					bind:value={lastname}
-					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-3 py-2.5 text-xs"
+					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
 					placeholder="Last Name"
 					required
 				/>
@@ -155,7 +155,7 @@
 					id="phone"
 					name="phone"
 					bind:value={phone}
-					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-3 py-2.5 text-xs"
+					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
 					placeholder="+63 912 345 6789"
 					required
 				/>
