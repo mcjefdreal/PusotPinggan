@@ -8,7 +8,7 @@
 	<img src={storePicUrl} alt={storeName} class="h-35 w-35 rounded-lg" />
 
 	<div class="flex flex-col overflow-hidden px-5">
-		<p class="text-pp-pink truncate pb-5 text-2xl font-semibold">{storeName}</p>
+		<p class="text-pp-pink truncate pb-3 text-2xl font-semibold">{storeName}</p>
 
 		<div class="flex flex-col">
 			<a
