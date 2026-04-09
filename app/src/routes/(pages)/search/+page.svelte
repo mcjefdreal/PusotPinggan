@@ -26,7 +26,7 @@
 				<div class="flex flex-row items-start pb-5">
 					<img src={s.img_url} alt={s.store_name} class="h-35 w-35 rounded-lg" />
 					<div class="flex flex-col overflow-hidden px-5">
-						<p class="text-pp-black truncate pb-3 text-2xl font-medium">{s.store_name}</p>
+						<p class="text-pp-pink truncate pb-5 text-2xl font-semibold">{s.store_name}</p>
 						<a
 							class="bg-pp-pink text-pp-white my-1 flex h-8 w-25 items-center justify-center rounded-lg text-sm"
 							href="/"
