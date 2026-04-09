@@ -5,7 +5,7 @@
 	import { resolve } from '$app/paths';
 
 	import StoreProductCard from '$lib/components/Homepage/StoreProductCard.svelte';
-    
+
 	let { data }: PageProps = $props();
 
 	let products = $derived(data.products);
@@ -42,15 +42,15 @@
 		<div class="px-4 pb-24">
 			<div class="grid grid-cols-2 gap-3">
 				{#each products as p (p.product_id)}
-                    <StoreProductCard
-                        productPic={p.img_url}
-                        productName={p.name}
-                        productPrice={p.price}
-                        productDescription={p.description}
-                        productId={p.product_id}
-                        productQuantity={p.quantity}
-                        storeId={data.storeId}
-                    />
+					<StoreProductCard
+						productPic={p.img_url}
+						productName={p.name}
+						productPrice={p.price}
+						productDescription={p.description}
+						productId={p.product_id}
+						productQuantity={p.quantity}
+						storeId={data.storeId}
+					/>
 				{/each}
 			</div>
 		</div>

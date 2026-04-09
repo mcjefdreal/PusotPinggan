@@ -30,7 +30,7 @@
 		<div class="px-4 pb-24">
 			<!-- display stores first -->
 			{#if data.stores.length != 0}
-				<p class="pb-3 text-xl font-medium"> Stores </p>
+				<p class="pb-3 text-xl font-medium">Stores</p>
 			{/if}
 			{#each data.stores as s (s.store_id)}
 				<div class="flex flex-row items-start pb-5">
@@ -49,20 +49,20 @@
 			{/each}
 
 			{#if data.products.length != 0}
-				<p class="py-3 text-xl font-medium"> Products </p>
+				<p class="py-3 text-xl font-medium">Products</p>
 			{/if}
 			<div class="grid grid-cols-2 gap-3">
 				<!-- display products second -->
 				{#each data.products as p (p.product_id)}
 					<StoreProductCard
-                        productPic={p.img_url}
-                        productName={p.name}
-                        productPrice={p.price}
-                        productDescription={p.description}
-                        productId={p.product_id}
-                        productQuantity={p.quantity}
-                        storeId={p.store_id}
-                    />
+						productPic={p.img_url}
+						productName={p.name}
+						productPrice={p.price}
+						productDescription={p.description}
+						productId={p.product_id}
+						productQuantity={p.quantity}
+						storeId={p.store_id}
+					/>
 				{/each}
 			</div>
 		</div>

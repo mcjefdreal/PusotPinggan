@@ -21,29 +21,21 @@
 
 <Modal bind:open={editModal} class="max-w-100" onclose={onClose}>
 	<div class="relative">
-		<div class="bg-pp-gray/10 h-44 w-full flex items-center justify-center">
-			<img
-				class="h-full object-cover"
-				src={productPic}
-				alt={productName}
-			/>
+		<div class="bg-pp-gray/10 flex h-44 w-full items-center justify-center">
+			<img class="h-full object-cover" src={productPic} alt={productName} />
 		</div>
 	</div>
-	<form
-		method="POST"
-		enctype="multipart/form-data"
-		action="?/order-product"
-	>
+	<form method="POST" enctype="multipart/form-data" action="?/order-product">
 		<input type="hidden" name="productId" value={productId} />
 		<input type="hidden" name="storeId" value={storeId} />
 
 		<div class="flex flex-col space-y-6">
 			<div>
 				<div class="flex flex-row">
-					<p class="text-pp-pink text-medium font-semibold"> {productName} </p>
-					<p class="ml-auto"> ₱ {productPrice.toFixed(2)} </p>
+					<p class="text-pp-pink text-medium font-semibold">{productName}</p>
+					<p class="ml-auto">₱ {productPrice.toFixed(2)}</p>
 				</div>
-				<p> {productDescription} </p>
+				<p>{productDescription}</p>
 				<label for="product_quantity" class="text-pp-gray mb-2.5 text-xs font-medium"
 					>Quantity</label
 				>
@@ -59,7 +51,7 @@
 		</div>
 		<div class="flex flex-row py-2.5">
 			<a
-				class="bg-pp-white border border-pp-pink text-pp-pink flex h-10 w-40 items-center justify-center rounded-lg text-lg"
+				class="bg-pp-white border-pp-pink text-pp-pink flex h-10 w-40 items-center justify-center rounded-lg border text-lg"
 				href="/"
 			>
 				View Store
@@ -74,10 +66,7 @@
 			</button>
 		</div>
 	</form>
-	<form
-		method="POST"
-		action="?/delete-product"
-	>
+	<form method="POST" action="?/delete-product">
 		<input type="hidden" name="productId" value={productId} />
 	</form>
 </Modal>
