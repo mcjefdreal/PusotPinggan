@@ -4,12 +4,6 @@
 	let { data } = $props();
 
 	import StoreProductCard from '$lib/components/Homepage/StoreProductCard.svelte';
-
-	let editModal = $state(false);
-
-	function handleClose() {
-		editModal = false;
-	}
 </script>
 
 <div class="min-h-screen w-full p-5">
