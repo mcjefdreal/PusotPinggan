@@ -3,7 +3,6 @@
 
 	let { data } = $props();
 
-	import ViewProductModal from '$lib/components/Homepage/ViewProductModal.svelte';
 	import StoreProductCard from '$lib/components/Homepage/StoreProductCard.svelte';
 
 	let editModal = $state(false);
