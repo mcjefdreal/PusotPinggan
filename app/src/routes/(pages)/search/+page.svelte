@@ -1,5 +1,16 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	let { data } = $props();
+
+	import ViewProductModal from '$lib/components/Homepage/ViewProductModal.svelte';
+	import StoreProductCard from '$lib/components/Homepage/StoreProductCard.svelte';
+
+	let editModal = $state(false);
+
+	function handleClose() {
+		editModal = false;
+	}
 </script>
 
 <div class="min-h-screen w-full p-5">
@@ -29,7 +40,7 @@
 						<p class="text-pp-pink truncate pb-5 text-2xl font-semibold">{s.store_name}</p>
 						<a
 							class="bg-pp-pink text-pp-white my-1 flex h-8 w-25 items-center justify-center rounded-lg text-sm"
-							href="/"
+							href={resolve(`/search/${s.store_name}/${s.store_id}`)}
 							data-testid="view-store"
 						>
 							View Store
@@ -44,13 +55,15 @@
 			<div class="grid grid-cols-2 gap-3">
 				<!-- display products second -->
 				{#each data.products as p (p.product_id)}
-					<div class="border-pp-gray/30 overflow-hidden rounded-xl border">
-						<img class="h-28 w-full object-cover" src={p.img_url} alt={p.name} />
-						<div class="p-2">
-							<div class="text-pp-black text-sm font-semibold">{p.name}</div>
-							<div class="text-pp-gray text-xs">₱ {p.price.toFixed(2)}</div>
-						</div>
-					</div>
+					<StoreProductCard
+                        productPic={p.img_url}
+                        productName={p.name}
+                        productPrice={p.price}
+                        productDescription={p.description}
+                        productId={p.product_id}
+                        productQuantity={p.quantity}
+                        storeId={p.store_id}
+                    />
 				{/each}
 			</div>
 		</div>
