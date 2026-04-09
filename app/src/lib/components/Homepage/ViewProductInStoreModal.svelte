@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import { Modal } from 'flowbite-svelte';
-	import { resolve } from '$app/paths';
+	// import { resolve } from '$app/paths';
 
 	let {
 		editModal = false,
