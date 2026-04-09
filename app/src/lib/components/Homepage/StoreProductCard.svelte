@@ -6,7 +6,7 @@
 		productQuantity = 1,
 		productDescription = 'Lorem ipsum',
 		productId = '',
-		storeId = '',
+		storeId = ''
 	} = $props();
 
 	import ViewProductInStoreModal from '$lib/components/Homepage/ViewProductInStoreModal.svelte';
@@ -24,7 +24,7 @@
 		<div class="flex">
 			<div class="p-2">
 				<div class="text-pp-black text-sm font-semibold">{productName}</div>
-				<div class="text-pp-gray text-xs text-left">₱ {productPrice.toFixed(2)}</div>
+				<div class="text-pp-gray text-left text-xs">₱ {productPrice.toFixed(2)}</div>
 			</div>
 		</div>
 	</div>

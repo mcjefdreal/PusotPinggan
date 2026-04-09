@@ -2,332 +2,332 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types.ts';
 
 export const load: PageServerLoad = async ({ parent, locals: { supabase }, params }) => {
-    const { user } = await parent();
+	const { user } = await parent();
 
-    const { data: store, error: storeError } = await supabase
-        .from('store')
-        .select('*')
-        .eq('store_name', params.storename)
-        .eq('store_id', params.id)
-        .eq('owner', user!.id)
-        .single();
+	const { data: store, error: storeError } = await supabase
+		.from('store')
+		.select('*')
+		.eq('store_name', params.storename)
+		.eq('store_id', params.id)
+		.eq('owner', user!.id)
+		.single();
 
-    if (storeError) {
-        console.error('Fetch Error:', storeError.message);
-        throw error(500, 'Failed to load stores');
-    }
+	if (storeError) {
+		console.error('Fetch Error:', storeError.message);
+		throw error(500, 'Failed to load stores');
+	}
 
-    let storeLat = '';
-    let storeLng = '';
+	let storeLat = '';
+	let storeLng = '';
 
-    if (store.store_coords) {
-        const { data: coords } = await supabase.rpc('get_geo_coords', {
-            p_store_id: store.store_id
-        });
-        if (coords) {
-            storeLat = coords[0].lat?.toString() || '';
-            storeLng = coords[0].lng?.toString() || '';
-        }
-    }
+	if (store.store_coords) {
+		const { data: coords } = await supabase.rpc('get_geo_coords', {
+			p_store_id: store.store_id
+		});
+		if (coords) {
+			storeLat = coords[0].lat?.toString() || '';
+			storeLng = coords[0].lng?.toString() || '';
+		}
+	}
 
-    const { data: products } = await supabase.from('product').select('*').eq('store_id', params.id);
+	const { data: products } = await supabase.from('product').select('*').eq('store_id', params.id);
 
-    return {
-        store,
-        storeName: params.storename,
-        storeId: params.id,
-        storeLat,
-        storeLng,
-        products
-    };
+	return {
+		store,
+		storeName: params.storename,
+		storeId: params.id,
+		storeLat,
+		storeLng,
+		products
+	};
 };
 
 export const actions: Actions = {
-    'add-product': async ({ request, locals: { supabase } }) => {
-        const timeout = (ms: number) =>
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
+	'add-product': async ({ request, locals: { supabase } }) => {
+		const timeout = (ms: number) =>
+			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
 
-        const formData = await request.formData();
+		const formData = await request.formData();
 
-        const name = formData.get('product_name') as string;
-        const price = parseFloat(formData.get('product_price') as string);
-        const description = formData.get('product_description') as string;
-        const quantity = formData.get('product_quantity') as string;
-        const storeId = formData.get('storeId') as string;
+		const name = formData.get('product_name') as string;
+		const price = parseFloat(formData.get('product_price') as string);
+		const description = formData.get('product_description') as string;
+		const quantity = formData.get('product_quantity') as string;
+		const storeId = formData.get('storeId') as string;
 
-        if (!name || !price || !description || !storeId) {
-            return fail(400, { success: false, message: 'Missing required fields' });
-        }
+		if (!name || !price || !description || !storeId) {
+			return fail(400, { success: false, message: 'Missing required fields' });
+		}
 
-        const dbPromise = await supabase
-            .from('product')
-            .insert({
-                store_id: storeId,
-                name: name,
-                description: description,
-                price: price,
-                quantity: quantity,
-                available: true
-            })
-            .select()
-            .single();
+		const dbPromise = await supabase
+			.from('product')
+			.insert({
+				store_id: storeId,
+				name: name,
+				description: description,
+				price: price,
+				quantity: quantity,
+				available: true
+			})
+			.select()
+			.single();
 
-        const result = (await Promise.race([dbPromise, timeout(5000)])) as {
-            data?: { product_id: string };
-            error?: { message: string };
-        };
+		const result = (await Promise.race([dbPromise, timeout(5000)])) as {
+			data?: { product_id: string };
+			error?: { message: string };
+		};
 
-        if (result.error) {
-            console.error('Database responded with error: ', result.error.message);
+		if (result.error) {
+			console.error('Database responded with error: ', result.error.message);
 
-            return fail(500, { success: false, message: result.error.message });
-        }
+			return fail(500, { success: false, message: result.error.message });
+		}
 
-        const product = result.data;
-        if (!product) {
-            return fail(500, { success: false, message: 'Failed to create product' });
-        }
-        const productId = product.product_id;
+		const product = result.data;
+		if (!product) {
+			return fail(500, { success: false, message: 'Failed to create product' });
+		}
+		const productId = product.product_id;
 
-        // get image file
-        const imgFile = formData.get('product_img') as File;
-        const fileExt = imgFile.name.split('.').pop();
-        const filePath = `${storeId}/${productId}.${fileExt}`;
+		// get image file
+		const imgFile = formData.get('product_img') as File;
+		const fileExt = imgFile.name.split('.').pop();
+		const filePath = `${storeId}/${productId}.${fileExt}`;
 
-        // console.log(`Image path is ${filePath}`);
+		// console.log(`Image path is ${filePath}`);
 
-        const { error: uploadError } = await supabase.storage.from('images').upload(filePath, imgFile);
+		const { error: uploadError } = await supabase.storage.from('images').upload(filePath, imgFile);
 
-        if (uploadError) return fail(500, { success: false, message: 'Image upload failed' });
+		if (uploadError) return fail(500, { success: false, message: 'Image upload failed' });
 
-        const {
-            data: { publicUrl }
-        } = supabase.storage.from('images').getPublicUrl(filePath);
+		const {
+			data: { publicUrl }
+		} = supabase.storage.from('images').getPublicUrl(filePath);
 
-        const { error: updateError } = await supabase
-            .from('product')
-            .update({ img_url: publicUrl })
-            .eq('product_id', productId)
-            .select();
+		const { error: updateError } = await supabase
+			.from('product')
+			.update({ img_url: publicUrl })
+			.eq('product_id', productId)
+			.select();
 
-        if (updateError) {
-            console.error('Update error:', updateError.message);
-            return fail(500, { success: false, message: updateError.message });
-        }
+		if (updateError) {
+			console.error('Update error:', updateError.message);
+			return fail(500, { success: false, message: updateError.message });
+		}
 
-        return { success: true, message: 'Product added successfully' };
-    },
+		return { success: true, message: 'Product added successfully' };
+	},
 
-    'edit-product': async ({ request, locals: { supabase } }) => {
-        const formData = await request.formData();
+	'edit-product': async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
 
-        const name = formData.get('product_name') as string;
-        const price = parseFloat(formData.get('product_price') as string);
-        const description = formData.get('product_description') as string;
-        const quantity = parseInt(formData.get('product_quantity') as string);
-        const storeId = formData.get('storeId') as string;
-        const productId = formData.get('productId') as string;
+		const name = formData.get('product_name') as string;
+		const price = parseFloat(formData.get('product_price') as string);
+		const description = formData.get('product_description') as string;
+		const quantity = parseInt(formData.get('product_quantity') as string);
+		const storeId = formData.get('storeId') as string;
+		const productId = formData.get('productId') as string;
 
-        if (!productId || !storeId || !name || !price || !description || isNaN(quantity)) {
-            return fail(400, { success: false, message: 'Missing required fields' });
-        }
+		if (!productId || !storeId || !name || !price || !description || isNaN(quantity)) {
+			return fail(400, { success: false, message: 'Missing required fields' });
+		}
 
-        await supabase
-            .from('product')
-            .update({ name: name, description: description, price: price, quantity: quantity })
-            .eq('product_id', productId);
+		await supabase
+			.from('product')
+			.update({ name: name, description: description, price: price, quantity: quantity })
+			.eq('product_id', productId);
 
-        // Handle optional image update
-        const imgFile = formData.get('product_img') as File;
-        if (imgFile && imgFile.size > 0) {
-            const fileExt = imgFile.name.split('.').pop();
-            const filePath = `${storeId}/${productId}_${Date.now()}.${fileExt}`;
+		// Handle optional image update
+		const imgFile = formData.get('product_img') as File;
+		if (imgFile && imgFile.size > 0) {
+			const fileExt = imgFile.name.split('.').pop();
+			const filePath = `${storeId}/${productId}_${Date.now()}.${fileExt}`;
 
-            // Delete existing images for this product
-            const { data: existingFiles } = await supabase.storage.from('images').list(`${storeId}/`);
+			// Delete existing images for this product
+			const { data: existingFiles } = await supabase.storage.from('images').list(`${storeId}/`);
 
-            if (existingFiles && existingFiles.length > 0) {
-                const filesToDelete = existingFiles
-                    .filter((f) => f.name.startsWith(`${productId}_`))
-                    .map((f) => `${storeId}/${f.name}`);
-                if (filesToDelete.length > 0) {
-                    await supabase.storage.from('images').remove(filesToDelete);
-                    await new Promise((resolve) => setTimeout(resolve, 100));
-                }
-            }
+			if (existingFiles && existingFiles.length > 0) {
+				const filesToDelete = existingFiles
+					.filter((f) => f.name.startsWith(`${productId}_`))
+					.map((f) => `${storeId}/${f.name}`);
+				if (filesToDelete.length > 0) {
+					await supabase.storage.from('images').remove(filesToDelete);
+					await new Promise((resolve) => setTimeout(resolve, 100));
+				}
+			}
 
-            // Upload new image
-            const { error: uploadError } = await supabase.storage
-                .from('images')
-                .upload(filePath, imgFile, { upsert: true, contentType: imgFile.type });
+			// Upload new image
+			const { error: uploadError } = await supabase.storage
+				.from('images')
+				.upload(filePath, imgFile, { upsert: true, contentType: imgFile.type });
 
-            if (uploadError) {
-                return fail(500, { success: false, message: 'Image upload failed' });
-            }
+			if (uploadError) {
+				return fail(500, { success: false, message: 'Image upload failed' });
+			}
 
-            const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
+			const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
 
-            const { error: imgUpdateError } = await supabase
-                .from('product')
-                .update({ img_url: urlData.publicUrl })
-                .eq('product_id', productId);
+			const { error: imgUpdateError } = await supabase
+				.from('product')
+				.update({ img_url: urlData.publicUrl })
+				.eq('product_id', productId);
 
-            if (imgUpdateError) {
-                return fail(500, { success: false, message: 'Image URL update failed' });
-            }
-        }
+			if (imgUpdateError) {
+				return fail(500, { success: false, message: 'Image URL update failed' });
+			}
+		}
 
-        return { success: true, message: 'Product edited successfully' };
-    },
+		return { success: true, message: 'Product edited successfully' };
+	},
 
-    'delete-product': async ({ request, locals: { supabase } }) => {
-        const formData = await request.formData();
-        const productId = formData.get('productId') as string;
+	'delete-product': async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+		const productId = formData.get('productId') as string;
 
-        const { error: deleteError } = await supabase
-            .from('product')
-            .delete()
-            .eq('product_id', productId);
+		const { error: deleteError } = await supabase
+			.from('product')
+			.delete()
+			.eq('product_id', productId);
 
-        if (deleteError) {
-            return fail(500, { success: false, message: 'Remove product failed' });
-        }
+		if (deleteError) {
+			return fail(500, { success: false, message: 'Remove product failed' });
+		}
 
-        return { success: true, message: 'Product removed successfully' };
-    },
+		return { success: true, message: 'Product removed successfully' };
+	},
 
-    'edit-store': async ({ request, locals: { supabase }, params }) => {
-        const formData = await request.formData();
+	'edit-store': async ({ request, locals: { supabase }, params }) => {
+		const formData = await request.formData();
 
-        const storeId = formData.get('storeId') as string;
-        const name = formData.get('store_name') as string;
-        const desc = formData.get('store_description') as string;
-        const addr = formData.get('store_addr') as string;
-        const lat = formData.get('store_lat') as string;
-        const lng = formData.get('store_lng') as string;
+		const storeId = formData.get('storeId') as string;
+		const name = formData.get('store_name') as string;
+		const desc = formData.get('store_description') as string;
+		const addr = formData.get('store_addr') as string;
+		const lat = formData.get('store_lat') as string;
+		const lng = formData.get('store_lng') as string;
 
-        const oldName = params.storename;
+		const oldName = params.storename;
 
-        const schedRaw = formData.get('sched') as string;
-        let sched = {};
-        try {
-            sched = JSON.parse(schedRaw);
-        } catch (e) {
-            console.error('Failed to parse schedule:', e);
-        }
+		const schedRaw = formData.get('sched') as string;
+		let sched = {};
+		try {
+			sched = JSON.parse(schedRaw);
+		} catch (e) {
+			console.error('Failed to parse schedule:', e);
+		}
 
-        if (!storeId || !name || !desc) {
-            return fail(400, { success: false, message: 'Missing required fields' });
-        }
+		if (!storeId || !name || !desc) {
+			return fail(400, { success: false, message: 'Missing required fields' });
+		}
 
-        let storeCoords = undefined;
-        if (lat && lng) {
-            storeCoords = `POINT(${lng} ${lat})`;
-        }
+		let storeCoords = undefined;
+		if (lat && lng) {
+			storeCoords = `POINT(${lng} ${lat})`;
+		}
 
-        const updateData: Record<string, unknown> = {
-            store_name: name,
-            store_desc: desc,
-            store_addr: addr,
-            store_hrs: sched
-        };
+		const updateData: Record<string, unknown> = {
+			store_name: name,
+			store_desc: desc,
+			store_addr: addr,
+			store_hrs: sched
+		};
 
-        if (storeCoords) {
-            updateData.store_coords = storeCoords;
-        }
+		if (storeCoords) {
+			updateData.store_coords = storeCoords;
+		}
 
-        const { error: updateError } = await supabase
-            .from('store')
-            .update(updateData)
-            .eq('store_id', storeId);
+		const { error: updateError } = await supabase
+			.from('store')
+			.update(updateData)
+			.eq('store_id', storeId);
 
-        if (updateError) {
-            console.error('Update error:', updateError.message);
-            return fail(500, { success: false, message: updateError.message });
-        }
+		if (updateError) {
+			console.error('Update error:', updateError.message);
+			return fail(500, { success: false, message: updateError.message });
+		}
 
-        const imgFile = formData.get('store_img') as File;
-        if (imgFile && imgFile.size > 0) {
-            const fileExt = imgFile.name.split('.').pop();
-            const filePath = `${storeId}/store_thumbnail_${Date.now()}.${fileExt}`;
+		const imgFile = formData.get('store_img') as File;
+		if (imgFile && imgFile.size > 0) {
+			const fileExt = imgFile.name.split('.').pop();
+			const filePath = `${storeId}/store_thumbnail_${Date.now()}.${fileExt}`;
 
-            const { data: existingFiles } = await supabase.storage.from('images').list(`${storeId}/`);
+			const { data: existingFiles } = await supabase.storage.from('images').list(`${storeId}/`);
 
-            if (existingFiles && existingFiles.length > 0) {
-                const filesToDelete = existingFiles
-                    .filter((f) => f.name.includes('store_thumbnail'))
-                    .map((f) => `${storeId}/${f.name}`);
-                if (filesToDelete.length > 0) {
-                    await supabase.storage.from('images').remove(filesToDelete);
-                    await new Promise((resolve) => setTimeout(resolve, 100));
-                }
-            }
+			if (existingFiles && existingFiles.length > 0) {
+				const filesToDelete = existingFiles
+					.filter((f) => f.name.includes('store_thumbnail'))
+					.map((f) => `${storeId}/${f.name}`);
+				if (filesToDelete.length > 0) {
+					await supabase.storage.from('images').remove(filesToDelete);
+					await new Promise((resolve) => setTimeout(resolve, 100));
+				}
+			}
 
-            const { error: uploadError } = await supabase.storage
-                .from('images')
-                .upload(filePath, imgFile, { upsert: true, contentType: imgFile.type });
+			const { error: uploadError } = await supabase.storage
+				.from('images')
+				.upload(filePath, imgFile, { upsert: true, contentType: imgFile.type });
 
-            if (uploadError) {
-                return fail(500, { success: false, message: 'Image upload failed' });
-            }
+			if (uploadError) {
+				return fail(500, { success: false, message: 'Image upload failed' });
+			}
 
-            const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
+			const { data: urlData } = supabase.storage.from('images').getPublicUrl(filePath);
 
-            const { error: imgUpdateError } = await supabase
-                .from('store')
-                .update({ img_url: urlData.publicUrl })
-                .eq('store_id', storeId);
+			const { error: imgUpdateError } = await supabase
+				.from('store')
+				.update({ img_url: urlData.publicUrl })
+				.eq('store_id', storeId);
 
-            if (imgUpdateError) {
-                return fail(500, { success: false, message: 'Image URL update failed' });
-            }
-        }
+			if (imgUpdateError) {
+				return fail(500, { success: false, message: 'Image URL update failed' });
+			}
+		}
 
-        const nameChanged = oldName !== name;
-        if (nameChanged) {
-            throw redirect(303, `/store/${name}/${storeId}`);
-        }
+		const nameChanged = oldName !== name;
+		if (nameChanged) {
+			throw redirect(303, `/store/${name}/${storeId}`);
+		}
 
-        return { success: true, message: 'Store updated successfully' };
-    },
+		return { success: true, message: 'Store updated successfully' };
+	},
 
-    'delete-store': async ({ request, locals: { supabase } }) => {
-        const formData = await request.formData();
-        const storeId = formData.get('storeId') as string;
+	'delete-store': async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+		const storeId = formData.get('storeId') as string;
 
-        if (!storeId) {
-            return fail(400, { success: false, message: 'Missing store ID' });
-        }
+		if (!storeId) {
+			return fail(400, { success: false, message: 'Missing store ID' });
+		}
 
-        const { data: products, error: productsError } = await supabase
-            .from('product')
-            .select('product_id')
-            .eq('store_id', storeId);
+		const { data: products, error: productsError } = await supabase
+			.from('product')
+			.select('product_id')
+			.eq('store_id', storeId);
 
-        if (productsError) {
-            return fail(500, { success: false, message: 'Failed to fetch products' });
-        }
+		if (productsError) {
+			return fail(500, { success: false, message: 'Failed to fetch products' });
+		}
 
-        if (products && products.length > 0) {
-            const { error: deleteProductsError } = await supabase
-                .from('product')
-                .delete()
-                .eq('store_id', storeId);
+		if (products && products.length > 0) {
+			const { error: deleteProductsError } = await supabase
+				.from('product')
+				.delete()
+				.eq('store_id', storeId);
 
-            if (deleteProductsError) {
-                return fail(500, { success: false, message: 'Failed to delete products' });
-            }
-        }
+			if (deleteProductsError) {
+				return fail(500, { success: false, message: 'Failed to delete products' });
+			}
+		}
 
-        const { error: deleteStoreError } = await supabase
-            .from('store')
-            .delete()
-            .eq('store_id', storeId);
+		const { error: deleteStoreError } = await supabase
+			.from('store')
+			.delete()
+			.eq('store_id', storeId);
 
-        if (deleteStoreError) {
-            return fail(500, { success: false, message: 'Delete store failed' });
-        }
+		if (deleteStoreError) {
+			return fail(500, { success: false, message: 'Delete store failed' });
+		}
 
-        throw redirect(303, '/store');
-    }
+		throw redirect(303, '/store');
+	}
 };
