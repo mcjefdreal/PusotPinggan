@@ -1,15 +1,13 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types.ts';
 
-export const load: PageServerLoad = async ({ parent, locals: { supabase }, params }) => {
-	const { user } = await parent();
+export const load: PageServerLoad = async ({ locals: { supabase }, params }) => {
 
 	const { data: store, error: storeError } = await supabase
 		.from('store')
 		.select('*')
 		.eq('store_name', params.storename)
 		.eq('store_id', params.id)
-		.eq('owner', user!.id)
 		.single();
 
 	if (storeError) {
