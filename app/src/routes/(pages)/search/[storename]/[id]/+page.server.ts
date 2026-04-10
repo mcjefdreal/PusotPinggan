@@ -2,7 +2,6 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types.ts';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, params }) => {
-
 	const { data: store, error: storeError } = await supabase
 		.from('store')
 		.select('*')
