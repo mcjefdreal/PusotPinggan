@@ -13,11 +13,8 @@
 			order_status: string;
 			order_date: string;
 			buyer: {
+				buyer_id: string;
 				display_name: string | null;
-				user: {
-					first_name: string | null;
-					last_name: string | null;
-				};
 			};
 			order_details: Array<{
 				product: {
@@ -33,32 +30,39 @@
 	let showSuccess = $state(false);
 	let showFail = $state(false);
 	let toastMessage = $state('');
+	let actionOrders: Map<string, boolean> = new Map();
 
 	let orders = $derived(data?.orders || []);
 
-	let activeStatus = $state<'Pending' | 'Confirmed'>('Pending');
+	let activeStatus = $state<'Pending' | 'Confirmed' | 'Completed' | 'Cancelled'>('Pending');
 
 	let filteredOrders = $derived(
 		orders.filter((o) => o.order_status === activeStatus)
 	);
 
 	async function handleConfirmOrder(orderId: string) {
+		actionOrders.set(orderId, true);
 		const formData = new FormData();
 		formData.append('orderId', orderId);
 
 		try {
 			const response = await fetch('?/confirm-order', {
 				method: 'POST',
+				headers: { 'Accept': 'application/json' },
 				body: formData
 			});
-			const result = await response.json();
 
-			if (result.success) {
+			const jsonResponse = await response.json();
+			const resultArray = JSON.parse(jsonResponse.data);
+			const success = resultArray[1];
+			const message = resultArray[2];
+
+			if (success) {
 				toastMessage = 'Order confirmed';
 				showSuccess = true;
 				await invalidateAll();
 			} else {
-				toastMessage = result.message || 'Failed to confirm';
+				toastMessage = message || 'Failed to confirm';
 				showFail = true;
 			}
 			setTimeout(() => {
@@ -69,26 +73,34 @@
 			toastMessage = 'Error confirming order';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
+		} finally {
+			actionOrders.set(orderId, false);
 		}
 	}
 
 	async function handleCancelOrder(orderId: string) {
+		actionOrders.set(orderId, true);
 		const formData = new FormData();
 		formData.append('orderId', orderId);
 
 		try {
 			const response = await fetch('?/cancel-order', {
 				method: 'POST',
+				headers: { 'Accept': 'application/json' },
 				body: formData
 			});
-			const result = await response.json();
 
-			if (result.success) {
+			const jsonResponse = await response.json();
+			const resultArray = JSON.parse(jsonResponse.data);
+			const success = resultArray[1];
+			const message = resultArray[2];
+
+			if (success) {
 				toastMessage = 'Order cancelled';
 				showSuccess = true;
 				await invalidateAll();
 			} else {
-				toastMessage = result.message || 'Failed to cancel';
+				toastMessage = message || 'Failed to cancel';
 				showFail = true;
 			}
 			setTimeout(() => {
@@ -99,11 +111,14 @@
 			toastMessage = 'Error cancelling order';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
+		} finally {
+			actionOrders.set(orderId, false);
 		}
 	}
 
 	function getBuyerName(order: typeof orders[0]) {
-		return order.buyer?.display_name || order.buyer?.user?.first_name || order.buyer?.user?.last_name || 'Customer';
+		console.log(order);
+		return order.buyer?.display_name || order.buyer?.buyer_id || 'Customer';
 	}
 
 	function getOrderTotal(order: typeof orders[0]) {
@@ -169,6 +184,22 @@
 					? ` (${orders.filter((o) => o.order_status === 'Confirmed').length})`
 					: ''}
 			</button>
+			<button
+				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Completed' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				onclick={() => (activeStatus = 'Completed')}
+			>
+				Completed{orders.filter((o) => o.order_status === 'Completed').length > 0
+					? ` (${orders.filter((o) => o.order_status === 'Completed').length})`
+					: ''}
+			</button>
+			<button
+				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Cancelled' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				onclick={() => (activeStatus = 'Cancelled')}
+			>
+				Cancelled{orders.filter((o) => o.order_status === 'Cancelled').length > 0
+					? ` (${orders.filter((o) => o.order_status === 'Cancelled').length})`
+					: ''}
+			</button>
 		</div>
 
 		<!-- Orders -->
@@ -189,7 +220,11 @@
 							<span
 								class="rounded-full px-2 py-1 text-xs {order.order_status === 'Pending'
 									? 'bg-yellow-100 text-yellow-800'
-									: 'bg-green-100 text-green-800'}"
+									: order.order_status === 'Confirmed'
+										? 'bg-green-100 text-green-800'
+										: order.order_status === 'Completed'
+											? 'bg-blue-100 text-blue-800'
+											: 'bg-red-100 text-red-800'}"
 							>
 								{order.order_status}
 							</span>
@@ -218,20 +253,28 @@
 							<div class="mt-3 flex gap-2">
 								<button
 									class="flex-1 rounded-lg bg-pp-pink py-2 text-white"
+									disabled={actionOrders.get(order.order_id)}
 									onclick={() => handleConfirmOrder(order.order_id)}
 								>
-									Confirm
+									{actionOrders.get(order.order_id) ? 'Processing...' : 'Confirm'}
 								</button>
 								<button
 									class="flex-1 rounded-lg border border-red-500 py-2 text-red-500"
+									disabled={actionOrders.get(order.order_id)}
 									onclick={() => handleCancelOrder(order.order_id)}
 								>
-									Cancel
+									{actionOrders.get(order.order_id) ? 'Processing...' : 'Cancel'}
 								</button>
 							</div>
-						{:else}
-							<div class="mt-3 rounded-lg bg-gray-100 py-2 text-center text-gray-500">
-								Chat (TBD)
+						{:else if order.order_status === 'Confirmed'}
+							<div class="mt-3 flex gap-2">
+								<button
+									class="flex-1 rounded-lg border border-red-500 py-2 text-red-500"
+									disabled={actionOrders.get(order.order_id)}
+									onclick={() => handleCancelOrder(order.order_id)}
+								>
+									{actionOrders.get(order.order_id) ? 'Processing...' : 'Cancel'}
+								</button>
 							</div>
 						{/if}
 					</div>
