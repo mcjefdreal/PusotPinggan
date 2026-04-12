@@ -56,40 +56,40 @@
 		</div>
 	</div>
 
-	{#if orders.length === 0}
-		<div class="flex flex-col items-center justify-center py-20">
-			<p class="text-pp-gray text-lg">No completed orders yet</p>
-		</div>
-	{:else}
-		<div class="flex flex-col items-center justify-center gap-y-2 py-1">
-			{#each orders as order}
-				<div class="mb-4 w-full px-2">
-					<div class="bg-pp-white mx-2 rounded-lg p-3 shadow">
-						<div class="mb-2 flex items-center justify-between border-b pb-2">
-							<h3 class="text-pp-pink text-lg font-semibold">
-								{order.store?.store_name || 'Store'}
-							</h3>
-							<span class="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
-								Completed
-							</span>
-						</div>
-
-						{#each order.order_details as detail}
-							<div class="mb-2 flex items-center">
-								<div class="flex-1">
-									<p class="text-pp-black font-medium">{detail.product?.name}</p>
-									<p class="text-pp-gray text-sm">x{detail.quantity}</p>
-								</div>
-								<p class="text-pp-gray">₱ {(detail.unit_price * detail.quantity).toFixed(2)}</p>
+		{#if orders.length === 0}
+			<div class="flex flex-col items-center justify-center py-20">
+				<p class="text-pp-gray text-lg">No completed orders yet</p>
+			</div>
+		{:else}
+			<div class="flex flex-col items-center justify-center gap-y-2 py-1">
+				{#each orders as order}
+					<div class="mb-4 w-full px-2">
+						<div class="bg-pp-white mx-2 rounded-lg p-3 shadow">
+							<div class="mb-2 flex items-center justify-between border-b pb-2">
+								<h3 class="text-pp-pink text-lg font-semibold">
+									{order.store?.store_name || 'Store'}
+								</h3>
+								<span class="rounded-full bg-green-100 px-2 py-1 text-xs text-green-800">
+									Completed
+								</span>
 							</div>
-						{/each}
 
-						<div class="mt-2 flex justify-end border-t pt-2 text-lg font-semibold">
-							Total: ₱ {getTotal(order).toFixed(2)}
+							{#each order.order_details as detail}
+								<div class="mb-2 flex items-center">
+									<div class="flex-1">
+										<p class="text-pp-black font-medium">{detail.product?.name}</p>
+										<p class="text-pp-gray text-sm">x{detail.quantity}</p>
+									</div>
+									<p class="text-pp-gray">₱ {(detail.unit_price * detail.quantity).toFixed(2)}</p>
+								</div>
+							{/each}
+
+							<div class="mt-2 flex justify-end border-t pt-2 text-lg font-semibold">
+								Total: ₱ {getTotal(order).toFixed(2)}
+							</div>
 						</div>
 					</div>
-				</div>
-			{/each}
-		</div>
-	{/if}
+				{/each}
+			</div>
+		{/if}
 </div>

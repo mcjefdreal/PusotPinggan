@@ -233,14 +233,14 @@
 		</div>
 	</div>
 
-	{#if cartItems.length === 0}
-		<div class="flex flex-col items-center justify-center py-20">
-			<p class="text-pp-gray text-lg">Your cart is empty</p>
-			<p class="text-pp-gray mt-2 text-sm">Add items from a store to get started</p>
-			<a href={resolve('/home')} class="text-pp-pink mt-4 text-sm font-medium">Go to Home</a>
-		</div>
-	{:else}
-		{#each getGroupedByStore() as group}
+		{#if cartItems.length === 0}
+			<div class="flex flex-col items-center justify-center py-20">
+				<p class="text-pp-gray text-lg">Your cart is empty</p>
+				<p class="text-pp-gray mt-2 text-sm">Add items from a store to get started</p>
+				<a href={resolve('/home')} class="text-pp-pink mt-4 text-sm font-medium">Go to Home</a>
+			</div>
+		{:else}
+			{#each getGroupedByStore() as group}
 			<div class="mb-4 w-full px-2">
 				<div class="bg-pp-white mx-2 rounded-lg p-3 shadow">
 					<div class="mb-3 flex items-center justify-between border-b pb-2">
