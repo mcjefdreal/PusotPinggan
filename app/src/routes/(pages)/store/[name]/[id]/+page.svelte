@@ -1,15 +1,17 @@
 <script lang="ts">
 	import AddProductModal from '$lib/components/Store/AddProductModal.svelte';
 	import EditStoreModal from '$lib/components/Store/EditStoreModal.svelte';
-	import type { PageProps } from './$types.ts';
+	import type { PageProps } from './$types';
 	import { Toast } from 'flowbite-svelte';
 	import { ArrowLeftOutline, EditOutline } from 'flowbite-svelte-icons';
 
 	import { resolve } from '$app/paths';
+	import { invalidateAll } from '$app/navigation';
 	import ProductCard from '$lib/components/Store/ProductCard.svelte';
 
 	let { data }: PageProps = $props();
 
+	let activeTab = $state<'products' | 'orders'>('products');
 	let active = $state(false);
 	let editStoreActive = $state(false);
 	let showSuccess = $state(false);
@@ -17,6 +19,7 @@
 	let toastMessage = $state('');
 
 	let products = $derived(data.products);
+	let orders = $derived(data.orders || []);
 
 	function handleEditStoreClose() {
 		editStoreActive = false;
@@ -45,6 +48,66 @@
 			showSuccess = true;
 			setTimeout(() => (showSuccess = false), 3000);
 		} else {
+			showFail = true;
+			setTimeout(() => (showFail = false), 3000);
+		}
+	}
+
+	async function handleConfirmOrder(orderId: string) {
+		const formData = new FormData();
+		formData.append('orderId', orderId);
+
+		try {
+			const response = await fetch('?/confirm-order', {
+				method: 'POST',
+				body: formData
+			});
+			const result = await response.json();
+
+			if (result.success) {
+				toastMessage = 'Order confirmed';
+				showSuccess = true;
+				await invalidateAll();
+			} else {
+				toastMessage = result.message || 'Failed to confirm';
+				showFail = true;
+			}
+			setTimeout(() => {
+				showSuccess = false;
+				showFail = false;
+			}, 3000);
+		} catch (err) {
+			toastMessage = 'Error confirming order';
+			showFail = true;
+			setTimeout(() => (showFail = false), 3000);
+		}
+	}
+
+	async function handleCancelOrder(orderId: string) {
+		const formData = new FormData();
+		formData.append('orderId', orderId);
+
+		try {
+			const response = await fetch('?/cancel-order', {
+				method: 'POST',
+				body: formData
+			});
+			const result = await response.json();
+
+			if (result.success) {
+				toastMessage = 'Order cancelled';
+				showSuccess = true;
+				await invalidateAll();
+			} else {
+				toastMessage = result.message || 'Failed to cancel';
+				showFail = true;
+			}
+			setTimeout(() => {
+				showSuccess = false;
+				showFail = false;
+			}, 3000);
+		} catch (err) {
+			toastMessage = 'Error cancelling order';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
 		}
@@ -97,34 +160,56 @@
 			<p class="text-pp-gray mt-2 text-xs">{data.store.store_desc}</p>
 		</div>
 
-		<!-- Products -->
-		<div class="px-4 pb-24">
-			<div class="grid grid-cols-2 gap-3">
-				{#each products as p (p.product_id)}
-					<ProductCard
-						productPic={p.img_url}
-						productName={p.name}
-						productPrice={p.price}
-						productDescription={p.description}
-						productId={p.product_id}
-						productQuantity={p.quantity}
-						storeId={data.storeId}
-						showToast={handleSubmit}
-					/>
-				{/each}
-			</div>
+		<!-- Tabs -->
+		<div class="mb-3 flex border-b">
+			<button
+				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'products' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				onclick={() => (activeTab = 'products')}
+			>
+				Products
+			</button>
+			<a
+				href={resolve(`/store/${data.storeName}/${data.storeId}/orders`)}
+				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'orders' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+			>
+				Orders{orders.length > 0 ? ` (${orders.length})` : ''}
+			</a>
 		</div>
-	</div>
 
-	<!-- Floating plus -->
-	<button
-		class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
-		aria-label="Add"
-		data-testid="add-product"
-		onclick={() => (active = true)}
-	>
-		+
-	</button>
+		{#if activeTab === 'products'}
+			<!-- Products -->
+			<div class="px-4 pb-24">
+				{#if products!.length === 0}
+					<div class="py-8 text-center text-pp-gray">No products yet</div>
+				{:else}
+					<div class="grid grid-cols-2 gap-3">
+						{#each products as p (p.product_id)}
+							<ProductCard
+								productPic={p.img_url}
+								productName={p.name}
+								productPrice={p.price}
+								productDescription={p.description}
+								productId={p.product_id}
+								productQuantity={p.quantity}
+								storeId={data.storeId}
+								showToast={handleSubmit}
+							/>
+						{/each}
+					</div>
+				{/if}
+			</div>
+
+			 <!-- Floating plus -->
+			<button
+				class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
+				aria-label="Add"
+				data-testid="add-product"
+				onclick={() => (active = true)}
+			>
+				+
+			</button>
+		{/if}
+	</div>
 
 	<AddProductModal {active} onClose={handleModal} onSubmit={handleSubmit} storeId={data.storeId}
 	></AddProductModal>

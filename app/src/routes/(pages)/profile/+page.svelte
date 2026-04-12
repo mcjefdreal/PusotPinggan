@@ -41,7 +41,7 @@
 		</a>
 		<div class="border-t-1 border-dotted border-gray-300"></div>
 		<a
-			href="/profile/basket/ordered"
+			href="/profile/basket/cart"
 			class="block flex w-full items-center px-3 py-4 text-base font-normal transition hover:bg-gray-100 active:bg-gray-300"
 		>
 			<CartOutline class="mr-4 ml-2 inline-block h-5 w-5" />

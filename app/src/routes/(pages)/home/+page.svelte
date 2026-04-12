@@ -27,7 +27,7 @@
 		<CategoryCard></CategoryCard>
 	</div>
 
-	<a href="/profile/basket/ordered">
+	<a href="/profile/basket/cart">
 		<Button
 			pill={true}
 			class="bg-pp-pink fixed right-6 bottom-25 z-50 p-2! shadow-lg focus:outline-none"
