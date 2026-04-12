@@ -46,7 +46,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase } }) => 
 		.from('order')
 		.select('*, order_details(*, product(*)), store(store_id, store_name)')
 		.eq('buyer_id', buyerId)
-		.eq('order_status', 'Confirmed');
+		.eq('order_status', 'Completed');
 
 	if (ordersError) {
 		console.error('Orders error:', ordersError.message);

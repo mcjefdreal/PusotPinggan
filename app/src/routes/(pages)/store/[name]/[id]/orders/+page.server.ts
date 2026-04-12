@@ -8,12 +8,8 @@ interface OrderWithDetails {
 	order_status: string;
 	order_date: string;
 	buyer: {
-		user_id: string;
+		buyer_id: string;
 		display_name: string | null;
-		user: {
-			first_name: string | null;
-			last_name: string | null;
-		};
 	};
 	order_details: Array<{
 		product_id: string;
@@ -44,19 +40,46 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 
 	const { data: orders, error: ordersError } = await supabase
 		.from('order')
-		.select('*, buyer:buyer_id(user_id, display_name, user:user_id(first_name, last_name)), order_details(*, product(name, img_url))')
+		.select('*, order_details(*, product(name, img_url))')
 		.eq('store_id', params.id)
-		.in('order_status', ['Pending', 'Confirmed']);
+		.in('order_status', ['Pending', 'Confirmed', 'Completed', 'Cancelled']);
 
 	if (ordersError) {
 		console.error('Orders error:', ordersError.message);
+	}
+
+	let ordersWithDisplayName: OrderWithDetails[] = [];
+
+	if (orders && orders.length > 0) {
+		const buyerIds = [...new Set(orders.map((o: any) => o.buyer_id).filter(Boolean))];
+
+		if (buyerIds.length > 0) {
+			const { data: users } = await supabase
+				.from('user')
+				.select('user_id, display_name')
+				.in('user_id', buyerIds);
+
+			console.log('Users:', users);
+
+			const userMap = new Map(users?.map((u) => [u.user_id, u.display_name]) || []);
+
+			ordersWithDisplayName = orders.map((order: any) => ({
+				...order,
+				buyer: {
+					buyer_id: order.buyer_id,
+					display_name: userMap.get(order.buyer_id) || null
+				}
+			}));
+		} else {
+			ordersWithDisplayName = orders as OrderWithDetails[];
+		}
 	}
 
 	return {
 		store,
 		storeName: params.name,
 		storeId: params.id,
-		orders: (orders as OrderWithDetails[]) || []
+		orders: ordersWithDisplayName || []
 	};
 };
 
