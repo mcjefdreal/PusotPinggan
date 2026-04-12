@@ -20,7 +20,7 @@
 			</a>
 			<a
 				class="bg-pp-pink text-pp-white my-1 flex h-8 w-25 items-center justify-center rounded-lg text-sm"
-				href="/"
+				href={resolve(`/store/${storeName}/${storeId}/orders`)}
 			>
 				View Orders
 			</a>

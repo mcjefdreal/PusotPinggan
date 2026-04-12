@@ -39,7 +39,123 @@ export const load: PageServerLoad = async ({ locals: { supabase }, params }) => 
 	};
 };
 
+async function getBuyerId(supabase: any, userId: string): Promise<string | null> {
+	const { data: buyer, error } = await supabase
+		.from('buyer')
+		.select('buyer_id')
+		.eq('buyer_id', userId)
+		.single();
+
+	if (error && error.code !== 'PGRST116') {
+		console.error('Error fetching buyer:', error.message);
+		return null;
+	}
+
+	if (buyer) {
+		return buyer.buyer_id;
+	}
+
+	// Create buyer if not exists
+	const { data: newBuyer, error: insertError } = await supabase
+		.from('buyer')
+		.insert({ buyer_id: userId })
+		.select('buyer_id')
+		.single();
+
+	if (insertError) {
+		console.error('Error creating buyer:', insertError.message);
+		return null;
+	}
+
+	return newBuyer.buyer_id;
+}
+
 export const actions: Actions = {
+	'add-to-cart': async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+		const productId = formData.get('productId') as string;
+		const storeId = formData.get('storeId') as string;
+		const quantity = parseInt(formData.get('quantity') as string) || 1;
+
+		if (!productId || !storeId) {
+			return fail(400, { success: false, message: 'Missing required fields' });
+		}
+
+		const { data: { user }, error: userError } = await supabase.auth.getUser();
+		if (userError || !user) {
+			return fail(401, { success: false, message: 'Unauthorized' });
+		}
+
+		const buyerId = await getBuyerId(supabase, user.id);
+		if (!buyerId) {
+			return fail(404, { success: false, message: 'Buyer not found' });
+		}
+
+		// Get or create cart
+		let { data: cart, error: findCartError } = await supabase
+			.from('cart')
+			.select('cart_id')
+			.eq('buyer_id', buyerId)
+			.single();
+
+		if (findCartError && findCartError.code !== 'PGRST116') {
+			return fail(500, { success: false, message: findCartError.message });
+		}
+
+		let cartId: string;
+
+		if (!cart) {
+			const { data: newCart, error: createCartError } = await supabase
+				.from('cart')
+				.insert({ buyer_id: buyerId })
+				.select('cart_id')
+				.single();
+
+			if (createCartError) {
+				return fail(500, { success: false, message: createCartError.message });
+			}
+
+			cartId = newCart.cart_id;
+		} else {
+			cartId = cart.cart_id;
+		}
+
+		// Check if product already in cart_item
+		const { data: existingItem, error: findItemError } = await supabase
+			.from('cart_item')
+			.select('id, quantity')
+			.eq('cart_id', cartId)
+			.eq('product_id', productId)
+			.single();
+
+		if (findItemError && findItemError.code !== 'PGRST116') {
+			return fail(500, { success: false, message: findItemError.message });
+		}
+
+		if (existingItem) {
+			const { error: updateError } = await supabase
+				.from('cart_item')
+				.update({ quantity: existingItem.quantity + quantity })
+				.eq('id', existingItem.id);
+
+			if (updateError) {
+				return fail(500, { success: false, message: updateError.message });
+			}
+		} else {
+			const { error: insertItemError } = await supabase.from('cart_item').insert({
+				cart_id: cartId,
+				product_id: productId,
+				quantity
+			});
+
+			if (insertItemError) {
+				return fail(500, { success: false, message: insertItemError.message });
+			}
+		}
+
+		return { success: true, message: 'Added to cart' };
+	},
+
 	'add-product': async ({ request, locals: { supabase } }) => {
 		const timeout = (ms: number) =>
 			new Promise((_, reject) => setTimeout(() => reject(new Error('Database Timeout')), ms));
