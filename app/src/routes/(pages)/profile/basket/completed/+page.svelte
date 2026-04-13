@@ -12,6 +12,12 @@
 			0
 		);
 	}
+
+	function formatDateTime(dateStr: string) {
+		if (!dateStr) return '';
+		const date = new Date(dateStr);
+		return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	}
 </script>
 
 <div class="min-h-screen w-full bg-rose-50">
@@ -73,6 +79,9 @@
 									Completed
 								</span>
 							</div>
+							{#if order.updated_at}
+								<p class="text-pp-gray mb-2 text-xs">Completed at: {formatDateTime(order.updated_at)}</p>
+							{/if}
 
 							{#each order.order_details as detail}
 								<div class="mb-2 flex items-center">

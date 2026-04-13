@@ -194,28 +194,38 @@
 								</div>
 							{/each}
 
-							<div class="mt-2 flex items-center justify-between border-t pt-2">
+							<div class="mt-2 flex flex-wrap items-center justify-between gap-2 border-t pt-2">
 								<span class="text-lg font-semibold">
 									Total: ₱ {order.order_details.reduce((sum: number, d: any) => sum + (d.unit_price || 0) * d.quantity, 0).toFixed(2)}
 								</span>
-								{#if order.order_status === 'Confirmed'}
-									<button
-										class="bg-pp-pink text-pp-white rounded-md px-4 py-2 text-sm"
-										disabled={actionOrders.get(order.order_id)}
-										onclick={() => handleCompleteOrder(order.order_id)}
-									>
-										{actionOrders.get(order.order_id) ? 'Completing...' : 'Complete Order'}
-									</button>
-								{/if}
-								{#if order.order_status === 'Pending' || order.order_status === 'Confirmed'}
-									<button
-										class="border-red-500 text-red-500 rounded-md border px-4 py-2 text-sm"
-										disabled={actionOrders.get(order.order_id)}
-										onclick={() => handleCancelOrder(order.order_id)}
-									>
-										{actionOrders.get(order.order_id) ? 'Cancelling...' : 'Cancel Order'}
-									</button>
-								{/if}
+								<div class="flex gap-2">
+									{#if order.order_status === 'Pending' || order.order_status === 'Confirmed'}
+										<a
+											href={resolve(`/messages/chat/${order.order_id}`)}
+											class="rounded-md bg-blue-500 px-4 py-2 text-sm text-white"
+										>
+											Chat
+										</a>
+									{/if}
+									{#if order.order_status === 'Confirmed'}
+										<button
+											class="bg-pp-pink text-pp-white rounded-md px-4 py-2 text-sm"
+											disabled={actionOrders.get(order.order_id)}
+											onclick={() => handleCompleteOrder(order.order_id)}
+										>
+											{actionOrders.get(order.order_id) ? 'Completing...' : 'Complete Order'}
+										</button>
+									{/if}
+									{#if order.order_status === 'Pending' || order.order_status === 'Confirmed'}
+										<button
+											class="border-red-500 text-red-500 rounded-md border px-4 py-2 text-sm"
+											disabled={actionOrders.get(order.order_id)}
+											onclick={() => handleCancelOrder(order.order_id)}
+										>
+											{actionOrders.get(order.order_id) ? 'Cancelling...' : 'Cancel Order'}
+										</button>
+									{/if}
+								</div>
 							</div>
 						</div>
 					</div>

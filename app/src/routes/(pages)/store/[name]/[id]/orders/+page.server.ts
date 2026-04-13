@@ -42,7 +42,8 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		.from('order')
 		.select('*, order_details(*, product(name, img_url))')
 		.eq('store_id', params.id)
-		.in('order_status', ['Pending', 'Confirmed', 'Completed', 'Cancelled']);
+		.in('order_status', ['Pending', 'Confirmed', 'Completed', 'Cancelled'])
+		.order('updated_at', { ascending: false });
 
 	if (ordersError) {
 		console.error('Orders error:', ordersError.message);

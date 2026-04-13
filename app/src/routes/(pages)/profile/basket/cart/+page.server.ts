@@ -277,6 +277,17 @@ export const actions: Actions = {
 			await supabase.from('cart').delete().eq('cart_id', cart.cart_id);
 		}
 
+		// Create chat for the order
+		const { error: chatError } = await supabase.from('chat').insert({
+			order_id: orderId,
+			buyer_id: buyerId,
+			seller_id: storeId
+		});
+
+		if (chatError) {
+			console.error('Chat create error:', chatError.message);
+		}
+
 		console.log('Order placed successfully:', orderId);
 		return { success: true, message: 'Order placed successfully!', orderId };
 	}

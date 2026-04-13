@@ -127,6 +127,12 @@
 			0
 		);
 	}
+
+	function formatDateTime(dateStr: string) {
+		if (!dateStr) return '';
+		const date = new Date(dateStr);
+		return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	}
 </script>
 
 {#if showSuccess}
@@ -230,6 +236,12 @@
 							</span>
 						</div>
 
+						{#if order.order_status === 'Completed' && order.updated_at}
+							<p class="text-pp-gray mt-1 text-xs">Completed at: {formatDateTime(order.updated_at)}</p>
+						{:else if order.order_status === 'Cancelled' && order.updated_at}
+							<p class="text-pp-gray mt-1 text-xs">Cancelled at: {formatDateTime(order.updated_at)}</p>
+						{/if}
+
 						{#each order.order_details as detail}
 							<div class="mb-2 flex items-center">
 								<img
@@ -251,6 +263,12 @@
 
 						{#if order.order_status === 'Pending'}
 							<div class="mt-3 flex gap-2">
+								<a
+									href={resolve(`/messages/chat/${order.order_id}`)}
+									class="flex-1 rounded-lg bg-blue-500 py-2 text-white text-center"
+								>
+									Chat
+								</a>
 								<button
 									class="flex-1 rounded-lg bg-pp-pink py-2 text-white"
 									disabled={actionOrders.get(order.order_id)}
@@ -268,6 +286,12 @@
 							</div>
 						{:else if order.order_status === 'Confirmed'}
 							<div class="mt-3 flex gap-2">
+								<a
+									href={resolve(`/messages/chat/${order.order_id}`)}
+									class="flex-1 rounded-lg bg-blue-500 py-2 text-white text-center"
+								>
+									Chat
+								</a>
 								<button
 									class="flex-1 rounded-lg border border-red-500 py-2 text-red-500"
 									disabled={actionOrders.get(order.order_id)}
