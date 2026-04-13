@@ -3,42 +3,50 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Toast } from 'flowbite-svelte';
 	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
+	import { SvelteMap } from 'svelte/reactivity';
 
-	let { data }: { data: {
-		store: any;
-		storeName: string;
-		storeId: string;
-		orders: Array<{
-			order_id: string;
-			order_status: string;
-			order_date: string;
-			buyer: {
-				buyer_id: string;
-				display_name: string | null;
+	let {
+		data
+	}: {
+		data: {
+			store: {
+				store_name: string;
+				img_url: string;
+				rating: number;
 			};
-			order_details: Array<{
-				product: {
-					name: string;
-					img_url: string;
+			storeName: string;
+			storeId: string;
+			orders: Array<{
+				order_id: string;
+				order_status: string;
+				order_date: string;
+				updated_at?: string;
+				buyer: {
+					buyer_id: string;
+					display_name: string | null;
 				};
-				unit_price: number;
-				quantity: number;
+				order_details: Array<{
+					product: {
+						name: string;
+						img_url: string;
+					};
+					unit_price: number;
+					quantity: number;
+				}>;
 			}>;
-		}>;
-	}} = $props();
+		};
+	} = $props();
 
 	let showSuccess = $state(false);
 	let showFail = $state(false);
 	let toastMessage = $state('');
-	let actionOrders: Map<string, boolean> = new Map();
+	let actionOrders: SvelteMap<string, boolean> = new SvelteMap();
 
 	let orders = $derived(data?.orders || []);
 
 	let activeStatus = $state<'Pending' | 'Confirmed' | 'Completed' | 'Cancelled'>('Pending');
 
-	let filteredOrders = $derived(
-		orders.filter((o) => o.order_status === activeStatus)
-	);
+	let filteredOrders = $derived(orders.filter((o) => o.order_status === activeStatus));
 
 	async function handleConfirmOrder(orderId: string) {
 		actionOrders.set(orderId, true);
@@ -48,7 +56,7 @@
 		try {
 			const response = await fetch('?/confirm-order', {
 				method: 'POST',
-				headers: { 'Accept': 'application/json' },
+				headers: { Accept: 'application/json' },
 				body: formData
 			});
 
@@ -69,7 +77,7 @@
 				showSuccess = false;
 				showFail = false;
 			}, 3000);
-		} catch (err) {
+		} catch {
 			toastMessage = 'Error confirming order';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
@@ -86,7 +94,7 @@
 		try {
 			const response = await fetch('?/cancel-order', {
 				method: 'POST',
-				headers: { 'Accept': 'application/json' },
+				headers: { Accept: 'application/json' },
 				body: formData
 			});
 
@@ -107,7 +115,7 @@
 				showSuccess = false;
 				showFail = false;
 			}, 3000);
-		} catch (err) {
+		} catch {
 			toastMessage = 'Error cancelling order';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
@@ -116,22 +124,23 @@
 		}
 	}
 
-	function getBuyerName(order: typeof orders[0]) {
+	function getBuyerName(order: (typeof orders)[0]) {
 		console.log(order);
 		return order.buyer?.display_name || order.buyer?.buyer_id || 'Customer';
 	}
 
-	function getOrderTotal(order: typeof orders[0]) {
-		return order.order_details.reduce(
-			(sum, d) => sum + (d.unit_price || 0) * d.quantity,
-			0
-		);
+	function getOrderTotal(order: (typeof orders)[0]) {
+		return order.order_details.reduce((sum, d) => sum + (d.unit_price || 0) * d.quantity, 0);
 	}
 
 	function formatDateTime(dateStr: string) {
 		if (!dateStr) return '';
 		const date = new Date(dateStr);
-		return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		return (
+			date.toLocaleDateString() +
+			' ' +
+			date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+		);
 	}
 </script>
 
@@ -175,7 +184,9 @@
 		<!-- Tabs -->
 		<div class="mb-3 flex border-b">
 			<button
-				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Pending' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Pending'
+					? 'border-pp-pink text-pp-pink'
+					: 'border-transparent'}"
 				onclick={() => (activeStatus = 'Pending')}
 			>
 				Pending{orders.filter((o) => o.order_status === 'Pending').length > 0
@@ -183,7 +194,9 @@
 					: ''}
 			</button>
 			<button
-				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Confirmed' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Confirmed'
+					? 'border-pp-pink text-pp-pink'
+					: 'border-transparent'}"
 				onclick={() => (activeStatus = 'Confirmed')}
 			>
 				Confirmed{orders.filter((o) => o.order_status === 'Confirmed').length > 0
@@ -191,7 +204,9 @@
 					: ''}
 			</button>
 			<button
-				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Completed' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Completed'
+					? 'border-pp-pink text-pp-pink'
+					: 'border-transparent'}"
 				onclick={() => (activeStatus = 'Completed')}
 			>
 				Completed{orders.filter((o) => o.order_status === 'Completed').length > 0
@@ -199,7 +214,9 @@
 					: ''}
 			</button>
 			<button
-				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Cancelled' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				class="flex-1 border-b-2 px-4 py-2 transition {activeStatus === 'Cancelled'
+					? 'border-pp-pink text-pp-pink'
+					: 'border-transparent'}"
 				onclick={() => (activeStatus = 'Cancelled')}
 			>
 				Cancelled{orders.filter((o) => o.order_status === 'Cancelled').length > 0
@@ -211,9 +228,9 @@
 		<!-- Orders -->
 		<div class="px-4 pb-24">
 			{#if filteredOrders.length === 0}
-				<div class="py-8 text-center text-pp-gray">No orders</div>
+				<div class="text-pp-gray py-8 text-center">No orders</div>
 			{:else}
-				{#each filteredOrders as order}
+				{#each filteredOrders as order (order.order_id)}
 					{@const orderTotal = getOrderTotal(order)}
 					<div class="mb-4 rounded-lg border bg-white p-4 shadow">
 						<div class="mb-3 flex items-center justify-between border-b pb-2">
@@ -237,12 +254,16 @@
 						</div>
 
 						{#if order.order_status === 'Completed' && order.updated_at}
-							<p class="text-pp-gray mt-1 text-xs">Completed at: {formatDateTime(order.updated_at)}</p>
+							<p class="text-pp-gray mt-1 text-xs">
+								Completed at: {formatDateTime(order.updated_at)}
+							</p>
 						{:else if order.order_status === 'Cancelled' && order.updated_at}
-							<p class="text-pp-gray mt-1 text-xs">Cancelled at: {formatDateTime(order.updated_at)}</p>
+							<p class="text-pp-gray mt-1 text-xs">
+								Cancelled at: {formatDateTime(order.updated_at)}
+							</p>
 						{/if}
 
-						{#each order.order_details as detail}
+						{#each order.order_details as detail (detail.product?.name)}
 							<div class="mb-2 flex items-center">
 								<img
 									class="h-12 w-12 rounded object-cover"
@@ -265,12 +286,12 @@
 							<div class="mt-3 flex gap-2">
 								<a
 									href={resolve(`/messages/chat/${order.order_id}`)}
-									class="flex-1 rounded-lg bg-blue-500 py-2 text-white text-center"
+									class="flex-1 rounded-lg bg-blue-500 py-2 text-center text-white"
 								>
 									Chat
 								</a>
 								<button
-									class="flex-1 rounded-lg bg-pp-pink py-2 text-white"
+									class="bg-pp-pink flex-1 rounded-lg py-2 text-white"
 									disabled={actionOrders.get(order.order_id)}
 									onclick={() => handleConfirmOrder(order.order_id)}
 								>
@@ -288,7 +309,7 @@
 							<div class="mt-3 flex gap-2">
 								<a
 									href={resolve(`/messages/chat/${order.order_id}`)}
-									class="flex-1 rounded-lg bg-blue-500 py-2 text-white text-center"
+									class="flex-1 rounded-lg bg-blue-500 py-2 text-center text-white"
 								>
 									Chat
 								</a>

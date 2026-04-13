@@ -4,38 +4,40 @@
 	import { onMount } from 'svelte';
 	import ChatPreview from '$lib/components/Messages/ChatPreview.svelte';
 
-	let { data }: { data: {
-		chats: Array<{
-			chat_id: string;
-			order_id: string;
-			isBuyer: boolean;
-			order: {
+	let {
+		data
+	}: {
+		data: {
+			chats: Array<{
+				chat_id: string;
 				order_id: string;
-				order_status: string;
-				created_at: string;
-				store: {
-					store_name: string;
-					img_url: string;
+				isBuyer: boolean;
+				order: {
+					order_id: string;
+					order_status: string;
+					created_at: string;
+					store: {
+						store_name: string;
+						img_url: string;
+					};
+					buyer: {
+						user_id: string;
+						display_name: string;
+					};
 				};
-				buyer: {
-					user_id: string;
-					display_name: string;
+				lastMessage: {
+					content: string;
+					created_at: string;
+					sender_id: string;
 				};
-			};
-			lastMessage: {
-				content: string;
-				created_at: string;
-				sender_id: string;
-			};
-			unread: boolean;
-		}>;
-		unreadCount: number;
-	}} = $props();
+				unread: boolean;
+			}>;
+		};
+	} = $props();
 
-	let pollInterval: any;
+	let pollInterval: ReturnType<typeof setInterval>;
 
 	let chats = $derived(data?.chats || []);
-	let unreadCount = $derived(data?.unreadCount || 0);
 
 	function formatTime(dateStr: string) {
 		if (!dateStr) return '';
@@ -82,7 +84,7 @@
 				<p class="text-pp-gray mt-2 text-sm">Place an order to start chatting with sellers</p>
 			</div>
 		{:else}
-			{#each chats as chat}
+			{#each chats as chat (chat.chat_id)}
 				{@const otherName = chat.order?.store?.store_name || 'Store'}
 				{@const lastTime = formatTime(chat.lastMessage?.created_at || chat.order?.created_at)}
 				{@const userPic = chat.isBuyer ? chat.order?.store?.img_url : null}

@@ -25,7 +25,10 @@ interface StoreGroup {
 	items: CartItem[];
 }
 
-async function getBuyerId(supabase: any, userId: string): Promise<string | null> {
+async function getBuyerId(
+	supabase: import('@supabase/supabase-js').SupabaseClient,
+	userId: string
+): Promise<string | null> {
 	const { data: buyer, error } = await supabase
 		.from('buyer')
 		.select('buyer_id')
@@ -97,7 +100,7 @@ export const POST: RequestHandler = async ({ locals: { supabase } }) => {
 	const storeGroups: StoreGroup[] = [];
 	const storeMap = new Map<string, CartItem[]>();
 
-	for (const item of cartItems as any[]) {
+	for (const item of cartItems as CartItem[]) {
 		const storeId = item.product?.store?.store_id;
 		const storeName = item.product?.store?.store_name;
 

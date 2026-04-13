@@ -23,14 +23,16 @@ interface OrderWithDetails {
 	}>;
 }
 
-export const GET: RequestHandler = async ({ url, locals: { supabase }, params }) => {
+export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
 	const storeId = url.searchParams.get('storeId');
 
 	if (!storeId) {
 		return json({ error: 'Missing storeId' }, { status: 400 });
 	}
 
-	const { data: { user } } = await supabase.auth.getUser();
+	const {
+		data: { user }
+	} = await supabase.auth.getUser();
 	if (!user) {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}

@@ -1,7 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 
-async function getBuyerId(supabase: any, userId: string): Promise<string | null> {
+async function getBuyerId(
+	supabase: import('@supabase/supabase-js').SupabaseClient,
+	userId: string
+): Promise<string | null> {
 	const { data: buyer, error } = await supabase
 		.from('buyer')
 		.select('buyer_id')
@@ -54,6 +57,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		.eq('order_id', params.orderId)
 		.single();
 
+	let chatWithId;
 	if (chatError || !chat) {
 		// Create chat if it doesn't exist
 		const { data: newChat, error: newChatError } = await supabase
@@ -70,14 +74,13 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 			throw error(500, 'Failed to create chat');
 		}
 
-		var chatWithId = newChat;
+		chatWithId = newChat;
 	} else {
-		var chatWithId = chat;
+		chatWithId = chat;
 	}
 
 	// Mark chat as opened
 	const openedField = isBuyer ? 'buyer_opened_at' : 'seller_opened_at';
-	const lastMessageField = isBuyer ? 'seller_opened_at' : 'buyer_opened_at';
 
 	// Get last message time
 	const { data: lastMessage } = await supabase
@@ -112,7 +115,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 
 	// Fetch sender names
 	const senderIds = [...new Set(messages?.map((m) => m.sender_id) || [])];
-	let senderMap: Record<string, { display_name: string }> = {};
+	const senderMap: Record<string, { display_name: string }> = {};
 
 	if (senderIds.length > 0) {
 		const { data: users } = await supabase
@@ -127,13 +130,14 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		}
 	}
 
-	const messagesWithSender = messages?.map((m) => ({
-		...m,
-		sender: senderMap[m.sender_id] || { display_name: 'Unknown' }
-	})) || [];
+	const messagesWithSender =
+		messages?.map((m) => ({
+			...m,
+			sender: senderMap[m.sender_id] || { display_name: 'Unknown' }
+		})) || [];
 
 	// Get order details for display
-	const { data: orderDetails, error: detailsError } = await supabase
+	const { data: orderDetails } = await supabase
 		.from('order_details')
 		.select('*, product(*)')
 		.eq('order_id', params.orderId);
@@ -160,7 +164,9 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 
 export const actions: Actions = {
 	'send-message': async ({ request, locals: { supabase }, params }) => {
-		const { data: { user } } = await supabase.auth.getUser();
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
 
 		if (!user) {
 			return { success: false, message: 'Unauthorized' };

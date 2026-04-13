@@ -6,7 +6,6 @@
 	import { ArrowLeftOutline, EditOutline } from 'flowbite-svelte-icons';
 
 	import { resolve } from '$app/paths';
-	import { invalidateAll } from '$app/navigation';
 	import ProductCard from '$lib/components/Store/ProductCard.svelte';
 
 	let { data }: PageProps = $props();
@@ -48,66 +47,6 @@
 			showSuccess = true;
 			setTimeout(() => (showSuccess = false), 3000);
 		} else {
-			showFail = true;
-			setTimeout(() => (showFail = false), 3000);
-		}
-	}
-
-	async function handleConfirmOrder(orderId: string) {
-		const formData = new FormData();
-		formData.append('orderId', orderId);
-
-		try {
-			const response = await fetch('?/confirm-order', {
-				method: 'POST',
-				body: formData
-			});
-			const result = await response.json();
-
-			if (result.success) {
-				toastMessage = 'Order confirmed';
-				showSuccess = true;
-				await invalidateAll();
-			} else {
-				toastMessage = result.message || 'Failed to confirm';
-				showFail = true;
-			}
-			setTimeout(() => {
-				showSuccess = false;
-				showFail = false;
-			}, 3000);
-		} catch (err) {
-			toastMessage = 'Error confirming order';
-			showFail = true;
-			setTimeout(() => (showFail = false), 3000);
-		}
-	}
-
-	async function handleCancelOrder(orderId: string) {
-		const formData = new FormData();
-		formData.append('orderId', orderId);
-
-		try {
-			const response = await fetch('?/cancel-order', {
-				method: 'POST',
-				body: formData
-			});
-			const result = await response.json();
-
-			if (result.success) {
-				toastMessage = 'Order cancelled';
-				showSuccess = true;
-				await invalidateAll();
-			} else {
-				toastMessage = result.message || 'Failed to cancel';
-				showFail = true;
-			}
-			setTimeout(() => {
-				showSuccess = false;
-				showFail = false;
-			}, 3000);
-		} catch (err) {
-			toastMessage = 'Error cancelling order';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
 		}
@@ -163,14 +102,18 @@
 		<!-- Tabs -->
 		<div class="mb-3 flex border-b">
 			<button
-				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'products' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'products'
+					? 'border-pp-pink text-pp-pink'
+					: 'border-transparent'}"
 				onclick={() => (activeTab = 'products')}
 			>
 				Products
 			</button>
 			<a
 				href={resolve(`/store/${data.storeName}/${data.storeId}/orders`)}
-				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'orders' ? 'border-pp-pink text-pp-pink' : 'border-transparent'}"
+				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'orders'
+					? 'border-pp-pink text-pp-pink'
+					: 'border-transparent'}"
 			>
 				Orders{orders.length > 0 ? ` (${orders.length})` : ''}
 			</a>
@@ -180,7 +123,7 @@
 			<!-- Products -->
 			<div class="px-4 pb-24">
 				{#if products!.length === 0}
-					<div class="py-8 text-center text-pp-gray">No products yet</div>
+					<div class="text-pp-gray py-8 text-center">No products yet</div>
 				{:else}
 					<div class="grid grid-cols-2 gap-3">
 						{#each products as p (p.product_id)}
@@ -199,7 +142,7 @@
 				{/if}
 			</div>
 
-			 <!-- Floating plus -->
+			<!-- Floating plus -->
 			<button
 				class="bg-pp-pink text-pp-white fixed right-6 bottom-24 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
 				aria-label="Add"

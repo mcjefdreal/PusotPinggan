@@ -1,6 +1,9 @@
 import type { PageServerLoad, Actions } from './$types';
 
-async function getBuyerId(supabase: any, userId: string): Promise<string | null> {
+async function getBuyerId(
+	supabase: import('@supabase/supabase-js').SupabaseClient,
+	userId: string
+): Promise<string | null> {
 	const { data: buyer, error } = await supabase
 		.from('buyer')
 		.select('buyer_id')

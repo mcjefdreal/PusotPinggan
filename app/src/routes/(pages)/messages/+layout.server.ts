@@ -9,16 +9,16 @@ export const load = async ({
 		session: import('@supabase/supabase-js').Session | null;
 		user: import('@supabase/supabase-js').User | null;
 	}>;
-	locals: { supabase: any };
+	locals: { supabase: import('@supabase/supabase-js').SupabaseClient };
 }) => {
 	const { session, user } = await parent();
 
 	if (!session) {
 		throw redirect(303, '/');
 	}
-	
+
 	if (!user) {
-		throw error("No user found");
+		throw error('No user found');
 	}
 
 	// Get buyer_id for the user
@@ -31,35 +31,26 @@ export const load = async ({
 	const buyerId = buyer?.buyer_id;
 
 	// Get stores owned by user
-	const { data: stores } = await supabase
-		.from('store')
-		.select('store_id')
-		.eq('owner', user.id);
+	const { data: stores } = await supabase.from('store').select('store_id').eq('owner', user.id);
 
 	const storeIds = stores?.map((s) => s.store_id) || [];
 
 	// Fetch chats where user is buyer or seller
-	let chats: any[] = [];
+	const chats: Record<string, unknown>[] = [];
 
 	if (buyerId) {
-		const { data: buyerChats } = await supabase
-			.from('chat')
-			.select('*')
-			.eq('buyer_id', buyerId);
-		chats = buyerChats || [];
+		const { data: buyerChats } = await supabase.from('chat').select('*').eq('buyer_id', buyerId);
+		chats.push(...(buyerChats || []));
 	}
 
 	if (storeIds.length > 0) {
-		const { data: sellerChats } = await supabase
-			.from('chat')
-			.select('*')
-			.in('seller_id', storeIds);
-		chats = [...chats, ...(sellerChats || [])];
+		const { data: sellerChats } = await supabase.from('chat').select('*').in('seller_id', storeIds);
+		chats.push(...(sellerChats || []));
 	}
 
 	// Fetch order data for each chat
 	const orderIds = [...new Set(chats.map((c) => c.order_id).filter(Boolean))];
-	let ordersMap: Record<string, any> = {};
+	const ordersMap: Record<string, Record<string, unknown>> = {};
 
 	if (orderIds.length > 0) {
 		const { data: orders } = await supabase
@@ -75,7 +66,7 @@ export const load = async ({
 	}
 
 	// Get last messages and unread counts
-	let chatsWithUnread: any[] = [];
+	const chatsWithUnread: Record<string, unknown>[] = [];
 
 	for (const chat of chats) {
 		// Get last message with content
@@ -89,12 +80,15 @@ export const load = async ({
 
 		// Determine if unread
 		const isBuyer = buyerId && chat.buyer_id === buyerId;
-		const lastOpened = isBuyer ? chat.buyer_opened_at : chat.seller_opened_at;
-		const unread = lastMsg && (!lastOpened || new Date(lastMsg.created_at) > new Date(lastOpened));
+		const lastOpened = isBuyer
+			? (chat.buyer_opened_at as string)
+			: (chat.seller_opened_at as string);
+		const unread =
+			lastMsg && (!lastOpened || new Date(lastMsg.created_at) > new Date(lastOpened || 0));
 
 		chatsWithUnread.push({
 			...chat,
-			order: ordersMap[chat.order_id] || null,
+			order: ordersMap[chat.order_id as string] || null,
 			lastMessage: lastMsg,
 			unread: unread || false,
 			isBuyer
@@ -106,8 +100,16 @@ export const load = async ({
 		if (a.unread !== b.unread) {
 			return a.unread ? -1 : 1;
 		}
-		const dateA = new Date(a.lastMessage?.created_at || a.order?.created_at || 0);
-		const dateB = new Date(b.lastMessage?.created_at || b.order?.created_at || 0);
+		const dateA = new Date(
+			(a.lastMessage as { created_at?: string })?.created_at ||
+				(a.order as { created_at?: string })?.created_at ||
+				0
+		);
+		const dateB = new Date(
+			(b.lastMessage as { created_at?: string })?.created_at ||
+				(b.order as { created_at?: string })?.created_at ||
+				0
+		);
 		return dateB.getTime() - dateA.getTime();
 	});
 

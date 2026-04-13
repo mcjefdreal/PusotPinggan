@@ -8,12 +8,16 @@ export const load = async ({
 		session: import('@supabase/supabase-js').Session | null;
 		user: import('@supabase/supabase-js').User | null;
 	}>;
-	locals: { supabase: any };
+	locals: { supabase: import('@supabase/supabase-js').SupabaseClient };
 }) => {
 	const { session, user } = await parent();
 
 	if (!session) {
 		throw redirect(303, '/');
+	}
+
+	if (!user) {
+		return { session, user, unreadCount: 0 };
 	}
 
 	// Get buyer_id for the user
@@ -26,22 +30,19 @@ export const load = async ({
 	const buyerId = buyer?.buyer_id;
 
 	// Get stores owned by user
-	const { data: stores } = await supabase
-		.from('store')
-		.select('store_id')
-		.eq('owner', user.id);
+	const { data: stores } = await supabase.from('store').select('store_id').eq('owner', user.id);
 
 	const storeIds = stores?.map((s) => s.store_id) || [];
 
 	// Fetch chats where user is buyer or seller
-	let chats: any[] = [];
+	const chats: Record<string, unknown>[] = [];
 
 	if (buyerId) {
 		const { data: buyerChats } = await supabase
 			.from('chat')
 			.select('chat_id, buyer_id, buyer_opened_at, seller_opened_at, order_id')
 			.eq('buyer_id', buyerId);
-		chats = buyerChats || [];
+		chats.push(...(buyerChats || []));
 	}
 
 	if (storeIds.length > 0) {
@@ -49,7 +50,7 @@ export const load = async ({
 			.from('chat')
 			.select('chat_id, buyer_id, buyer_opened_at, seller_opened_at, order_id')
 			.in('seller_id', storeIds);
-		chats = [...chats, ...(sellerChats || [])];
+		chats.push(...(sellerChats || []));
 	}
 
 	// Get last messages and unread counts
@@ -67,8 +68,11 @@ export const load = async ({
 
 		// Determine if unread
 		const isBuyer = buyerId && chat.buyer_id === buyerId;
-		const lastOpened = isBuyer ? chat.buyer_opened_at : chat.seller_opened_at;
-		const unread = lastMsg && (!lastOpened || new Date(lastMsg.created_at) > new Date(lastOpened));
+		const lastOpened = isBuyer
+			? (chat.buyer_opened_at as string)
+			: (chat.seller_opened_at as string);
+		const unread =
+			lastMsg && (!lastOpened || new Date(lastMsg.created_at) > new Date(lastOpened || 0));
 
 		if (unread) {
 			unreadCount++;

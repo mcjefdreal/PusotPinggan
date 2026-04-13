@@ -39,7 +39,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, params }) => 
 	};
 };
 
-async function getBuyerId(supabase: any, userId: string): Promise<string | null> {
+async function getBuyerId(
+	supabase: import('@supabase/supabase-js').SupabaseClient,
+	userId: string
+): Promise<string | null> {
 	const { data: buyer, error } = await supabase
 		.from('buyer')
 		.select('buyer_id')
@@ -81,7 +84,10 @@ export const actions: Actions = {
 			return fail(400, { success: false, message: 'Missing required fields' });
 		}
 
-		const { data: { user }, error: userError } = await supabase.auth.getUser();
+		const {
+			data: { user },
+			error: userError
+		} = await supabase.auth.getUser();
 		if (userError || !user) {
 			return fail(401, { success: false, message: 'Unauthorized' });
 		}
@@ -92,7 +98,7 @@ export const actions: Actions = {
 		}
 
 		// Get or create cart
-		let { data: cart, error: findCartError } = await supabase
+		const { data: cart, error: findCartError } = await supabase
 			.from('cart')
 			.select('cart_id')
 			.eq('buyer_id', buyerId)

@@ -19,7 +19,10 @@ interface CartItemWithProduct {
 	};
 }
 
-async function getBuyerId(supabase: any, userId: string): Promise<string | null> {
+async function getBuyerId(
+	supabase: import('@supabase/supabase-js').SupabaseClient,
+	userId: string
+): Promise<string | null> {
 	const { data: buyer, error } = await supabase
 		.from('buyer')
 		.select('buyer_id')
@@ -99,7 +102,9 @@ export const actions: Actions = {
 			return { success: false, message: 'Invalid parameters' };
 		}
 
-		const { data: { user } } = await supabase.auth.getUser();
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
 		if (!user) {
 			return { success: false, message: 'Unauthorized' };
 		}
@@ -130,7 +135,9 @@ export const actions: Actions = {
 			return { success: false, message: 'Invalid item' };
 		}
 
-		const { data: { user } } = await supabase.auth.getUser();
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
 		if (!user) {
 			return { success: false, message: 'Unauthorized' };
 		}
@@ -145,7 +152,9 @@ export const actions: Actions = {
 	},
 
 	'order-now': async ({ request, locals: { supabase } }) => {
-		const { data: { user } } = await supabase.auth.getUser();
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
 		if (!user) {
 			return { success: false, message: 'Unauthorized' };
 		}
@@ -185,7 +194,9 @@ export const actions: Actions = {
 			return { success: false, message: 'Cart is empty' };
 		}
 
-		const storeItems = cartItems.filter((item: any) => item.product?.store?.store_id === storeId);
+		const storeItems = cartItems.filter(
+			(item: CartItemWithProduct) => item.product?.store?.store_id === storeId
+		);
 
 		if (!storeItems || storeItems.length === 0) {
 			return { success: false, message: 'Cart is empty for this store' };
@@ -209,7 +220,7 @@ export const actions: Actions = {
 		console.log('Order created:', orderId);
 
 		for (const item of storeItems) {
-			console.log('Entering for loop')
+			console.log('Entering for loop');
 			const { error: detailsError } = await supabase.from('order_details').insert({
 				order_id: orderId,
 				product_id: item.product_id,
@@ -234,9 +245,9 @@ export const actions: Actions = {
 			}
 
 			const newQuantity = productData.quantity - item.quantity;
-			
-			console.log("product quantity:", productData.quantity)
-			console.log("item quantity:", item.quantity)
+
+			console.log('product quantity:', productData.quantity);
+			console.log('item quantity:', item.quantity);
 
 			if (newQuantity < 0) {
 				return { success: false, message: `Insufficient quantity for ${item.product.name}` };
@@ -252,10 +263,10 @@ export const actions: Actions = {
 				return { success: false, message: updateError.message };
 			}
 		}
-		
-		console.log("exited for loop")
 
-		const storeItemIds = storeItems.map((item: any) => item.id);
+		console.log('exited for loop');
+
+		const storeItemIds = storeItems.map((item: CartItemWithProduct) => item.id);
 		if (storeItemIds.length > 0) {
 			const { error: deleteItemsError } = await supabase
 				.from('cart_item')
