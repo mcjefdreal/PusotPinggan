@@ -10,11 +10,7 @@
 
 <div class="flex min-w-0 flex-row px-4 py-4">
 	{#if userPic}
-		<img
-			class="h-20 w-20 shrink-0 rounded-full object-cover"
-			src={userPic}
-			alt={userName}
-		/>
+		<img class="h-20 w-20 shrink-0 rounded-full object-cover" src={userPic} alt={userName} />
 	{:else}
 		<div class="bg-pp-light-pink h-20 w-20 shrink-0 rounded-full"></div>
 	{/if}

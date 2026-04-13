@@ -5,34 +5,45 @@
 	import { Toast } from 'flowbite-svelte';
 	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
 
-	let { data }: { data: {
-		order: any;
-		chat: any;
-		messages: Array<{
-			msg_id: string;
-			chat_id: string;
-			sender_id: string;
-			content: string;
-			created_at: string;
-			sender: {
-				display_name: string;
+	let {
+		data
+	}: {
+		data: {
+			order: {
+				order_id: string;
+				order_status: string;
+				order_date: string;
+				store?: {
+					store_name?: string;
+				};
 			};
-		}>;
-		orderDetails: Array<{
-			product: {
-				name: string;
-				img_url: string;
-			};
-			quantity: number;
-			unit_price: number;
-		}>;
-		isBuyer: boolean;
-		isSeller: boolean;
-		userId: string;
-		deletionTime: string | null;
-	}} = $props();
+			chat: Record<string, unknown>;
+			messages: Array<{
+				msg_id: string;
+				chat_id: string;
+				sender_id: string;
+				content: string;
+				created_at: string;
+				sender: {
+					display_name: string;
+				};
+			}>;
+			orderDetails: Array<{
+				product: {
+					name: string;
+					img_url: string;
+					product_id?: string;
+				};
+				product_id?: string;
+				quantity: number;
+				unit_price: number;
+			}>;
+			userId: string;
+			deletionTime: string | null;
+		};
+	} = $props();
 
-	let pollInterval: any;
+	let pollInterval: ReturnType<typeof setInterval>;
 
 	let newMessage = $state('');
 	let messagesContainer: HTMLDivElement;
@@ -40,14 +51,11 @@
 	let showFail = $state(false);
 	let toastMessage = $state('');
 	let isSending = $state(false);
-	let pendingMessages = $state<any[]>([]);
-
+	let pendingMessages = $state<Record<string, unknown>[]>([]);
 
 	let messages = $derived(data?.messages || []);
 	let order = $derived(data?.order || {});
 	let orderDetails = $derived(data?.orderDetails || []);
-	let isBuyer = $derived(data?.isBuyer || false);
-	let isSeller = $derived(data?.isSeller || false);
 	let userId = $derived(data?.userId || '');
 	let deletionTime = $derived(data?.deletionTime || null);
 	let showDeletionNotice = $derived(order.order_status === 'Completed');
@@ -57,8 +65,8 @@
 	// Clear pending messages when server data updates with new messages
 	$effect(() => {
 		if (pendingMessages.length > 0 && messages.length > 0) {
-			const pendingContents = pendingMessages.map(p => p.content);
-			const hasServerNewMessage = messages.some(m => pendingContents.includes(m.content));
+			const pendingContents = pendingMessages.map((p) => p.content);
+			const hasServerNewMessage = messages.some((m) => pendingContents.includes(m.content));
 			if (hasServerNewMessage) {
 				pendingMessages = [];
 			}
@@ -80,7 +88,8 @@
 
 	function getOrderTotal() {
 		return orderDetails.reduce(
-			(sum: number, d: any) => sum + (d.unit_price || 0) * d.quantity,
+			(sum: number, d: { unit_price: number; quantity: number }) =>
+				sum + (d.unit_price || 0) * d.quantity,
 			0
 		);
 	}
@@ -108,7 +117,7 @@
 		try {
 			const response = await fetch('?/send-message', {
 				method: 'POST',
-				headers: { 'Accept': 'application/json' },
+				headers: { Accept: 'application/json' },
 				body: formData
 			});
 
@@ -137,7 +146,7 @@
 				showFail = true;
 				setTimeout(() => (showFail = false), 3000);
 			}
-		} catch (err) {
+		} catch {
 			toastMessage = 'An error occurred';
 			showFail = true;
 			setTimeout(() => (showFail = false), 3000);
@@ -201,7 +210,7 @@
 			</span>
 		</div>
 		<div class="max-h-24 space-y-1 overflow-y-auto">
-			{#each orderDetails as detail}
+			{#each orderDetails as detail (detail.product?.product_id || detail.product_id)}
 				<div class="flex items-center justify-between text-sm">
 					<div class="flex items-center gap-2">
 						<img
@@ -224,12 +233,12 @@
 	<!-- Messages -->
 	<div bind:this={messagesContainer} class="flex-1 overflow-y-auto p-3">
 		{#if allMessages.length === 0}
-			<div class="flex h-full items-center justify-center text-pp-gray">
+			<div class="text-pp-gray flex h-full items-center justify-center">
 				<p>No messages yet. Start the conversation!</p>
 			</div>
 		{:else}
 			<div class="space-y-3">
-				{#each allMessages as msg}
+				{#each allMessages as msg (msg.msg_id)}
 					{@const isMyMessage = msg.sender_id === userId}
 					<div class="flex {isMyMessage ? 'justify-end' : 'justify-start'}">
 						<div
@@ -239,7 +248,7 @@
 						>
 							<div class="text-sm">{msg.content}</div>
 							<div class="text-xs {isMyMessage ? 'text-pink-200' : 'text-gray-500'}">
-								{formatTime(msg.created_at)}
+								{formatTime(msg.created_at as string)}
 							</div>
 						</div>
 					</div>
@@ -248,7 +257,10 @@
 		{/if}
 
 		{#if showDeletionNotice && deletionTime}
-			{@const delTime = new Date(deletionTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+			{@const delTime = new Date(deletionTime).toLocaleTimeString([], {
+				hour: '2-digit',
+				minute: '2-digit'
+			})}
 			<div class="mt-4 flex justify-center">
 				<p class="text-center text-sm text-gray-500">
 					This chat will be deleted in 1 hour (at {delTime})
@@ -269,16 +281,21 @@
 			type="text"
 			bind:value={newMessage}
 			placeholder="Type a message..."
-			class="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-pp-pink focus:outline-none"
+			class="focus:border-pp-pink flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none"
 		/>
 		<button
 			type="submit"
 			disabled={!newMessage.trim() || isSending}
-			class="rounded-lg bg-pp-pink px-4 py-2 text-white disabled:opacity-50"
+			class="bg-pp-pink rounded-lg px-4 py-2 text-white disabled:opacity-50"
 			aria-label="send"
 		>
 			<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+				></path>
 			</svg>
 		</button>
 	</form>

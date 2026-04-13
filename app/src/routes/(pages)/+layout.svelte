@@ -6,7 +6,7 @@
 
 	const { data, children } = $props();
 
-	let pollInterval: any;
+	let pollInterval: ReturnType<typeof setInterval>;
 
 	onMount(() => {
 		pollInterval = setInterval(async () => {

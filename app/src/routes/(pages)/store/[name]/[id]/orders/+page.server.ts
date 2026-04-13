@@ -52,7 +52,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 	let ordersWithDisplayName: OrderWithDetails[] = [];
 
 	if (orders && orders.length > 0) {
-		const buyerIds = [...new Set(orders.map((o: any) => o.buyer_id).filter(Boolean))];
+		const buyerIds = [...new Set(orders.map((o) => o.buyer_id).filter(Boolean))];
 
 		if (buyerIds.length > 0) {
 			const { data: users } = await supabase
@@ -64,7 +64,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 
 			const userMap = new Map(users?.map((u) => [u.user_id, u.display_name]) || []);
 
-			ordersWithDisplayName = orders.map((order: any) => ({
+			ordersWithDisplayName = orders.map((order) => ({
 				...order,
 				buyer: {
 					buyer_id: order.buyer_id,

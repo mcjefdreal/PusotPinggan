@@ -26,7 +26,7 @@
 		showSuccess = false;
 		showError = false;
 
-		const quantityInput = (document.getElementById('product_quantity') as HTMLInputElement);
+		const quantityInput = document.getElementById('product_quantity') as HTMLInputElement;
 		const quantity = parseInt(quantityInput?.value || '1') || 1;
 
 		try {
@@ -54,7 +54,7 @@
 				showError = true;
 				setTimeout(() => (showError = false), 3000);
 			}
-		} catch (err) {
+		} catch {
 			toastMessage = 'An error occurred';
 			showError = true;
 			setTimeout(() => (showError = false), 3000);
@@ -90,9 +90,7 @@
 				<p class="ml-auto">₱ {productPrice.toFixed(2)}</p>
 			</div>
 			<p>{productDescription}</p>
-			<label for="product_quantity" class="text-pp-gray mb-2.5 text-xs font-medium"
-				>Quantity</label
-			>
+			<label for="product_quantity" class="text-pp-gray mb-2.5 text-xs font-medium">Quantity</label>
 			<input
 				type="number"
 				id="product_quantity"

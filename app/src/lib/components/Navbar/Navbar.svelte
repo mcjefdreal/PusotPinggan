@@ -7,7 +7,7 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 
-	let { data }: { data: { unreadCount?: number } } = $props();
+	let { data }: { data?: { unreadCount?: number } } = $props();
 
 	let unreadCount = $derived(data?.unreadCount || 0);
 </script>
@@ -39,7 +39,9 @@
 					<div class="bg-pp-pink absolute -bottom-1 h-1 w-1 rounded-full"></div>
 				{/if}
 				{#if unreadCount > 0}
-					<div class="bg-red-500 absolute -right-1 top-0 flex h-4 w-4 items-center justify-center rounded-full text-xs text-white">
+					<div
+						class="absolute top-0 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white"
+					>
 						{unreadCount > 9 ? '9+' : unreadCount}
 					</div>
 				{/if}
