@@ -49,7 +49,7 @@
 </script>
 
 <div class="relative h-screen overflow-hidden">
-	<div class="from-pp-pink to-pp-light-pink relative h-[17.5%] bg-gradient-to-t p-6">
+	<div class="from-pp-pink to-pp-light-pink relative h-[17%] bg-gradient-to-t p-6">
 		{#if showToast}
 			<Toast color={isSuccess ? 'green' : 'red'} class="fixed top-4 right-4 z-50">
 				{toastMessage}
@@ -97,7 +97,7 @@
 				};
 			}}
 		>
-			<div class="mt-8 flex flex-col items-center">
+			<div class="mt-6 flex flex-col items-center">
 				<div
 					class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white"
 				>
@@ -123,7 +123,7 @@
 		</form>
 	</div>
 
-	<div class="absolute top-[23%] left-1/2 mx-auto mt-10 w-84 -translate-x-1/2">
+	<div class="absolute top-[22%] left-1/2 mx-auto mt-10 w-84 -translate-x-1/2">
 		<div class="mb-1 grid gap-2.5 px-3 pt-2">
 			<div>
 				<label for="firstname" class="text-pp-gray mb-2.5 text-sm font-medium">First Name</label>

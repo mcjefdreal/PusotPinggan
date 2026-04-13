@@ -10,6 +10,19 @@
 
 	const { data } = $props();
 
+	let firstname = $derived(data.pub_user?.first_name || '');
+	let lastname  = $derived(data.pub_user?.last_name || '');
+	let imgUrl = $derived.by(() => {
+	const baseUrl = data.pub_user?.img_url;
+	if (!baseUrl) return '';
+
+	const timestamp = data.pub_user?.updated_at
+		? new Date(data.pub_user.updated_at).getTime()
+		: Date.now();
+
+	return `${baseUrl}?t=${timestamp}`;
+	});
+
 	export async function signOut() {
 		await data.supabase.auth.signOut();
 		await invalidateAll();
@@ -20,12 +33,12 @@
 	<div class="from-pp-pink to-pp-light-pink relative h-[36%] bg-gradient-to-t p-6">
 		<div class="text-pp-white mt-0 text-center text-2xl font-semibold">Profile</div>
 		<div class="mt-6 flex flex-col items-center justify-center">
-			<div
-				class="flex h-35 w-35 items-center justify-center rounded-full border-4 border-white bg-white shadow-lg"
-			>
-				Karin
+			<div class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white">
+					<img src={imgUrl} alt="Profile" class="h-full w-full rounded-full object-cover" />
 			</div>
-			<div class="text-pp-white mt-2 text-center text-lg font-medium">Karin Consebido</div>
+			<div class="text-pp-white mt-2 text-center text-lg font-medium">
+				{(firstname || lastname) ? `${firstname} ${lastname}` : 'Username'}
+			</div>
 		</div>
 	</div>
 
