@@ -28,7 +28,18 @@
 	let showError = $state(false);
 	let toastMessage = $state('');
 
-	let cartItems = $derived(data?.cartItems || []);
+	// Local state for optimistic UI updates
+	let localCartItems = $state<typeof data.cartItems>([]);
+	let pendingUpdates: Map<string, number> = new Map();
+	let updateTimers: Map<string, any> = new Map();
+	let savingItems: Set<string> = $state(new Set());
+
+	// Sync with server data
+	$effect(() => {
+		localCartItems = data?.cartItems || [];
+	});
+
+	let cartItems = $derived(localCartItems);
 
 	type CartItem = {
 		id: string;
@@ -68,6 +79,10 @@
 
 	async function handleOrderNow(storeId: string) {
 		if (isOrdering) return;
+		
+		// First, wait for any pending quantity updates to complete
+		await waitForPendingUpdates();
+		
 		isOrdering = true;
 		showSuccess = false;
 		showError = false;
@@ -126,10 +141,39 @@
 		}
 	}
 
-	let pendingUpdates: Map<string, number> = new Map();
-	let updateTimers: Map<string, any> = new Map();
+	// Wait for any pending quantity updates to complete before ordering
+	async function waitForPendingUpdates() {
+		if (pendingUpdates.size === 0) return;
+		
+		const promises: Promise<void>[] = [];
+		for (const [itemId, timer] of updateTimers) {
+			promises.push(
+				new Promise((resolve) => {
+					clearTimeout(timer);
+					const q = pendingUpdates.get(itemId);
+					if (q !== undefined) {
+						const formData = new FormData();
+						formData.append('itemId', itemId);
+						formData.append('quantity', q.toString());
+						
+						fetch('?/update-cart-quantity', {
+							method: 'POST',
+							headers: { 'Accept': 'application/json' },
+							body: formData
+						}).then(async () => {
+							await invalidateAll();
+							resolve();
+						}).catch(() => resolve());
+					} else {
+						resolve();
+					}
+				})
+			);
+		}
+		await Promise.all(promises);
+	}
 
-	function handleUpdateQuantity(itemId: string, newQuantity: number) {
+	async function handleUpdateQuantity(itemId: string, newQuantity: number) {
 		if (newQuantity < 1) {
 			pendingUpdates.delete(itemId);
 			if (updateTimers.has(itemId)) {
@@ -140,9 +184,10 @@
 			return;
 		}
 
-		const item = cartItems.find((i: any) => i.id === itemId);
-		if (item) {
-			item.quantity = newQuantity;
+		// Optimistic UI update - immediately update local state
+		const itemIndex = localCartItems.findIndex((i: any) => i.id === itemId);
+		if (itemIndex !== -1) {
+			localCartItems[itemIndex].quantity = newQuantity;
 		}
 
 		pendingUpdates.set(itemId, newQuantity);
@@ -158,6 +203,9 @@
 				const q = pendingUpdates.get(itemId);
 				if (q !== undefined) {
 					pendingUpdates.delete(itemId);
+					savingItems.add(itemId);
+					savingItems = new Set(savingItems);
+
 					const formData = new FormData();
 					formData.append('itemId', itemId);
 					formData.append('quantity', q.toString());
@@ -172,6 +220,9 @@
 						await invalidateAll();
 					} catch (err) {
 						console.error('Failed to update quantity:', err);
+					} finally {
+						savingItems.delete(itemId);
+						savingItems = new Set(savingItems);
 					}
 				}
 			}, 1000)
@@ -267,13 +318,19 @@
 								<div class="mt-2 flex items-center gap-2">
 									<button
 										class="border-pp-gray h-6 w-6 rounded border"
+										disabled={savingItems.has(item.id)}
 										onclick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
 									>
 										-
 									</button>
-									<span class="w-8 text-center">{item.quantity}</span>
+									{#if savingItems.has(item.id)}
+										<div class="h-4 w-4 animate-spin rounded-full border-2 border-pp-pink border-t-transparent"></div>
+									{:else}
+										<span class="w-8 text-center">{item.quantity}</span>
+									{/if}
 									<button
 										class="border-pp-gray h-6 w-6 rounded border"
+										disabled={savingItems.has(item.id)}
 										onclick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
 									>
 										+
