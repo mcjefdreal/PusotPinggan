@@ -81,21 +81,21 @@
 			};
 		}}
 	>
-	<div class="from-pp-pink to-pp-light-pink relative h-[17%] bg-gradient-to-t p-6">
-		{#if showToast}
-			<Toast color={isSuccess ? 'green' : 'red'} class="fixed top-4 right-4 z-50">
-				{toastMessage}
-			</Toast>
-		{/if}
+		<div class="from-pp-pink to-pp-light-pink relative h-[17%] bg-gradient-to-t p-6">
+			{#if showToast}
+				<Toast color={isSuccess ? 'green' : 'red'} class="fixed top-4 right-4 z-50">
+					{toastMessage}
+				</Toast>
+			{/if}
 
-		<a
-			href={resolve('/profile')}
-			class="text-pp-white active:text-pp-darker-pink absolute top-6 left-6 flex items-center gap-1 transition"
-		>
-			<ArrowLeftOutline class="h-8 w-8" />
-		</a>
+			<a
+				href={resolve('/profile')}
+				class="text-pp-white active:text-pp-darker-pink absolute top-6 left-6 flex items-center gap-1 transition"
+			>
+				<ArrowLeftOutline class="h-8 w-8" />
+			</a>
 
-		<div class="text-pp-white text-center text-2xl font-semibold">Edit Profile</div>
+			<div class="text-pp-white text-center text-2xl font-semibold">Edit Profile</div>
 
 			<div class="mt-6 flex flex-col items-center">
 				<div
@@ -120,59 +120,59 @@
 					</div>
 				</button>
 			</div>
-	</div>
-
-	<div class="absolute top-[22%] left-1/2 mx-auto mt-10 w-84 -translate-x-1/2">
-		<div class="mb-1 grid gap-2.5 px-3 pt-2">
-			<div>
-				<label for="firstname" class="text-pp-gray mb-2.5 text-sm font-medium">First Name</label>
-				<input
-					type="text"
-					id="firstname"
-					name="firstname"
-					bind:value={firstname}
-					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
-					placeholder="First Name"
-					required
-				/>
-			</div>
-
-			<div>
-				<label for="lastname" class="text-pp-gray mb-2.5 text-sm font-medium">Last Name</label>
-				<input
-					type="text"
-					id="lastname"
-					name="lastname"
-					bind:value={lastname}
-					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
-					placeholder="Last Name"
-					required
-				/>
-			</div>
-
-			<div>
-				<label for="phone" class="text-pp-gray mb-2.5 text-sm font-medium">Phone Number</label>
-				<input
-					type="tel"
-					id="phone"
-					name="phone"
-					bind:value={phone}
-					class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
-					placeholder="+63 912 345 6789"
-					required
-				/>
-			</div>
 		</div>
 
-		<div class="pt-4 pr-6 pb-12">
-			<button
-				type="submit"
-				class="bg-pp-pink text-pp-white active:bg-pp-darker-pink float-right rounded-lg px-4 py-1 text-xs"
-				disabled={isSaving}
-			>
-				{isSaving ? 'Saving...' : 'Save changes'}
-			</button>
+		<div class="absolute top-[22%] left-1/2 mx-auto mt-10 w-84 -translate-x-1/2">
+			<div class="mb-1 grid gap-2.5 px-3 pt-2">
+				<div>
+					<label for="firstname" class="text-pp-gray mb-2.5 text-sm font-medium">First Name</label>
+					<input
+						type="text"
+						id="firstname"
+						name="firstname"
+						bind:value={firstname}
+						class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
+						placeholder="First Name"
+						required
+					/>
+				</div>
+
+				<div>
+					<label for="lastname" class="text-pp-gray mb-2.5 text-sm font-medium">Last Name</label>
+					<input
+						type="text"
+						id="lastname"
+						name="lastname"
+						bind:value={lastname}
+						class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
+						placeholder="Last Name"
+						required
+					/>
+				</div>
+
+				<div>
+					<label for="phone" class="text-pp-gray mb-2.5 text-sm font-medium">Phone Number</label>
+					<input
+						type="tel"
+						id="phone"
+						name="phone"
+						bind:value={phone}
+						class="border-pp-gray placeholder-pp-gray w-full rounded-md border px-2.5 py-2.5 text-xs"
+						placeholder="+63 912 345 6789"
+						required
+					/>
+				</div>
+			</div>
+
+			<div class="pt-4 pr-6 pb-12">
+				<button
+					type="submit"
+					class="bg-pp-pink text-pp-white active:bg-pp-darker-pink float-right rounded-lg px-4 py-1 text-xs"
+					disabled={isSaving}
+				>
+					{isSaving ? 'Saving...' : 'Save changes'}
+				</button>
+			</div>
 		</div>
-	</div>
-</form>
+	</form>
 </div>
