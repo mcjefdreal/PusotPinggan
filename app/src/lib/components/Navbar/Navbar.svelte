@@ -6,6 +6,10 @@
 
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+
+	let { data }: { data?: { unreadCount?: number } } = $props();
+
+	let unreadCount = $derived(data?.unreadCount || 0);
 </script>
 
 <nav class="bg-pp-white border-pp-gray sticky bottom-0 z-10 w-full border-t-1">
@@ -33,6 +37,13 @@
 				<MsgIcon active={page.url.pathname.includes('/messages')} />
 				{#if page.url.pathname.includes('/messages')}
 					<div class="bg-pp-pink absolute -bottom-1 h-1 w-1 rounded-full"></div>
+				{/if}
+				{#if unreadCount > 0}
+					<div
+						class="absolute top-0 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white"
+					>
+						{unreadCount > 9 ? '9+' : unreadCount}
+					</div>
 				{/if}
 			</a>
 		</li>
