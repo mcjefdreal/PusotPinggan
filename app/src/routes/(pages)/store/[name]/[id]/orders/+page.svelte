@@ -286,7 +286,7 @@
 							<div class="mt-3 flex gap-2">
 								<a
 									href={resolve(`/messages/chat/${order.order_id}`)}
-									class="flex-1 rounded-lg bg-pp-pink py-2 text-center text-white"
+									class="bg-pp-pink flex-1 rounded-lg py-2 text-center text-white"
 								>
 									Chat
 								</a>
@@ -309,7 +309,7 @@
 							<div class="mt-3 flex gap-2">
 								<a
 									href={resolve(`/messages/chat/${order.order_id}`)}
-									class="flex-1 rounded-lg bg-pp-pink py-2 text-center text-white"
+									class="bg-pp-pink flex-1 rounded-lg py-2 text-center text-white"
 								>
 									Chat
 								</a>

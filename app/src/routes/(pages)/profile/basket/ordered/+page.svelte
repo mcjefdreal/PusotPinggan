@@ -211,7 +211,7 @@
 									{#if order.order_status === 'Pending' || order.order_status === 'Confirmed'}
 										<a
 											href={resolve(`/messages/chat/${order.order_id}`)}
-											class="rounded-md bg-pp-pink px-4 py-2 text-sm text-white"
+											class="bg-pp-pink rounded-md px-4 py-2 text-sm text-white"
 										>
 											Chat
 										</a>
