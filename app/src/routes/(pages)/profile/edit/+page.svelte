@@ -48,40 +48,40 @@
 	}
 </script>
 
-<div class="relative h-screen overflow-hidden">
-	<form
-		method="POST"
-		enctype="multipart/form-data"
-		bind:this={form}
-		use:enhance={() => {
-			isSaving = true;
-			return async ({ result, update }) => {
-				if (result.type === 'success') {
-					const formData = result.data as { success?: boolean; message?: string } | undefined;
-					if (formData?.success) {
-						toastMessage = 'Profile updated successfully!';
-						isSuccess = true;
-					} else {
-						toastMessage = formData?.message || 'Update failed';
-						isSuccess = false;
-					}
-				} else if (result.type === 'failure') {
-					const errorData = result.data as { message?: string } | undefined;
-					toastMessage = errorData?.message || 'An error occurred';
-					isSuccess = false;
-				} else {
+<form
+	method="POST"
+	enctype="multipart/form-data"
+	bind:this={form}
+	use:enhance={() => {
+		isSaving = true;
+		return async ({ result, update }) => {
+			if (result.type === 'success') {
+				const formData = result.data as { success?: boolean; message?: string } | undefined;
+				if (formData?.success) {
 					toastMessage = 'Profile updated successfully!';
 					isSuccess = true;
+				} else {
+					toastMessage = formData?.message || 'Update failed';
+					isSuccess = false;
 				}
-				await update({ reset: false });
-				isSaving = false;
-				showToast = true;
-				setTimeout(() => (showToast = false), 2000);
-				await invalidateAll();
-			};
-		}}
-	>
-		<div class="from-pp-pink to-pp-light-pink relative h-[17%] bg-gradient-to-t p-6">
+			} else if (result.type === 'failure') {
+				const errorData = result.data as { message?: string } | undefined;
+				toastMessage = errorData?.message || 'An error occurred';
+				isSuccess = false;
+			} else {
+				toastMessage = 'Profile updated successfully!';
+				isSuccess = true;
+			}
+			await update({ reset: false });
+			isSaving = false;
+			showToast = true;
+			setTimeout(() => (showToast = false), 2000);
+			await invalidateAll();
+		};
+	}}
+>
+	<div class="relative h-screen overflow-hidden">
+		<div class="from-pp-pink to-pp-light-pink relative h-[16.75%] bg-gradient-to-t p-6">
 			{#if showToast}
 				<Toast color={isSuccess ? 'green' : 'red'} class="fixed top-4 right-4 z-50">
 					{toastMessage}
@@ -174,5 +174,5 @@
 				</button>
 			</div>
 		</div>
-	</form>
-</div>
+	</div>
+</form>
