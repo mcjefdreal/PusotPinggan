@@ -49,6 +49,38 @@
 </script>
 
 <div class="relative h-screen overflow-hidden">
+	<form
+		method="POST"
+		enctype="multipart/form-data"
+		bind:this={form}
+		use:enhance={() => {
+			isSaving = true;
+			return async ({ result, update }) => {
+				if (result.type === 'success') {
+					const formData = result.data as { success?: boolean; message?: string } | undefined;
+					if (formData?.success) {
+						toastMessage = 'Profile updated successfully!';
+						isSuccess = true;
+					} else {
+						toastMessage = formData?.message || 'Update failed';
+						isSuccess = false;
+					}
+				} else if (result.type === 'failure') {
+					const errorData = result.data as { message?: string } | undefined;
+					toastMessage = errorData?.message || 'An error occurred';
+					isSuccess = false;
+				} else {
+					toastMessage = 'Profile updated successfully!';
+					isSuccess = true;
+				}
+				await update({ reset: false });
+				isSaving = false;
+				showToast = true;
+				setTimeout(() => (showToast = false), 2000);
+				await invalidateAll();
+			};
+		}}
+	>
 	<div class="from-pp-pink to-pp-light-pink relative h-[17%] bg-gradient-to-t p-6">
 		{#if showToast}
 			<Toast color={isSuccess ? 'green' : 'red'} class="fixed top-4 right-4 z-50">
@@ -65,38 +97,6 @@
 
 		<div class="text-pp-white text-center text-2xl font-semibold">Edit Profile</div>
 
-		<form
-			method="POST"
-			enctype="multipart/form-data"
-			bind:this={form}
-			use:enhance={() => {
-				isSaving = true;
-				return async ({ result, update }) => {
-					if (result.type === 'success') {
-						const formData = result.data as { success?: boolean; message?: string } | undefined;
-						if (formData?.success) {
-							toastMessage = 'Profile updated successfully!';
-							isSuccess = true;
-						} else {
-							toastMessage = formData?.message || 'Update failed';
-							isSuccess = false;
-						}
-					} else if (result.type === 'failure') {
-						const errorData = result.data as { message?: string } | undefined;
-						toastMessage = errorData?.message || 'An error occurred';
-						isSuccess = false;
-					} else {
-						toastMessage = 'Profile updated successfully!';
-						isSuccess = true;
-					}
-					await update({ reset: false });
-					isSaving = false;
-					showToast = true;
-					setTimeout(() => (showToast = false), 2000);
-					await invalidateAll();
-				};
-			}}
-		>
 			<div class="mt-6 flex flex-col items-center">
 				<div
 					class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white"
@@ -120,7 +120,6 @@
 					</div>
 				</button>
 			</div>
-		</form>
 	</div>
 
 	<div class="absolute top-[22%] left-1/2 mx-auto mt-10 w-84 -translate-x-1/2">
@@ -175,4 +174,5 @@
 			</button>
 		</div>
 	</div>
+</form>
 </div>
