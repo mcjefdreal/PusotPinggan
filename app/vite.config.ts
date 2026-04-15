@@ -55,7 +55,4 @@ export default defineConfig({
 			}
 		})
 	]
-	// server: {
-	//   allowedHosts: ["paulene-pannicular-bula.ngrok-free.dev"]
-	// }
 });
