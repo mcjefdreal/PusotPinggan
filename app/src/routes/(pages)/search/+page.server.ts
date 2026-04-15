@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ url, parent, locals: { supabase } }
 		.select('*')
 		.ilike('store_name', `%${query}%`);
 
-	if (storeError) throw error(500, "Failed to search for stores.");
+	if (storeError) throw error(500, 'Failed to search for stores.');
 
 	// Calculate distance for each store
 	const storesWithDistance = await Promise.all(
@@ -53,7 +53,7 @@ export const load: PageServerLoad = async ({ url, parent, locals: { supabase } }
 		.ilike('name', `%${query}%`)
 		.gt('quantity', 0);
 
-	if (productsError) throw error(500, "Failed to search for products.");
+	if (productsError) throw error(500, 'Failed to search for products.');
 
 	return {
 		products: products || [],
