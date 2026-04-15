@@ -9,12 +9,16 @@
 	let checking = $state(false);
 
 	const isTrulyOnline = async () => {
-		try {
-			await fetch('https://google.com', { mode: 'no-cors' });
+		if (navigator.onLine) {
+			// Try a quick fetch as secondary verification
+			try {
+			await fetch('/favicon.ico', { mode: 'no-cors', cache: 'no-store' });
 			return true;
-		} catch (_error) {
-			return false;
+			} catch {
+			return true; // Browser says online, trust it
+			}
 		}
+		return false;
 	};
 
 	async function checkOnlineStatus() {
