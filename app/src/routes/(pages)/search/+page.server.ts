@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 		return {
 			products: [],
 			stores: []
-		}; 
+		};
 	}
 
 	const { data: products, error: productError } = await supabase

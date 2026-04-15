@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase } }) => 
 	if (!user) {
 		throw error(401, 'Unauthorized');
 	}
- 
+
 	const userId = user.id;
 
 	// Fetch all stores

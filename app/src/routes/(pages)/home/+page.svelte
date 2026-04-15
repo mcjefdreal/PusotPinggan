@@ -31,7 +31,13 @@
 		<h1 class="py-3 text-xl font-medium">Stores near you</h1>
 		<div class="grid grid-cols-2 gap-4 pb-4">
 			{#each closestStores as s (s.store_id)}
-				<StoreCard storePic={s.img_url} storeName={s.store_name} storeDistance={formatDistance(s.distance_meters)} storeRating={s.rating} storeID={s.store_id} />
+				<StoreCard
+					storePic={s.img_url}
+					storeName={s.store_name}
+					storeDistance={formatDistance(s.distance_meters)}
+					storeRating={s.rating}
+					storeID={s.store_id}
+				/>
 				<!-- <p>{s.store_name} - {formatDistance(s.distance_meters)}km away</p> -->
 			{/each}
 		</div>
@@ -39,12 +45,11 @@
 		<div class="flex items-center justify-center p-4">
 			<button
 				onclick={() => (showAllStores = true)}
-				class="bg-pp-pink text-pp-white text-xl rounded-lg max-w-70 px-10 py-2.5"
+				class="bg-pp-pink text-pp-white max-w-70 rounded-lg px-10 py-2.5 text-xl"
 			>
 				View all stores
 			</button>
 		</div>
-
 	{:else}
 		<h1 class="py-3 text-xl font-medium">All Stores</h1>
 
@@ -53,8 +58,10 @@
 				<img src={s.img_url} alt={s.store_name} class="h-35 w-35 rounded-lg" />
 				<div class="flex flex-col overflow-hidden px-5">
 					<p class="text-pp-pink truncate pb-2 text-2xl font-semibold">{s.store_name}</p>
-					<p class="text-pp-gray"> ⭐{s.rating} </p>
-					<p class="text-pp-black text-base text-pp-black">{formatDistance(s.distance_meters)}km away</p>
+					<p class="text-pp-gray">⭐{s.rating}</p>
+					<p class="text-pp-black text-pp-black text-base">
+						{formatDistance(s.distance_meters)}km away
+					</p>
 					<a
 						class="bg-pp-pink text-pp-white my-1 flex h-8 w-25 items-center justify-center rounded-lg text-sm"
 						href={resolve(`/search/${s.store_name}/${s.store_id}`)}
@@ -67,10 +74,7 @@
 		{/each}
 
 		<div class="flex justify-center p-4">
-			<button
-				onclick={() => (showAllStores = false)}
-				class="text-gray-500 underline"
-			>
+			<button onclick={() => (showAllStores = false)} class="text-gray-500 underline">
 				← Back
 			</button>
 		</div>
@@ -84,5 +88,3 @@
 		>
 	</a>
 </div>
-
-
