@@ -49,6 +49,7 @@
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.1.18",
 		"@types/node": "^24",
+		"@vite-pwa/sveltekit": "^1.1.0",
 		"@vitest/browser-playwright": "^4.0.18",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
@@ -80,10 +81,11 @@
 	],
 	"packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
 	"dependencies": {
-		"@sveltejs/kit": "^2.50.1",
 		"@googlemaps/js-api-loader": "^2.0.2",
 		"@supabase/ssr": "^0.8.0",
 		"@supabase/supabase-js": "^2.95.3",
-		"dotenv": "^17.3.1"
+		"@sveltejs/kit": "^2.50.1",
+		"dotenv": "^17.3.1",
+		"workbox-window": "^7.4.0"
 	}
 }

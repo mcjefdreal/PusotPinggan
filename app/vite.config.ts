@@ -2,14 +2,15 @@ import { defineConfig } from 'vite'; // Change from 'vitest/config' to 'vite'
 import devtoolsJson from 'vite-plugin-devtools-json';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { VitePWA } from 'vite-plugin-pwa';
+import { SvelteKitPWA } from '@vite-pwa/sveltekit'
 
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		sveltekit(),
 		devtoolsJson(),
-		VitePWA({
+		SvelteKitPWA({
+			injectRegister: 'auto',
 			registerType: 'autoUpdate',
 			manifest: {
 				name: `Puso't Pinggan`,
@@ -34,7 +35,6 @@ export default defineConfig({
 			},
 			workbox: {
 				// NetworkFirst = always try network first, fall back to error if offline
-				globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
 				runtimeCaching: [
 					{
 						urlPattern: /^https:\/\/.*/i,
