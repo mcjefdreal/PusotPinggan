@@ -12,10 +12,10 @@
 		if (navigator.onLine) {
 			// Try a quick fetch as secondary verification
 			try {
-			await fetch('/favicon.ico', { mode: 'no-cors', cache: 'no-store' });
-			return true;
+				await fetch('/favicon.ico', { mode: 'no-cors', cache: 'no-store' });
+				return true;
 			} catch {
-			return true; // Browser says online, trust it
+				return true; // Browser says online, trust it
 			}
 		}
 		return false;
