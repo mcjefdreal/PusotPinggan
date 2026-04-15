@@ -17,7 +17,7 @@ setup('authenticate', async ({ page }) => {
 		}
 		// Navigate to trigger auth state
 		await page.goto('http://localhost:5173/home');
-		await expect(page.getByText('All categories')).toBeVisible({ timeout: 10000 });
+		await expect(page.getByText('Stores near you')).toBeVisible({ timeout: 10000 });
 		await page.waitForTimeout(1000);
 	} else if (accessToken) {
 		try {
@@ -58,7 +58,7 @@ setup('authenticate', async ({ page }) => {
 			]);
 		}
 		await page.goto('http://localhost:5173/home');
-		await expect(page.getByText('All categories')).toBeVisible({ timeout: 10000 });
+		await expect(page.getByText('Stores near you')).toBeVisible({ timeout: 10000 });
 		await page.waitForTimeout(1000);
 	} else {
 		const stealthPlugin = stealth();
@@ -87,7 +87,7 @@ setup('authenticate', async ({ page }) => {
 
 		await loginPage.waitForURL('http://localhost:5173/**', { timeout: 30000 });
 
-		await expect(loginPage.getByText('All categories')).toBeVisible({ timeout: 10000 });
+		await expect(loginPage.getByText('Stores near you')).toBeVisible({ timeout: 10000 });
 
 		await loginPage.waitForTimeout(5000);
 
