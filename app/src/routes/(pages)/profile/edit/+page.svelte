@@ -97,7 +97,7 @@
 
 			<div class="text-pp-white text-center text-2xl font-semibold">Edit Profile</div>
 
-			<div class="mt-6 flex flex-col items-center">
+			<div class="mt-4 flex flex-col items-center">
 				<div
 					class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white"
 				>

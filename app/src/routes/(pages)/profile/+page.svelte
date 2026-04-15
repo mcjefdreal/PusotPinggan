@@ -10,8 +10,7 @@
 
 	const { data } = $props();
 
-	let firstname = $derived(data.pub_user?.first_name || '');
-	let lastname = $derived(data.pub_user?.last_name || '');
+	let displayname = $derived(data.pub_user?.display_name || '');
 	let imgUrl = $derived.by(() => {
 		const baseUrl = data.pub_user?.img_url;
 		if (!baseUrl) return '';
@@ -29,23 +28,23 @@
 	}
 </script>
 
-<div class="relative h-screen overflow-hidden">
-	<div class="from-pp-pink to-pp-light-pink relative h-[36%] bg-gradient-to-t p-6">
-		<div class="text-pp-white mt-0 text-center text-2xl font-semibold">Profile</div>
-		<div class="mt-6 flex flex-col items-center justify-center">
+<div class="min-h-screen flex flex-col">
+	<div class=" bg-gradient-to-t from-pp-pink to-pp-light-pink px-6 pt-6 pb-20 p-6">
+		<div class="text-pp-white text-center text-2xl font-semibold">Profile</div>
+		<div class="mt-4 flex flex-col items-center justify-center">
 			<div
-				class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white"
+				class="flex h-36 w-36 items-center justify-center rounded-full border-4 border-white bg-white overflow-hidden"
 			>
-				<img src={imgUrl} alt="Profile" class="h-full w-full rounded-full object-cover" />
+				<img src={imgUrl} alt="Profile" class="h-full w-full object-cover" />
 			</div>
 			<div class="text-pp-white mt-2 text-center text-lg font-medium">
-				{firstname || lastname ? `${firstname} ${lastname}` : 'Username'}
+				{displayname || 'Username'}
 			</div>
 		</div>
 	</div>
 
-	<div class="h-[64%] bg-rose-50"></div>
-	<div class="bg-pp-white absolute top-[31%] left-1/2 w-80 -translate-x-1/2 rounded-xl">
+	<div class="flex-1 bg-rose-50">
+		<div class="flex-1 bg-pp-white mx-auto w-full max-w-[85%] rounded-xl -mt-15">
 		<a
 			href={resolve('/profile/edit')}
 			class="block flex w-full items-center rounded-t-xl px-3 py-4 text-base font-normal transition hover:bg-gray-100 active:bg-gray-300"
@@ -71,5 +70,6 @@
 			<ArrowRightToBracketOutline class="mr-3 ml-2 inline-block h-5 w-5 text-red-800" />
 			Log Out
 		</button>
+		</div>
 	</div>
 </div>
