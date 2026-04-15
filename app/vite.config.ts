@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'; // Change from 'vitest/config' to 'vite'
 import devtoolsJson from 'vite-plugin-devtools-json';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit'
+import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
 export default defineConfig({
 	plugins: [
