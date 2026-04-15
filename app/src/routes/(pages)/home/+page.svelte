@@ -6,6 +6,12 @@
 	import CategoryCard from '$lib/components/Homepage/CategoryCard.svelte';
 
 	import BasketIcon from '$lib/icons/basket.svg';
+
+	let { data } = $props();
+
+	function formatDistance(meters: number): string {
+		return (meters / 1000).toFixed(1);
+	}
 </script>
 
 <div class="min-h-screen w-full p-5">
@@ -26,6 +32,9 @@
 		<CategoryCard></CategoryCard>
 		<CategoryCard></CategoryCard>
 	</div>
+	{#each data.stores as s (s.store_id)}
+		<p>{s.store_name} - {formatDistance(s.distance_meters)}km away</p>
+	{/each}
 
 	<a href="/profile/basket/cart">
 		<Button
