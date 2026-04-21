@@ -53,35 +53,15 @@ export const load = async ({
 		chats.push(...(sellerChats || []));
 	}
 
-	// Get last messages and unread counts
-	let unreadCount = 0;
-
-	for (const chat of chats) {
-		// Get last message
-		const { data: lastMsg } = await supabase
-			.from('message')
-			.select('created_at, sender_id')
-			.eq('chat_id', chat.chat_id)
-			.order('created_at', { ascending: false })
-			.limit(1)
-			.single();
-
-		// Determine if unread
-		const isBuyer = buyerId && chat.buyer_id === buyerId;
-		const lastOpened = isBuyer
-			? (chat.buyer_opened_at as string)
-			: (chat.seller_opened_at as string);
-		const unread =
-			lastMsg && (!lastOpened || new Date(lastMsg.created_at) > new Date(lastOpened || 0));
-
-		if (unread) {
-			unreadCount++;
-		}
-	}
+	// Single DB call for unread count instead of N+1
+	const { data: unreadCount } = await supabase.rpc('get_unread_count', {
+		p_buyer_id: user.id,
+		p_store_ids: storeIds
+	});
 
 	return {
 		session,
 		user,
-		unreadCount
+		unreadCount: unreadCount || 0
 	};
 };
