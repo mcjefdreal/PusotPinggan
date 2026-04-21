@@ -18,24 +18,13 @@ export const load: PageServerLoad = async ({ url, parent, locals: { supabase } }
 		};
 	}
 
-	// fetch stores
-	const { data: stores, error: storeError } = await supabase
-		.from('store')
-		.select('*')
-		.ilike('store_name', `%${query}%`);
 
-	if (storeError) throw error(500, 'Failed to search for stores.');
+	const { data: stores, error: storesError } = await supabase.rpc('get_stores_with_distances_from_search', {
+		p_user_id: userId,
+		search_term: `%${query}%`
+	});
 
-	// Calculate distance for each store
-	const storesWithDistance = await Promise.all(
-		stores.map(async (store) => {
-			const { data: distance } = await supabase.rpc('get_store_distance', {
-				p_user_id: userId,
-				p_store_id: store.store_id
-			});
-			return { ...store, distance_meters: distance || 0 };
-		})
-	);
+	if (storesError) throw error(500, 'Failed to search for stores.');
 
 	// Fetch products where quantity > 0, joined with store info
 	const { data: products, error: productsError } = await supabase
@@ -57,7 +46,7 @@ export const load: PageServerLoad = async ({ url, parent, locals: { supabase } }
 
 	return {
 		products: products || [],
-		stores: storesWithDistance || [],
+		stores: stores || [],
 		query
 	};
 };
