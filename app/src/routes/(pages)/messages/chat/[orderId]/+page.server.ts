@@ -1,27 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 
-async function getBuyerId(
-	supabase: import('@supabase/supabase-js').SupabaseClient,
-	userId: string
-): Promise<string | null> {
-	const { data: buyer, error } = await supabase
-		.from('buyer')
-		.select('buyer_id')
-		.eq('buyer_id', userId)
-		.single();
-
-	if (error && error.code !== 'PGRST116') {
-		return null;
-	}
-
-	if (buyer) {
-		return buyer.buyer_id;
-	}
-
-	return null;
-}
-
 export const load: PageServerLoad = async ({ parent, locals: { supabase }, params }) => {
 	const { user } = await parent();
 
@@ -29,7 +8,6 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		throw redirect(303, '/login');
 	}
 
-	const buyerId = await getBuyerId(supabase, user.id);
 
 	// Get order details
 	const { data: order, error: orderError } = await supabase
@@ -43,12 +21,31 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 	}
 
 	// Check if user is buyer or store owner
-	const isBuyer = buyerId && order.buyer_id === buyerId;
+	const isBuyer = order.buyer_id === user.id;
 	const isSeller = order.store?.owner === user.id;
+
+	// get buyer name
+	let buyerName = null;
+
+	if(isSeller) {
+		const { data: buyerData, error: buyerError } = await supabase
+			.from('user')
+			.select('display_name')
+			.eq('user_id', order.buyer_id)
+			.single()
+
+		if(buyerError) {
+			throw error(404, 'Buyer not found');
+		}
+
+		buyerName = buyerData.display_name
+	}
+
 
 	if (!isBuyer && !isSeller) {
 		throw error(403, 'You do not have access to this chat');
 	}
+
 
 	// Get chat by order_id
 	const { data: chat, error: chatError } = await supabase
@@ -158,7 +155,8 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		isBuyer,
 		isSeller,
 		userId: user.id,
-		deletionTime
+		deletionTime,
+		buyerName
 	};
 };
 

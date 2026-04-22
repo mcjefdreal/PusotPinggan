@@ -51,6 +51,7 @@ export const load = async ({
 	// Fetch order data for each chat
 	const orderIds = [...new Set(chats.map((c) => c.order_id).filter(Boolean))];
 	const ordersMap: Record<string, Record<string, unknown>> = {};
+	const buyerNamesMap: Record<string, Record<string, unknown>> = {};
 
 	if (orderIds.length > 0) {
 		const { data: orders } = await supabase
@@ -59,8 +60,33 @@ export const load = async ({
 			.in('order_id', orderIds);
 
 		if (orders) {
+			// Fetch buyer display names from user table
+			const buyerUserIds = orders
+				.map((o: any) => o.buyer_id)
+				.filter((id: string) => id); // Remove undefined/null
+
+			const uniqueBuyerIds = [...new Set(buyerUserIds)];
+			if (uniqueBuyerIds.length > 0) {
+				const { data: buyerUsers } = await supabase
+					.from('user')
+					.select('user_id, display_name')
+					.in('user_id', uniqueBuyerIds);
+				
+				if (buyerUsers) {
+					buyerUsers.forEach((u) => {
+					buyerNamesMap[u.user_id] = { display_name: u.display_name };
+					});
+				}
+			}
+
 			orders.forEach((o) => {
-				ordersMap[o.order_id] = o;
+				ordersMap[o.order_id] = {
+					...o,
+					buyerDisplayName: o.buyer_id 
+					? (buyerNamesMap[o.buyer_id]?.display_name || 'Buyer')
+					: null
+
+				};
 			});
 		}
 	}

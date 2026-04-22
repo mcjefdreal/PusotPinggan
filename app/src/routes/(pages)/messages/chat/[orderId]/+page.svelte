@@ -42,6 +42,7 @@
 			}>;
 			userId: string;
 			deletionTime: string | null;
+			buyerName: string | null;
 		};
 	} = $props();
 
@@ -167,6 +168,8 @@
 			}, 0);
 		}
 	});
+
+	$inspect(data.buyerName);
 </script>
 
 {#if showSuccess}
@@ -190,8 +193,13 @@
 			<ArrowLeftOutline class="h-8 w-8" />
 		</a>
 		<div class="text-center">
-			<div class="text-pp-white text-xl font-semibold">{order.store?.store_name || 'Store'}</div>
-			<div class="text-pp-white text-xs">{formatDate(order.order_date)}</div>
+			{#if data.buyerName}
+				<div class="text-pp-white text-xl font-semibold">{data.buyerName}</div>
+				<div class="text-pp-white text-xs">{formatDate(order.order_date)}</div>
+			{:else}
+				<div class="text-pp-white text-xl font-semibold">{order.store?.store_name || 'Store'}</div>
+				<div class="text-pp-white text-xs">{formatDate(order.order_date)}</div>
+			{/if}
 		</div>
 		<div class="w-8"></div>
 	</div>

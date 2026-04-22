@@ -25,8 +25,8 @@
 					};
 					buyer: {
 						user_id: string;
-						display_name: string;
 					};
+					buyerDisplayName: string;
 				};
 				lastMessage: {
 					content: string;
@@ -89,7 +89,9 @@
 			</div>
 		{:else}
 			{#each chats as chat (chat.chat_id)}
-				{@const otherName = chat.order?.store?.store_name || 'Store'}
+				{@const otherName = chat.isBuyer 
+				? (chat.order?.store?.store_name || 'Store')
+				: (chat.order?.buyerDisplayName || 'Buyer')}
 				{@const lastTime = formatTime(chat.lastMessage?.created_at || chat.order?.created_at)}
 				{@const userPic = chat.isBuyer ? chat.order?.store?.img_url : null}
 				{@const latestMsg = chat.lastMessage?.content || 'No messages yet'}
