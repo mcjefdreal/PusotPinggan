@@ -71,7 +71,7 @@
 		<div class="relative">
 			<a
 				class="bg-pp-pink text-pp-white absolute top-2 left-2 grid h-12 w-12 place-items-center rounded-full text-xl shadow-lg"
-				href={resolve('/store/')}
+				href={resolve('/store')}
 			>
 				<ArrowLeftOutline />
 			</a>
