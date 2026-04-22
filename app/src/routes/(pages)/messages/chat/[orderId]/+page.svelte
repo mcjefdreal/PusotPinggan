@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
+	import { subscribeToChat } from '$lib/hooks/UseRealtime';
+	import { supabase } from '$lib/SupabaseClient';
 	import { onMount } from 'svelte';
 	import { Toast } from 'flowbite-svelte';
 	import { ArrowLeftOutline } from 'flowbite-svelte-icons';
@@ -43,7 +45,7 @@
 		};
 	} = $props();
 
-	let pollInterval: ReturnType<typeof setInterval>;
+	// let pollInterval: ReturnType<typeof setInterval>;
 
 	let newMessage = $state('');
 	let messagesContainer: HTMLDivElement;
@@ -73,16 +75,29 @@
 		}
 	});
 
+	// onMount(() => {
+	// 	// Polling every 2 seconds
+	// 	pollInterval = setInterval(async () => {
+	// 		await invalidateAll();
+	// 	}, 2000);
+
+	// 	return () => {
+	// 		if (pollInterval) {
+	// 			clearInterval(pollInterval);
+	// 		}
+	// 	};
+	// });
+
 	onMount(() => {
-		// Polling every 2 seconds
-		pollInterval = setInterval(async () => {
-			await invalidateAll();
-		}, 2000);
+		const chatId = data?.chat?.chat_id as string;
+		if (!chatId) return;
+
+		const channel = subscribeToChat(chatId, () => {
+			invalidateAll();
+		});
 
 		return () => {
-			if (pollInterval) {
-				clearInterval(pollInterval);
-			}
+			supabase.removeChannel(channel);
 		};
 	});
 

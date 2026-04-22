@@ -122,30 +122,38 @@ export const actions: Actions = {
 			return { success: false, message: detailsError.message };
 		}
 
-		if (orderDetails && orderDetails.length > 0) {
-			for (const detail of orderDetails) {
-				const { data: product, error: productError } = await supabase
-					.from('product')
-					.select('quantity')
-					.eq('product_id', detail.product_id)
-					.single();
+		const { error: restoreError } = await supabase.rpc('restore_product_quantities', {
+			p_order_id: orderId
+		});
 
-				if (productError) {
-					return { success: false, message: productError.message };
-				}
-
-				const newQuantity = product.quantity + detail.quantity;
-
-				const { error: updateError } = await supabase
-					.from('product')
-					.update({ quantity: newQuantity })
-					.eq('product_id', detail.product_id);
-
-				if (updateError) {
-					return { success: false, message: updateError.message };
-				}
-			}
+		if (restoreError) {
+			return { success: false, message: restoreError.message };
 		}
+
+		// if (orderDetails && orderDetails.length > 0) {
+		// 	for (const detail of orderDetails) {
+		// 		const { data: product, error: productError } = await supabase
+		// 			.from('product')
+		// 			.select('quantity')
+		// 			.eq('product_id', detail.product_id)
+		// 			.single();
+
+		// 		if (productError) {
+		// 			return { success: false, message: productError.message };
+		// 		}
+
+		// 		const newQuantity = product.quantity + detail.quantity;
+
+		// 		const { error: updateError } = await supabase
+		// 			.from('product')
+		// 			.update({ quantity: newQuantity })
+		// 			.eq('product_id', detail.product_id);
+
+		// 		if (updateError) {
+		// 			return { success: false, message: updateError.message };
+		// 		}
+		// 	}
+		// }
 
 		const { error } = await supabase
 			.from('order')

@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load = async ({
 	parent,
@@ -17,7 +17,7 @@ export const load = async ({
 	}
 
 	if (!user) {
-		return { session, user, unreadCount: 0 };
+		throw error(401, "User not found");
 	}
 
 	// Get buyer_id for the user

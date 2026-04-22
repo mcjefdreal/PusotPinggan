@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
+	import { subscribeToMessagesList } from '$lib/hooks/UseRealtime';
+	import { supabase } from '$lib/SupabaseClient';
 	import { onMount } from 'svelte';
 	import ChatPreview from '$lib/components/Messages/ChatPreview.svelte';
 
@@ -8,6 +10,7 @@
 		data
 	}: {
 		data: {
+			user: { id: string };
 			chats: Array<{
 				chat_id: string;
 				order_id: string;
@@ -35,7 +38,7 @@
 		};
 	} = $props();
 
-	let pollInterval: ReturnType<typeof setInterval>;
+	// let pollInterval: ReturnType<typeof setInterval>;
 
 	let chats = $derived(data?.chats || []);
 
@@ -57,15 +60,28 @@
 		}
 	}
 
+	// onMount(() => {
+	// 	pollInterval = setInterval(async () => {
+	// 		await invalidateAll();
+	// 	}, 30000);
+
+	// 	return () => {
+	// 		if (pollInterval) {
+	// 			clearInterval(pollInterval);
+	// 		}
+	// 	};
+	// });
+
 	onMount(() => {
-		pollInterval = setInterval(async () => {
-			await invalidateAll();
-		}, 30000);
+		const userId = data.user.id;
+		if (!userId) return;
+
+		const channel = subscribeToMessagesList(userId, () => {
+			invalidateAll();
+		});
 
 		return () => {
-			if (pollInterval) {
-				clearInterval(pollInterval);
-			}
+			supabase.removeChannel(channel);
 		};
 	});
 </script>
