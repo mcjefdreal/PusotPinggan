@@ -8,7 +8,6 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 		throw redirect(303, '/login');
 	}
 
-
 	// Get order details
 	const { data: order, error: orderError } = await supabase
 		.from('order')
@@ -27,25 +26,23 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 	// get buyer name
 	let buyerName = null;
 
-	if(isSeller) {
+	if (isSeller) {
 		const { data: buyerData, error: buyerError } = await supabase
 			.from('user')
 			.select('display_name')
 			.eq('user_id', order.buyer_id)
-			.single()
+			.single();
 
-		if(buyerError) {
+		if (buyerError) {
 			throw error(404, 'Buyer not found');
 		}
 
-		buyerName = buyerData.display_name
+		buyerName = buyerData.display_name;
 	}
-
 
 	if (!isBuyer && !isSeller) {
 		throw error(403, 'You do not have access to this chat');
 	}
-
 
 	// Get chat by order_id
 	const { data: chat, error: chatError } = await supabase

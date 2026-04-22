@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase } }) => 
 	const userId = user.id;
 
 	const { data: stores, error: storesError } = await supabase.rpc('get_stores_with_distances', {
-	p_user_id: userId
+		p_user_id: userId
 	});
 
 	if (storesError) throw error(500, storesError.message);

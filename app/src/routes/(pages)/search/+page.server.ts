@@ -18,11 +18,13 @@ export const load: PageServerLoad = async ({ url, parent, locals: { supabase } }
 		};
 	}
 
-
-	const { data: stores, error: storesError } = await supabase.rpc('get_stores_with_distances_from_search', {
-		p_user_id: userId,
-		search_term: `%${query}%`
-	});
+	const { data: stores, error: storesError } = await supabase.rpc(
+		'get_stores_with_distances_from_search',
+		{
+			p_user_id: userId,
+			search_term: `%${query}%`
+		}
+	);
 
 	if (storesError) throw error(500, 'Failed to search for stores.');
 

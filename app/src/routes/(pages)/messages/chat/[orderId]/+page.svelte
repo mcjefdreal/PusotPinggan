@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
-	import { subscribeToChat, subscribeToMessagesList } from '$lib/hooks/UseRealtime';
+	import { subscribeToChat } from '$lib/hooks/UseRealtime';
 	import { supabaseClient } from '$lib/SupabaseClient';
 	import { onMount } from 'svelte';
 	import { Toast } from 'flowbite-svelte';
@@ -81,7 +81,7 @@
 		if (!chatId) return;
 
 		const channel = subscribeToChat(chatId, () => {
-			console.log("New message found")
+			console.log('New message found');
 			invalidateAll();
 		});
 
@@ -168,8 +168,6 @@
 			}, 0);
 		}
 	});
-
-	$inspect(data.buyerName);
 </script>
 
 {#if showSuccess}

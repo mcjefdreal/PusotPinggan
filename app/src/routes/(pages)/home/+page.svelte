@@ -12,7 +12,10 @@
 	const closestStores = $derived(
 		data.stores
 			.slice()
-			.sort((a, b) => a.distance_meters - b.distance_meters)
+			.sort(
+				(a: { distance_meters: number }, b: { distance_meters: number }) =>
+					a.distance_meters - b.distance_meters
+			)
 			.slice(0, 6)
 	);
 

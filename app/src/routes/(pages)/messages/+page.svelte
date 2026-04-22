@@ -90,9 +90,9 @@
 			</div>
 		{:else}
 			{#each chats as chat (chat.chat_id)}
-				{@const otherName = chat.isBuyer 
-				? (chat.order?.store?.store_name || 'Store')
-				: (chat.order?.buyerDisplayName || 'Buyer')}
+				{@const otherName = chat.isBuyer
+					? chat.order?.store?.store_name || 'Store'
+					: chat.order?.buyerDisplayName || 'Buyer'}
 				{@const lastTime = formatTime(chat.lastMessage?.created_at || chat.order?.created_at)}
 				{@const userPic = chat.isBuyer ? chat.order?.store?.img_url : chat.order?.buyerImgUrl}
 				{@const latestMsg = chat.lastMessage?.content || 'No messages yet'}

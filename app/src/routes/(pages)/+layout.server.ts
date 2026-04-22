@@ -17,7 +17,7 @@ export const load = async ({
 	}
 
 	if (!user) {
-		throw error(401, "User not found");
+		throw error(401, 'User not found');
 	}
 
 	// Get buyer_id for the user

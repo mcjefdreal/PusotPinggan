@@ -61,9 +61,7 @@ export const load = async ({
 
 		if (orders) {
 			// Fetch buyer display names from user table
-			const buyerUserIds = orders
-				.map((o: any) => o.buyer_id)
-				.filter((id: string) => id); // Remove undefined/null
+			const buyerUserIds = orders.map((o) => o.buyer_id).filter((id) => id); // Remove undefined/null
 
 			const uniqueBuyerIds = [...new Set(buyerUserIds)];
 			if (uniqueBuyerIds.length > 0) {
@@ -71,10 +69,10 @@ export const load = async ({
 					.from('user')
 					.select('user_id, display_name, img_url')
 					.in('user_id', uniqueBuyerIds);
-				
+
 				if (buyerUsers) {
 					buyerUsers.forEach((u) => {
-					buyerNamesMap[u.user_id] = { display_name: u.display_name, img_url: u.img_url };
+						buyerNamesMap[u.user_id] = { display_name: u.display_name, img_url: u.img_url };
 					});
 				}
 			}
@@ -82,12 +80,8 @@ export const load = async ({
 			orders.forEach((o) => {
 				ordersMap[o.order_id] = {
 					...o,
-					buyerDisplayName: o.buyer_id 
-					? (buyerNamesMap[o.buyer_id]?.display_name || 'Buyer')
-					: null,
-					buyerImgUrl: o.buyer_id 
-					? (buyerNamesMap[o.buyer_id]?.img_url || null)
-					: null
+					buyerDisplayName: o.buyer_id ? buyerNamesMap[o.buyer_id]?.display_name || 'Buyer' : null,
+					buyerImgUrl: o.buyer_id ? buyerNamesMap[o.buyer_id]?.img_url || null : null
 				};
 			});
 		}

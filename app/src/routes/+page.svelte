@@ -41,8 +41,13 @@
 		// const interval = setInterval(checkOnlineStatus, 5000);
 
 		// return () => clearInterval(interval);
-		const handleOnline = () => { isOnline = true; handleRetry(); };
-		const handleOffline = () => { isOnline = false; };
+		const handleOnline = () => {
+			isOnline = true;
+			handleRetry();
+		};
+		const handleOffline = () => {
+			isOnline = false;
+		};
 
 		window.addEventListener('online', handleOnline);
 		window.addEventListener('offline', handleOffline);
