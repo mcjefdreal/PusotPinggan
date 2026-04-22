@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import { invalidateAll } from '$app/navigation';
 	import { subscribeToMessagesList } from '$lib/hooks/UseRealtime';
-	import { supabase } from '$lib/SupabaseClient';
+	import { supabaseClient } from '$lib/SupabaseClient';
 	import { onMount } from 'svelte';
 	import ChatPreview from '$lib/components/Messages/ChatPreview.svelte';
 
@@ -60,18 +60,6 @@
 		}
 	}
 
-	// onMount(() => {
-	// 	pollInterval = setInterval(async () => {
-	// 		await invalidateAll();
-	// 	}, 30000);
-
-	// 	return () => {
-	// 		if (pollInterval) {
-	// 			clearInterval(pollInterval);
-	// 		}
-	// 	};
-	// });
-
 	onMount(() => {
 		const userId = data.user.id;
 		if (!userId) return;
@@ -81,7 +69,7 @@
 		});
 
 		return () => {
-			supabase.removeChannel(channel);
+			supabaseClient.removeChannel(channel);
 		};
 	});
 </script>

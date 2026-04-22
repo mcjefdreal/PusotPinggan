@@ -2,25 +2,12 @@
 	import Navbar from '$lib/components/Navbar/Navbar.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import { subscribeToMessagesList } from '$lib/hooks/UseRealtime';
-	import { supabase } from '$lib/SupabaseClient';
+	import { supabaseClient } from '$lib/SupabaseClient';
 	import { invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	const { data, children } = $props();
 
-	// let pollInterval: ReturnType<typeof setInterval>;
-
-	// onMount(() => {
-	// 	pollInterval = setInterval(async () => {
-	// 		await invalidateAll();
-	// 	}, 60000);
-
-	// 	return () => {
-	// 		if (pollInterval) {
-	// 			clearInterval(pollInterval);
-	// 		}
-	// 	};
-	// });
 	onMount(() => {
 		const userId = data.user.id;
 		if (!userId) return;
@@ -30,7 +17,7 @@
 		});
 
 		return () => {
-			supabase.removeChannel(channel);
+			supabaseClient.removeChannel(channel);
 		};
 	});
 </script>
