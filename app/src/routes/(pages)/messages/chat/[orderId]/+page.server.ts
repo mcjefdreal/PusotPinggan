@@ -138,7 +138,10 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 
 	// Calculate deletion time if order is completed
 	let deletionTime: string | null = null;
-	if (order.order_status === 'Completed' || order.order_status === 'Cancelled' && order.updated_at) {
+	if (
+		order.order_status === 'Completed' ||
+		(order.order_status === 'Cancelled' && order.updated_at)
+	) {
 		const completionTime = new Date(order.updated_at);
 		completionTime.setHours(completionTime.getHours() + 1);
 		deletionTime = completionTime.toISOString();
