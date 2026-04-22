@@ -69,12 +69,12 @@ export const load = async ({
 			if (uniqueBuyerIds.length > 0) {
 				const { data: buyerUsers } = await supabase
 					.from('user')
-					.select('user_id, display_name')
+					.select('user_id, display_name, img_url')
 					.in('user_id', uniqueBuyerIds);
 				
 				if (buyerUsers) {
 					buyerUsers.forEach((u) => {
-					buyerNamesMap[u.user_id] = { display_name: u.display_name };
+					buyerNamesMap[u.user_id] = { display_name: u.display_name, img_url: u.img_url };
 					});
 				}
 			}
@@ -84,8 +84,10 @@ export const load = async ({
 					...o,
 					buyerDisplayName: o.buyer_id 
 					? (buyerNamesMap[o.buyer_id]?.display_name || 'Buyer')
+					: null,
+					buyerImgUrl: o.buyer_id 
+					? (buyerNamesMap[o.buyer_id]?.img_url || null)
 					: null
-
 				};
 			});
 		}

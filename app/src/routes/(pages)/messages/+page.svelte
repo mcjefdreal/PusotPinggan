@@ -27,6 +27,7 @@
 						user_id: string;
 					};
 					buyerDisplayName: string;
+					buyerImgUrl: string;
 				};
 				lastMessage: {
 					content: string;
@@ -93,7 +94,7 @@
 				? (chat.order?.store?.store_name || 'Store')
 				: (chat.order?.buyerDisplayName || 'Buyer')}
 				{@const lastTime = formatTime(chat.lastMessage?.created_at || chat.order?.created_at)}
-				{@const userPic = chat.isBuyer ? chat.order?.store?.img_url : null}
+				{@const userPic = chat.isBuyer ? chat.order?.store?.img_url : chat.order?.buyerImgUrl}
 				{@const latestMsg = chat.lastMessage?.content || 'No messages yet'}
 				<a
 					href={resolve(`/messages/chat/${chat.order_id}`)}
