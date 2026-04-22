@@ -61,7 +61,8 @@
 	let orderDetails = $derived(data?.orderDetails || []);
 	let userId = $derived(data?.userId || '');
 	let deletionTime = $derived(data?.deletionTime || null);
-	let showDeletionNotice = $derived(order.order_status === 'Completed');
+	let showDeletionNotice = $derived(order.order_status === 'Completed' || order.order_status === 'Cancelled');
+
 
 	let allMessages = $derived([...messages, ...pendingMessages]);
 
