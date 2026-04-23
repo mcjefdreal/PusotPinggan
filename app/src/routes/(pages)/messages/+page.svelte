@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import { subscribeToMessagesList } from '$lib/hooks/UseRealtime';
 	import { supabaseClient } from '$lib/SupabaseClient';
 	import { onMount } from 'svelte';
@@ -66,7 +66,7 @@
 		if (!userId) return;
 
 		const channel = subscribeToMessagesList(userId, () => {
-			invalidateAll();
+			invalidate('supabase:messages');
 		});
 
 		return () => {
