@@ -102,7 +102,7 @@
 		</div>
 
 		<!-- Tabs -->
-		<div class="mb-3 flex border-b items-center justify-center text-center">
+		<div class="mb-3 flex items-center justify-center border-b text-center">
 			<button
 				class="flex-1 border-b-2 px-4 py-2 transition {activeTab === 'products'
 					? 'border-pp-pink text-pp-pink'

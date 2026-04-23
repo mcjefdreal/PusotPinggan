@@ -93,7 +93,7 @@
 		bind:this={inputElement}
 		type="text"
 		placeholder="Search address..."
-		class="border-pp-gray w-full rounded-md border px-3 py-2.5 text-xs text-pp-black"
+		class="border-pp-gray text-pp-black w-full rounded-md border px-3 py-2.5 text-xs"
 		required
 	/>
 

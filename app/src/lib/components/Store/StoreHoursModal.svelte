@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { Modal } from 'flowbite-svelte';
 
-	let {
-		editModal = false,
-		onClose,
-		storeHrs = {},
-        isOpen
-	} = $props();
+	let { editModal = false, onClose, storeHrs = {}, isOpen } = $props();
 
 	type DaySchedule = { open: string; close: string };
 	type WeekSchedule = Record<string, DaySchedule>;
@@ -21,20 +16,22 @@
 		sunday: storeHrs?.sunday || { open: '00:00', close: '00:00' }
 	});
 
-    let today = $derived(new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase());
+	let today = $derived(new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase());
 </script>
 
 <Modal bind:open={editModal} class="max-w-100" onclose={onClose}>
-    <p class="text-xl text-pp-black font-medium"> Store Hours </p>
-    {#if isOpen} 
-        <p class="text-green-700"> Open Now </p>
-    {:else}
-        <p class="text-red-500"> Currently Closed </p>
-    {/if}
-    <div class="grid grid-cols-2">
-        {#each Object.keys(schedule) as day (day)}
-            <div class="capitalize {today === day ? 'font-bold' : 'font-medium'}"> {day} </div>
-            <div class="{today === day ? 'font-bold' : 'font-normal'}"> {schedule[day].open} - {schedule[day].close} </div>
-        {/each}
-    </div>
+	<p class="text-pp-black text-xl font-medium">Store Hours</p>
+	{#if isOpen}
+		<p class="text-green-700">Open Now</p>
+	{:else}
+		<p class="text-red-500">Currently Closed</p>
+	{/if}
+	<div class="grid grid-cols-2">
+		{#each Object.keys(schedule) as day (day)}
+			<div class="capitalize {today === day ? 'font-bold' : 'font-medium'}">{day}</div>
+			<div class={today === day ? 'font-bold' : 'font-normal'}>
+				{schedule[day].open} - {schedule[day].close}
+			</div>
+		{/each}
+	</div>
 </Modal>
