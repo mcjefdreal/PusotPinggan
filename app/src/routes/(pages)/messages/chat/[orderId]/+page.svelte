@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import { subscribeToChat } from '$lib/hooks/UseRealtime';
 	import { supabaseClient } from '$lib/SupabaseClient';
 	import { onMount } from 'svelte';
@@ -83,8 +83,7 @@
 		if (!chatId) return;
 
 		const channel = subscribeToChat(chatId, () => {
-			console.log('New message found');
-			invalidateAll();
+			invalidate('supabase:chat');
 		});
 
 		return () => {
@@ -146,7 +145,6 @@
 					}
 				];
 				newMessage = '';
-				await invalidateAll();
 			} else {
 				toastMessage = responseMsg || 'Failed to send';
 				showFail = true;
