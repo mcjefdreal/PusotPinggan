@@ -34,21 +34,45 @@ export default defineConfig({
 				]
 			},
 			workbox: {
-				// NetworkFirst = always try network first, fall back to error if offline
 				runtimeCaching: [
 					{
-						urlPattern: /^https:\/\/.*/i,
-						handler: 'NetworkFirst',
+						// Supabase Storage images — cache aggressively
+						urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/v1\/object\/public\/.*/i,
+						handler: 'CacheFirst',
 						options: {
-							cacheName: 'global-cache',
+							cacheName: 'supabase-images',
 							expiration: {
 								maxEntries: 100,
-								maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+								maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
 							},
-							networkTimeoutSeconds: 10, // Wait 10s before considering offline
-							cacheableResponse: {
-								statuses: [0, 200]
-							}
+							cacheableResponse: { statuses: [0, 200] }
+						}
+					},
+					{
+						// All other external images (store/product URLs)
+						urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|svg|gif|webp)(\?.*)?$/i,
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'external-images',
+							expiration: {
+								maxEntries: 100,
+								maxAgeSeconds: 60 * 60 * 24 * 7
+							},
+							cacheableResponse: { statuses: [0, 200] }
+						}
+					},
+					{
+						// Supabase REST API + your API routes — fail fast, short stale fallback
+						urlPattern: /^https:\/\/.*\/(rest\/v1\/|api\/).*/i,
+						handler: 'NetworkFirst',
+						options: {
+							cacheName: 'api-data',
+							networkTimeoutSeconds: 3,
+							expiration: {
+								maxEntries: 50,
+								maxAgeSeconds: 60 * 5 // 5 min
+							},
+							cacheableResponse: { statuses: [0, 200] }
 						}
 					}
 				]
