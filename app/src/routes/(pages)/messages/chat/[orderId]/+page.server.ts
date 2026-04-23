@@ -1,7 +1,8 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 
-export const load: PageServerLoad = async ({ parent, locals: { supabase }, params }) => {
+export const load: PageServerLoad = async ({ parent, locals: { supabase }, params, depends }) => {
+	depends('supabase:chat');
 	const { user } = await parent();
 
 	if (!user) {
@@ -79,7 +80,7 @@ export const load: PageServerLoad = async ({ parent, locals: { supabase }, param
 	// Get last message time
 	const { data: lastMessage } = await supabase
 		.from('message')
-		.select('created_at')
+		.select('created_at, sender_id')
 		.eq('chat_id', chatWithId.chat_id)
 		.order('created_at', { ascending: false })
 		.limit(1)
