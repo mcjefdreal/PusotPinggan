@@ -46,7 +46,7 @@
 
 	function handleRangeChange(day: string, start: string, end: string) {
 		schedule[day] = { open: start, close: end };
-	}
+	} 
 
 	function handleImageClick() {
 		fileInput?.click();
@@ -127,6 +127,7 @@
 				{#each Object.keys(schedule) as day (day)}
 					<div class="grid grid-cols-[80px_1fr] items-center gap-2 pb-2">
 						<Label class="text-xs capitalize">{day}</Label>
+						<br />
 						<Timepicker
 							type="range"
 							onselect={(e: { time: string; endTime: string }) =>
