@@ -34,7 +34,7 @@
 	type DaySchedule = { open: string; close: string };
 	type WeekSchedule = Record<string, DaySchedule>;
 
-	let schedule: WeekSchedule = $derived({
+	let schedule: WeekSchedule = $state({
 		monday: storeHrs?.monday || { open: '00:00', close: '00:00' },
 		tuesday: storeHrs?.tuesday || { open: '00:00', close: '00:00' },
 		wednesday: storeHrs?.wednesday || { open: '00:00', close: '00:00' },
