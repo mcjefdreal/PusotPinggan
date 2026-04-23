@@ -46,7 +46,7 @@
 
 	function handleRangeChange(day: string, start: string, end: string) {
 		schedule[day] = { open: start, close: end };
-	} 
+	}
 
 	function handleImageClick() {
 		fileInput?.click();
