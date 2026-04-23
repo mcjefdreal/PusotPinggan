@@ -7,9 +7,7 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 
-	let { data }: { data?: { unreadCount?: number } } = $props();
-
-	let unreadCount = $derived(data?.unreadCount || 0);
+	let { unreadCount = 0 }: { unreadCount?: number } = $props();
 </script>
 
 <nav class="bg-pp-white border-pp-gray sticky bottom-0 z-10 w-full border-t-1">
