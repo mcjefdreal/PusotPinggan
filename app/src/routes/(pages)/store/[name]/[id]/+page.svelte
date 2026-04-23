@@ -88,6 +88,7 @@
 					class="h-full w-full object-cover"
 					src={data.store.img_url}
 					alt={data.store.store_name}
+					loading="lazy" decoding="async"
 				/>
 			</div>
 		</div>

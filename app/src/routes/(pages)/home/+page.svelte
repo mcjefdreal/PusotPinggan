@@ -58,7 +58,7 @@
 
 		{#each data.stores as s (s.store_id)}
 			<div class="flex flex-row items-start pb-5">
-				<img src={s.img_url} alt={s.store_name} class="h-35 w-35 rounded-lg" />
+				<img src={s.img_url} alt={s.store_name} class="h-35 w-35 rounded-lg" loading="lazy" decoding="async" />
 				<div class="flex flex-col overflow-hidden px-5">
 					<p class="text-pp-pink truncate pb-2 text-2xl font-semibold">{s.store_name}</p>
 					<p class="text-pp-gray">⭐{s.rating}</p>

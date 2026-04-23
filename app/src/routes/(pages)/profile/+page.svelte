@@ -35,7 +35,7 @@
 			<div
 				class="flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white"
 			>
-				<img src={imgUrl} alt="Profile" class="h-full w-full object-cover" />
+				<img src={imgUrl} alt="Profile" class="h-full w-full object-cover" loading="lazy" decoding="async" />
 			</div>
 			<div class="text-pp-white mt-2 text-center text-lg font-medium">
 				{displayname || 'Username'}

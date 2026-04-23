@@ -20,7 +20,7 @@
 
 <button onclick={() => (editModal = true)}>
 	<div class="border-pp-gray/30 overflow-hidden rounded-xl border">
-		<img class="h-28 w-full object-cover" src={productPic} alt={productName} />
+		<img class="h-28 w-full object-cover" src={productPic} alt={productName} loading="lazy" decoding="async" />
 		<div class="flex">
 			<div class="p-2">
 				<div class="text-pp-black text-sm font-semibold">{productName}</div>
