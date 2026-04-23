@@ -12,5 +12,21 @@ export const load: LayoutServerLoad = async ({ parent, locals: { supabase } }) =
 		throw error(401, 'User not found');
 	}
 
-	return { session, user };
+	const { data: stores, error: storeError } = await supabase
+		.from('store')
+		.select('store_id')
+		.eq('owner', user.id);
+
+	if(storeError) throw error(500, storeError.message);
+
+	const storeIds = stores?.map((s) => s.store_id) || [];
+
+	const { data: count } = await supabase.rpc('get_unread_count', {
+		p_buyer_id: user.id,
+		p_store_ids: storeIds
+	});
+
+	const unreadCount = count || 0;
+
+	return { session, user, unreadCount };
 };

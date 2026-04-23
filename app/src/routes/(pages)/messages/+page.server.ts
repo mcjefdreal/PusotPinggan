@@ -103,6 +103,7 @@ export const load: PageServerLoad = async ({ depends, parent, locals: { supabase
 	const unreadCount = chatsWithUnread.filter((c) => c.unread).length;
 
 	return {
+		user,
 		chats: chatsWithUnread,
 		unreadCount
 	};
