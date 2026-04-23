@@ -17,7 +17,7 @@ export const load: LayoutServerLoad = async ({ parent, locals: { supabase } }) =
 		.select('store_id')
 		.eq('owner', user.id);
 
-	if(storeError) throw error(500, storeError.message);
+	if (storeError) throw error(500, storeError.message);
 
 	const storeIds = stores?.map((s) => s.store_id) || [];
 

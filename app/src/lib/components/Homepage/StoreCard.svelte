@@ -14,7 +14,13 @@
 <a href={resolve(`/search/${storeName}/${storeID}`)}>
 	<Card class="items-left flex">
 		<!-- <div class="bg-pp-light-pink mb-2 aspect-square max-h-40 rounded-t-lg"></div> -->
-		<img class="mb-2 aspect-square max-h-40 rounded-t-lg" src={storePic} alt={storeName} loading="lazy" decoding="async" />
+		<img
+			class="mb-2 aspect-square max-h-40 rounded-t-lg"
+			src={storePic}
+			alt={storeName}
+			loading="lazy"
+			decoding="async"
+		/>
 
 		<div class="items-left flex flex-row overflow-hidden px-2 pb-2">
 			<div class="flex w-full flex-col text-left">

@@ -226,7 +226,8 @@
 							class="h-8 w-8 rounded object-cover"
 							src={detail.product?.img_url || '/placeholder.png'}
 							alt={detail.product?.name}
-							loading="lazy" decoding="async"
+							loading="lazy"
+							decoding="async"
 						/>
 						<span class="text-pp-black">{detail.product?.name}</span>
 						<span class="text-pp-gray">x{detail.quantity}</span>

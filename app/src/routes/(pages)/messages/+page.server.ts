@@ -51,7 +51,10 @@ export const load: PageServerLoad = async ({ depends, parent, locals: { supabase
 	const chats = (chatsRaw ?? []) as ChatPreviewRow[];
 
 	const orderIds = [...new Set(chats.map((c) => c.order_id).filter(Boolean))];
-	const ordersMap: Record<string, OrderWithStore & { buyerDisplayName: string | null; buyerImgUrl: string | null }> = {};
+	const ordersMap: Record<
+		string,
+		OrderWithStore & { buyerDisplayName: string | null; buyerImgUrl: string | null }
+	> = {};
 	const buyerNamesMap: Record<string, BuyerInfo> = {};
 
 	if (orderIds.length > 0) {
@@ -70,7 +73,11 @@ export const load: PageServerLoad = async ({ depends, parent, locals: { supabase
 					.select('user_id, display_name, img_url')
 					.in('user_id', buyerUserIds);
 
-				const buyerUsers = (buyerUsersRaw ?? []) as { user_id: string; display_name: string; img_url: string }[];
+				const buyerUsers = (buyerUsersRaw ?? []) as {
+					user_id: string;
+					display_name: string;
+					img_url: string;
+				}[];
 				buyerUsers.forEach((u) => {
 					buyerNamesMap[u.user_id] = { display_name: u.display_name, img_url: u.img_url };
 				});

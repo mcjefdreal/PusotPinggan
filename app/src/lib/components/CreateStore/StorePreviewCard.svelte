@@ -5,7 +5,13 @@
 </script>
 
 <div class="flex flex-row items-start">
-	<img src={storePicUrl} alt={storeName} class="h-35 w-35 rounded-lg" loading="lazy" decoding="async" />
+	<img
+		src={storePicUrl}
+		alt={storeName}
+		class="h-35 w-35 rounded-lg"
+		loading="lazy"
+		decoding="async"
+	/>
 
 	<div class="flex flex-col overflow-hidden px-5">
 		<p class="text-pp-pink truncate pb-3 text-2xl font-semibold">{storeName}</p>
